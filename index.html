@@ -1,0 +1,350 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;700;900&family=Roboto+Condensed:wght@400;500&family=Dancing+Script:wght@700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body, .app { font-family: 'Roboto Condensed', sans-serif; color: var(--color-text-primary); background: transparent; }
+  .app { padding: 0 0 2rem; }
+  .header {
+    background: linear-gradient(135deg, #0a3d62 0%, #1a6496 50%, #0e8a72 100%);
+    border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem;
+    color: white; display: flex; align-items: center; gap: 1rem;
+    position: relative; overflow: hidden;
+  }
+  .header::before { content:''; position:absolute; top:-30px; right:-30px; width:120px; height:120px; border-radius:50%; background:rgba(255,255,255,0.07); }
+  .header::after { content:''; position:absolute; bottom:-20px; left:40%; width:80px; height:80px; border-radius:50%; background:rgba(255,255,255,0.05); }
+  .header-icon { font-size: 42px; }
+  .header-title { font-family:'Exo 2',sans-serif; font-size:22px; font-weight:900; line-height:1.2; }
+  .header-sub { font-size:13px; opacity:0.8; margin-top:3px; }
+  .location-bar { display:flex; align-items:center; gap:8px; background:var(--color-background-secondary); border:0.5px solid var(--color-border-tertiary); border-radius:10px; padding:10px 14px; margin-bottom:1.25rem; font-size:14px; color:var(--color-text-secondary); }
+  .location-bar i { color:#1a6496; font-size:18px; }
+  .location-bar strong { color:var(--color-text-primary); font-weight:500; }
+  .section-title { font-family:'Exo 2',sans-serif; font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--color-text-secondary); margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+  .section-title i { font-size:18px; color:#1a6496; }
+  .cards-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-bottom:1.25rem; }
+  .card { background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:12px; padding:14px; text-align:center; }
+  .card-label { font-size:12px; color:var(--color-text-secondary); margin-bottom:4px; text-transform:uppercase; letter-spacing:0.05em; }
+  .card-value { font-family:'Exo 2',sans-serif; font-size:26px; font-weight:700; line-height:1; }
+  .card-sub { font-size:12px; color:var(--color-text-secondary); margin-top:3px; }
+  .card.temp .card-value { color:#e67e22; }
+  .card.chuva .card-value { color:#2980b9; }
+  .card.vento .card-value { color:#27ae60; }
+  .card.lua .card-value { font-size:36px; }
+  .score-bar { background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:12px; padding:16px; margin-bottom:1.25rem; }
+  .score-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .score-label { font-size:14px; font-weight:500; }
+  .score-badge { font-family:'Exo 2',sans-serif; font-size:13px; font-weight:700; padding:4px 12px; border-radius:20px; }
+  .score-badge.excelente { background:#d5f5e3; color:#1e8449; }
+  .score-badge.bom { background:#d6eaf8; color:#1a5276; }
+  .score-badge.regular { background:#fef9e7; color:#9a7d0a; }
+  .score-badge.ruim { background:#fdedec; color:#922b21; }
+  .score-track { height:12px; background:var(--color-background-secondary); border-radius:6px; overflow:hidden; margin-bottom:6px; }
+  .score-fill { height:100%; border-radius:6px; transition:width 1s ease; }
+  .score-factors { font-size:12px; color:var(--color-text-secondary); }
+  .days-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-bottom:1.25rem; }
+  .day-card { border-radius:10px; padding:8px 4px; text-align:center; cursor:pointer; transition:transform 0.15s,border-color 0.15s; background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); }
+  .day-card:hover { transform:translateY(-2px); }
+  .day-card.selected { border:2px solid #1a6496; }
+  .day-card.excelente { background:#eafaf1; }
+  .day-card.bom { background:#eaf4fb; }
+  .day-card.regular { background:#fefde7; }
+  .day-card.ruim { background:#fdf2f0; }
+  .day-name { font-size:10px; color:var(--color-text-secondary); text-transform:uppercase; margin-bottom:2px; }
+  .day-num { font-family:'Exo 2',sans-serif; font-size:17px; font-weight:700; line-height:1; }
+  .day-icon { font-size:20px; margin:4px 0; }
+  .day-temp { font-size:11px; color:var(--color-text-secondary); }
+  .day-moon { font-size:14px; }
+  .day-score-dot { width:8px; height:8px; border-radius:50%; margin:4px auto 0; }
+  .dot-excelente { background:#27ae60; }
+  .dot-bom { background:#2980b9; }
+  .dot-regular { background:#f39c12; }
+  .dot-ruim { background:#e74c3c; }
+  .detail-panel { background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:12px; padding:16px; margin-bottom:1.25rem; }
+  .tips-list { list-style:none; }
+  .tips-list li { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:0.5px solid var(--color-border-tertiary); font-size:14px; line-height:1.5; }
+  .tips-list li:last-child { border-bottom:none; }
+  .tips-list i { font-size:18px; color:#1a6496; flex-shrink:0; margin-top:1px; }
+  .fish-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:8px; margin-bottom:1.25rem; }
+  .fish-card { background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:10px; padding:12px 10px; text-align:center; }
+  .fish-emoji { font-size:28px; }
+  .fish-name { font-size:13px; font-weight:500; margin:4px 0 2px; }
+  .fish-info { font-size:11px; color:var(--color-text-secondary); }
+  .fish-active { display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; margin-top:4px; }
+  .active-sim { background:#d5f5e3; color:#1e8449; }
+  .active-nao { background:#fdedec; color:#922b21; }
+  .active-maybe { background:#fef9e7; color:#9a7d0a; }
+  .moon-phase-big { display:flex; align-items:center; gap:16px; background:#0a1628; border-radius:12px; padding:16px; margin-bottom:1.25rem; color:white; }
+  .moon-symbol { font-size:56px; line-height:1; }
+  .moon-name { font-family:'Exo 2',sans-serif; font-size:20px; font-weight:700; }
+  .moon-desc { font-size:13px; opacity:0.75; margin-top:4px; line-height:1.5; }
+  .moon-effect { font-size:12px; margin-top:8px; padding:6px 10px; background:rgba(255,255,255,0.1); border-radius:8px; }
+  .loading-msg { text-align:center; padding:2rem; color:var(--color-text-secondary); font-size:14px; }
+  .btn-refresh { background:#1a6496; color:white; border:none; padding:8px 18px; border-radius:8px; font-size:14px; cursor:pointer; font-family:'Roboto Condensed',sans-serif; font-weight:500; display:flex; align-items:center; gap:6px; }
+  .btn-refresh:hover { background:#0e4d7a; }
+  .error-msg { background:#fef3cd; border:1px solid #ffc107; border-radius:8px; padding:12px 16px; font-size:13px; color:#856404; margin-bottom:1rem; }
+
+  .dev-footer {
+    margin-top: 2rem;
+    border-top: 0.5px solid var(--color-border-tertiary);
+    padding-top: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .dev-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #0a3d62, #0e8a72);
+    border-radius: 12px;
+    padding: 10px 16px;
+    flex: 1;
+    min-width: 220px;
+  }
+  .dev-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Exo 2',sans-serif; font-size: 14px; font-weight: 700;
+    color: white; flex-shrink: 0;
+  }
+  .dev-name {
+    font-family: 'Dancing Script', cursive;
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.1;
+  }
+  .dev-role {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .dev-version {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    text-align: right;
+  }
+
+  @media (max-width: 500px) {
+    .days-grid { grid-template-columns:repeat(4,1fr); }
+    .day-card { padding:6px 2px; }
+    .day-num { font-size:14px; }
+  }
+</style>
+
+<div class="app" id="app">
+  <div class="header">
+    <div class="header-icon">🤿</div>
+    <div>
+      <div class="header-title">Pesca Subaquática</div>
+      <div class="header-sub">Rio Grande · Bacia do Paraná · Águas Doces</div>
+    </div>
+    <button class="btn-refresh" onclick="loadAll()" style="margin-left:auto; flex-shrink:0;">
+      <i class="ti ti-refresh" aria-hidden="true"></i> Atualizar
+    </button>
+  </div>
+
+  <div class="location-bar">
+    <i class="ti ti-map-pin" aria-hidden="true"></i>
+    <strong>Rio Grande / Bacia do Paraná</strong>
+    <span style="margin-left:auto; font-size:12px;" id="last-update">Carregando...</span>
+  </div>
+
+  <div id="main-content">
+    <div class="loading-msg">
+      <i class="ti ti-loader" style="font-size:24px; display:block; margin-bottom:8px;" aria-hidden="true"></i>
+      Buscando dados de clima e calculando condições...
+    </div>
+  </div>
+
+  <div class="dev-footer">
+    <div class="dev-badge">
+      <div class="dev-avatar">AQ</div>
+      <div>
+        <div class="dev-name">Adolfo Queiroz</div>
+        <div class="dev-role">Desenvolvedor · Pesca Subaquática</div>
+      </div>
+    </div>
+    <div class="dev-version">
+      <i class="ti ti-code" style="font-size:14px; vertical-align:-2px;" aria-hidden="true"></i>
+      v1.0 · 2025<br>
+      Bacia do Paraná
+    </div>
+  </div>
+</div>
+
+<script>
+const LAT = -20.1, LON = -48.9;
+
+function getMoonPhase(date) {
+  const known = new Date(2000,0,6,18,14);
+  const days = (date - known)/(1000*60*60*24);
+  const cycle = 29.53058867;
+  let phase = ((days % cycle)+cycle)%cycle;
+  let name,emoji,pescaEfeito,iluminacao;
+  if(phase<1.85){name='Lua Nova';emoji='🌑';pescaEfeito='Excelente';iluminacao=0;}
+  else if(phase<7.38){name='Crescente';emoji='🌒';pescaEfeito='Muito Bom';iluminacao=Math.round((phase/7.38)*40);}
+  else if(phase<9.22){name='Quarto Crescente';emoji='🌓';pescaEfeito='Bom';iluminacao=50;}
+  else if(phase<14.77){name='Gibosa Crescente';emoji='🌔';pescaEfeito='Regular';iluminacao=Math.round(50+(phase-9.22)/5.55*40);}
+  else if(phase<16.61){name='Lua Cheia';emoji='🌕';pescaEfeito='Ruim';iluminacao=100;}
+  else if(phase<22.15){name='Gibosa Minguante';emoji='🌖';pescaEfeito='Regular';iluminacao=Math.round(90-(phase-16.61)/5.54*40);}
+  else if(phase<24.0){name='Quarto Minguante';emoji='🌗';pescaEfeito='Bom';iluminacao=50;}
+  else{name='Minguante';emoji='🌘';pescaEfeito='Muito Bom';iluminacao=Math.round(40-(phase-24)/5.53*40);}
+  return{name,emoji,pescaEfeito,iluminacao,phase};
+}
+
+function getMoonDesc(nome) {
+  const d={'Lua Nova':'Céu escuro favorece camuflagem do mergulhador. Peixes ficam mais ativos e menos assustados. Melhor período para pesca subaquática!','Crescente':'Luminosidade baixa e crescente. Período excelente — peixes ainda ativos e ambiente propício ao mergulho.','Quarto Crescente':'Iluminação moderada. Bom período, especialmente nas primeiras horas do dia.','Gibosa Crescente':'Luminosidade aumentando. Peixes começam a ficar mais cautelosos. Prefira horários crepusculares.','Lua Cheia':'Água iluminada reduz efetividade da pesca subaquática. Peixes muito alertas. Evite este período.','Gibosa Minguante':'Luminosidade diminuindo. Condições melhorando gradualmente. Tente nas margens sombreadas.','Quarto Minguante':'Boas condições retornando. Peixes readquirindo rotina de alimentação normal.','Minguante':'Escuridão crescente. Excelente período! Peixes menos alertas e mais fáceis de aproximar.'};
+  return d[nome]||'';
+}
+
+async function fetchWeather() {
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,weathercode&current_weather=true&timezone=America/Sao_Paulo&forecast_days=7`;
+  const r=await fetch(url);
+  if(!r.ok)throw new Error('Erro clima');
+  return r.json();
+}
+
+function wxCodeToInfo(code) {
+  if(code===0)return{label:'Sol pleno',icon:'☀️',class:'excelente'};
+  if(code<=2)return{label:'Parcialmente nublado',icon:'⛅',class:'bom'};
+  if(code<=3)return{label:'Nublado',icon:'☁️',class:'regular'};
+  if(code<=49)return{label:'Neblina/Névoa',icon:'🌫️',class:'regular'};
+  if(code<=59)return{label:'Garoa',icon:'🌦️',class:'regular'};
+  if(code<=69)return{label:'Chuva',icon:'🌧️',class:'ruim'};
+  if(code<=79)return{label:'Granizo',icon:'🌨️',class:'ruim'};
+  if(code<=82)return{label:'Pancadas de chuva',icon:'⛈️',class:'ruim'};
+  if(code<=99)return{label:'Tempestade',icon:'⛈️',class:'ruim'};
+  return{label:'Variável',icon:'🌥️',class:'regular'};
+}
+
+function calcScore(wxCode,precip,wind,moon) {
+  let score=100,fatores=[];
+  if(moon.pescaEfeito==='Excelente'){score+=20;fatores.push('🌑 Lua favorável (+20)');}
+  else if(moon.pescaEfeito==='Muito Bom'){score+=10;fatores.push('🌒 Lua boa (+10)');}
+  else if(moon.pescaEfeito==='Regular'){score-=15;fatores.push('🌔 Lua desfavorável (-15)');}
+  else if(moon.pescaEfeito==='Ruim'){score-=35;fatores.push('🌕 Lua cheia (-35)');}
+  if(wxCode===0){score+=15;fatores.push('☀️ Sol pleno (+15)');}
+  else if(wxCode<=2){score+=8;fatores.push('⛅ Pouco nublado (+8)');}
+  else if(wxCode>=60){score-=20;fatores.push('🌧️ Chuva (-20)');}
+  else if(wxCode>=80){score-=30;fatores.push('⛈️ Tempestade (-30)');}
+  if(precip>10){score-=15;fatores.push(`🌧️ Precipitação alta: ${Math.round(precip)}mm (-15)`);}
+  else if(precip>2){score-=5;fatores.push(`🌦️ Alguma chuva: ${Math.round(precip)}mm (-5)`);}
+  if(wind>30){score-=20;fatores.push(`💨 Vento forte: ${Math.round(wind)}km/h (-20)`);}
+  else if(wind>15){score-=8;fatores.push(`💨 Vento moderado: ${Math.round(wind)}km/h (-8)`);}
+  else{score+=5;fatores.push(`🌿 Vento calmo: ${Math.round(wind)}km/h (+5)`);}
+  score=Math.max(0,Math.min(150,score));
+  let classe,label;
+  if(score>=110){classe='excelente';label='🏆 Excelente';}
+  else if(score>=80){classe='bom';label='👍 Bom';}
+  else if(score>=55){classe='regular';label='⚠️ Regular';}
+  else{classe='ruim';label='❌ Evitar';}
+  return{score:Math.min(score,140),classe,label,fatores};
+}
+
+const PEIXES=[
+  {emoji:'🐟',nome:'Dourado',habitat:'Corredeiras',ativo_sol:true,ativo_sombra:false,dica:'Prefere águas rápidas e oxigenadas'},
+  {emoji:'🐠',nome:'Pacu',habitat:'Remansos',ativo_sol:false,ativo_sombra:true,dica:'Ativo ao entardecer, remansos com folhas'},
+  {emoji:'🦈',nome:'Pintado/Surubim',habitat:'Fundo/Troncos',ativo_sol:false,ativo_sombra:true,dica:'Embaixo de troncos submersos, à noite'},
+  {emoji:'🐡',nome:'Curimbatá',habitat:'Corredeiras rasas',ativo_sol:true,ativo_sombra:true,dica:'Fácil de encontrar, se alimenta de algas'},
+  {emoji:'🦑',nome:'Piapara',habitat:'Pedras',ativo_sol:true,ativo_sombra:false,dica:'Junto às pedras em corredeiras'},
+  {emoji:'🐬',nome:'Piraputanga',habitat:'Superfície',ativo_sol:true,ativo_sombra:false,dica:'Próxima à superfície, áreas sombreadas'},
+];
+
+let selectedDay=0,weatherData=null;
+
+function renderApp(data) {
+  weatherData=data;
+  const today=new Date();
+  const days=[];
+  for(let i=0;i<7;i++){
+    const d=new Date(today);
+    d.setDate(today.getDate()+i);
+    const moon=getMoonPhase(d);
+    const wx=data.daily;
+    const wxInfo=wxCodeToInfo(wx.weathercode[i]);
+    const sc=calcScore(wx.weathercode[i],wx.precipitation_sum[i],wx.windspeed_10m_max[i],moon);
+    days.push({date:d,moon,wxInfo,tmax:Math.round(wx.temperature_2m_max[i]),tmin:Math.round(wx.temperature_2m_min[i]),precip:Math.round(wx.precipitation_sum[i]),wind:Math.round(wx.windspeed_10m_max[i]),wxCode:wx.weathercode[i],score:sc});
+  }
+  window._days=days;
+  const dayNames=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  const monthNames=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+  let daysHtml='';
+  days.forEach((d,i)=>{
+    const isToday=i===0;
+    daysHtml+=`<div class="day-card ${d.score.classe} ${i===selectedDay?'selected':''}" onclick="selectDay(${i})" role="button" tabindex="0">
+      <div class="day-name">${isToday?'Hoje':dayNames[d.date.getDay()]}</div>
+      <div class="day-num">${d.date.getDate()}<span style="font-size:10px;font-weight:400"> ${monthNames[d.date.getMonth()]}</span></div>
+      <div class="day-icon">${d.wxInfo.icon}</div>
+      <div class="day-temp">${d.tmax}°/${d.tmin}°</div>
+      <div class="day-moon">${d.moon.emoji}</div>
+      <div class="day-score-dot dot-${d.score.classe}"></div>
+    </div>`;
+  });
+
+  const sel=days[selectedDay];
+  const scoreWidth=Math.round((sel.score.score/140)*100);
+  let scoreColor=sel.score.classe==='excelente'?'#27ae60':sel.score.classe==='bom'?'#2980b9':sel.score.classe==='regular'?'#f39c12':'#e74c3c';
+  const moonInfo=getMoonDesc(sel.moon.name);
+
+  const fishHtml=PEIXES.map(f=>{
+    let status,statusClass;
+    const isSunny=sel.wxCode<=2;
+    if(f.ativo_sol&&isSunny){status='Ativo Agora';statusClass='active-sim';}
+    else if(f.ativo_sombra&&!isSunny){status='Ativo Agora';statusClass='active-sim';}
+    else{status='Pouco Ativo';statusClass='active-maybe';}
+    if(sel.score.classe==='ruim'){status='Difícil Hoje';statusClass='active-nao';}
+    return `<div class="fish-card"><div class="fish-emoji">${f.emoji}</div><div class="fish-name">${f.nome}</div><div class="fish-info">${f.habitat}</div><div class="fish-active ${statusClass}">${status}</div><div style="font-size:10px;color:var(--color-text-secondary);margin-top:4px;">${f.dica}</div></div>`;
+  }).join('');
+
+  let tips=[];
+  if(sel.score.classe==='excelente'){tips=[{icon:'ti-clock',txt:'Horário ideal: entre 6h–9h e 16h–18h (entardecer).'},{icon:'ti-wave-square',txt:'Explore corredeiras e remansos — dourado e curimbatá muito ativos.'},{icon:'ti-eye',txt:'Visibilidade boa. Mergulhe devagar para não assustar os peixes.'},{icon:'ti-sun',txt:'Dia ideal! Clima e lua alinhados para pesca subaquática.'}];}
+  else if(sel.score.classe==='bom'){tips=[{icon:'ti-clock',txt:'Prefira 6h–8h ou final da tarde (16h–18h).'},{icon:'ti-fish',txt:'Foque em zonas de transição: onde corredeira encontra remanso.'},{icon:'ti-droplet',txt:sel.precip>0?'Pode haver leve turbidez — tente áreas de água mais clara.':'Água limpa. Ótima visibilidade para mergulho.'}];}
+  else if(sel.score.classe==='regular'){tips=[{icon:'ti-alert-triangle',txt:'Condições medianas. Tente nas melhores zonas do rio.'},{icon:'ti-moon',txt:sel.moon.iluminacao>70?'Lua iluminada — peixes mais alertas. Movimentos lentos.':'Aproxime-se devagar, os peixes estão mais cautelosos.'},{icon:'ti-map-pin',txt:'Explore locais com vegetação submersa e troncos.'}];}
+  else{tips=[{icon:'ti-x',txt:'Hoje não é o melhor dia. Planeje a próxima saída.'},{icon:'ti-calendar',txt:`Próximos dias melhores: ${days.filter(d=>d.score.classe==='excelente'||d.score.classe==='bom').map(d=>d.date.getDate()+'/'+(d.date.getMonth()+1)).slice(0,3).join(', ')||'veja o calendário acima'}.`},{icon:'ti-tools',txt:'Aproveite para revisar equipamentos: roupa, arpão, cinto e nadadeiras.'}];}
+
+  const tipsHtml=tips.map(t=>`<li><i class="ti ${t.icon}" aria-hidden="true"></i><span>${t.txt}</span></li>`).join('');
+  const now=new Date();
+  document.getElementById('last-update').textContent=`Atualizado ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+  document.getElementById('main-content').innerHTML=`
+    <div class="section-title"><i class="ti ti-calendar-week" aria-hidden="true"></i>Próximos 7 dias</div>
+    <div class="days-grid">${daysHtml}</div>
+    <div class="section-title"><i class="ti ti-chart-bar" aria-hidden="true"></i>Condições — ${sel.date.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'})}</div>
+    <div class="cards-grid">
+      <div class="card temp"><div class="card-label">Temperatura</div><div class="card-value">${sel.tmax}°C</div><div class="card-sub">Mín ${sel.tmin}°C</div></div>
+      <div class="card chuva"><div class="card-label">Precipitação</div><div class="card-value">${sel.precip}<span style="font-size:14px">mm</span></div><div class="card-sub">${sel.wxInfo.label}</div></div>
+      <div class="card vento"><div class="card-label">Vento Máx.</div><div class="card-value">${sel.wind}<span style="font-size:14px">km/h</span></div><div class="card-sub">${sel.wind<=10?'Calmo':sel.wind<=20?'Leve':sel.wind<=30?'Moderado':'Forte'}</div></div>
+      <div class="card lua"><div class="card-label">Lua</div><div class="card-value">${sel.moon.emoji}</div><div class="card-sub">${sel.moon.name}</div></div>
+    </div>
+    <div class="score-bar">
+      <div class="score-header"><span class="score-label">Índice de Pesca Subaquática</span><span class="score-badge ${sel.score.classe}">${sel.score.label}</span></div>
+      <div class="score-track"><div class="score-fill" style="width:${scoreWidth}%;background:${scoreColor};"></div></div>
+      <div class="score-factors">${sel.score.fatores.join(' · ')}</div>
+    </div>
+    <div class="moon-phase-big">
+      <div class="moon-symbol">${sel.moon.emoji}</div>
+      <div><div class="moon-name">${sel.moon.name}</div><div class="moon-desc">${moonInfo}</div><div class="moon-effect">Para pesca subaquática: <strong>${sel.moon.pescaEfeito}</strong> · Iluminação: ~${sel.moon.iluminacao}%</div></div>
+    </div>
+    <div class="section-title"><i class="ti ti-fish" aria-hidden="true"></i>Peixes da Bacia do Paraná / Rio Grande</div>
+    <div class="fish-grid">${fishHtml}</div>
+    <div class="section-title"><i class="ti ti-bulb" aria-hidden="true"></i>Dicas para hoje</div>
+    <div class="detail-panel"><ul class="tips-list">${tipsHtml}</ul></div>
+  `;
+}
+
+function selectDay(i){selectedDay=i;if(weatherData)renderApp(weatherData);}
+
+async function loadAll(){
+  document.getElementById('main-content').innerHTML=`<div class="loading-msg"><i class="ti ti-loader" style="font-size:24px;display:block;margin-bottom:8px;"></i>Buscando dados de clima...</div>`;
+  document.getElementById('last-update').textContent='Atualizando...';
+  try{const data=await fetchWeather();selectedDay=0;renderApp(data);}
+  catch(e){document.getElementById('main-content').innerHTML=`<div class="error-msg"><strong>Não foi possível buscar dados.</strong><br>Verifique sua conexão e tente novamente.<br><small>Erro: ${e.message}</small></div><button class="btn-refresh" onclick="loadAll()"><i class="ti ti-refresh"></i> Tentar novamente</button>`;}
+}
+
+loadAll();
+</script>
