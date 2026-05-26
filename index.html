@@ -2,527 +2,683 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Pesca Subaquática Inteligente</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;700;900&family=Roboto+Condensed:wght@300;400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
 <style>
-
 :root{
-  --bg:#07131f;
-  --card:#0f1f2d;
-  --card2:#14293d;
-  --primary:#00b4ff;
-  --primary2:#0ed39b;
-  --text:#ffffff;
-  --sub:#9fb5c8;
-  --border:rgba(255,255,255,0.08);
-  --success:#19c37d;
-  --warning:#f7b731;
-  --danger:#ff5d5d;
+  --bg:#07131a;
+  --panel:#0d1b24;
+  --panel-2:#102633;
+  --line:rgba(255,255,255,.1);
+  --text:#f7fbff;
+  --muted:#9bb1c0;
+  --soft:#d5e7ef;
+  --blue:#23a7ff;
+  --green:#19c37d;
+  --yellow:#f4b63f;
+  --red:#ef6262;
+  --shadow:0 20px 60px rgba(0,0,0,.28);
 }
 
 *{
-  margin:0;
-  padding:0;
   box-sizing:border-box;
 }
 
 body{
-  background:
-  radial-gradient(circle at top right,#10345a 0%,transparent 25%),
-  radial-gradient(circle at bottom left,#0e7a65 0%,transparent 20%),
-  var(--bg);
-
-  color:var(--text);
-  font-family:'Roboto Condensed',sans-serif;
+  margin:0;
   min-height:100vh;
-  padding:20px;
+  background:
+    linear-gradient(135deg,rgba(35,167,255,.18),transparent 32%),
+    linear-gradient(315deg,rgba(25,195,125,.14),transparent 26%),
+    var(--bg);
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
 }
 
-.app{
-  max-width:1200px;
-  margin:auto;
-}
-
-.header{
-  background:linear-gradient(135deg,#0a3d62,#11669b,#0e8a72);
-  border-radius:24px;
-  padding:24px;
-  position:relative;
-  overflow:hidden;
-  margin-bottom:20px;
-  border:1px solid rgba(255,255,255,0.08);
-}
-
-.header::before{
-  content:'';
-  position:absolute;
-  width:220px;
-  height:220px;
-  border-radius:50%;
-  background:rgba(255,255,255,0.05);
-  top:-80px;
-  right:-80px;
-}
-
-.header-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:20px;
-  flex-wrap:wrap;
-}
-
-.logo-area{
-  display:flex;
-  align-items:center;
-  gap:18px;
-}
-
-.logo{
-  width:75px;
-  height:75px;
-  border-radius:20px;
-  background:rgba(255,255,255,0.15);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:42px;
-}
-
-.title{
-  font-family:'Exo 2',sans-serif;
-  font-size:34px;
-  font-weight:900;
-}
-
-.subtitle{
-  color:#dbefff;
-  margin-top:4px;
-  font-size:14px;
-}
-
-.location-box{
-  background:rgba(255,255,255,0.12);
-  padding:14px 18px;
-  border-radius:14px;
-  backdrop-filter:blur(10px);
-  min-width:250px;
-}
-
-.location-title{
-  font-size:12px;
-  opacity:.8;
-  margin-bottom:4px;
-}
-
-.location-name{
-  font-size:20px;
-  font-weight:700;
-}
-
-.location-coords{
-  font-size:12px;
-  opacity:.8;
-  margin-top:3px;
-}
-
-.location-actions{
-  margin-top:12px;
-  display:grid;
-  grid-template-columns:1fr auto auto;
-  gap:8px;
-}
-
-.city-input{
-  width:100%;
-  min-width:0;
-  border:1px solid rgba(255,255,255,0.18);
-  background:rgba(7,19,31,0.55);
-  color:white;
-  border-radius:10px;
-  padding:10px 12px;
+button,
+input{
   font:inherit;
 }
 
-.city-input::placeholder{
-  color:rgba(255,255,255,0.58);
+.app{
+  width:min(1180px,calc(100% - 32px));
+  margin:0 auto;
+  padding:24px 0 32px;
 }
 
-.icon-btn{
-  width:42px;
-  height:42px;
-  border:0;
-  border-radius:10px;
-  background:rgba(255,255,255,0.16);
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  font-size:19px;
+.hero{
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:linear-gradient(135deg,rgba(15,44,61,.96),rgba(10,31,42,.94));
+  box-shadow:var(--shadow);
+  overflow:hidden;
 }
 
-.icon-btn.primary{
-  background:linear-gradient(135deg,var(--primary),var(--primary2));
-}
-
-.location-hint{
-  color:#dbefff;
-  font-size:12px;
-  margin-top:8px;
-  opacity:.84;
-}
-
-.main-grid{
+.hero-main{
   display:grid;
-  grid-template-columns:1fr;
-  gap:20px;
+  grid-template-columns:1fr minmax(320px,420px);
+  gap:22px;
+  padding:24px;
+  align-items:stretch;
 }
 
-.section{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:22px;
-  padding:22px;
-}
-
-.section-title{
-  font-family:'Exo 2',sans-serif;
-  font-size:18px;
-  font-weight:700;
-  margin-bottom:18px;
+.brand{
   display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.cards-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  align-items:flex-start;
   gap:16px;
 }
 
-.card{
-  background:linear-gradient(180deg,var(--card2),#102130);
-  border-radius:18px;
-  padding:20px;
-  border:1px solid var(--border);
-}
-
-.card-label{
-  color:var(--sub);
-  font-size:13px;
-  text-transform:uppercase;
-  letter-spacing:.06em;
-}
-
-.card-value{
-  font-family:'Exo 2',sans-serif;
-  font-size:38px;
-  font-weight:900;
-  margin-top:8px;
-}
-
-.card-sub{
-  color:var(--sub);
-  margin-top:6px;
-  font-size:13px;
-}
-
-.days-grid{
+.brand-mark{
+  width:58px;
+  height:58px;
+  border-radius:14px;
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-  gap:12px;
+  place-items:center;
+  background:rgba(255,255,255,.1);
+  border:1px solid var(--line);
+  font-size:30px;
+  flex:none;
+}
+
+h1{
+  margin:0;
+  font-size:clamp(28px,4vw,46px);
+  line-height:1.02;
+  letter-spacing:0;
+}
+
+.hero-copy{
+  margin:12px 0 0;
+  max-width:720px;
+  color:var(--soft);
+  line-height:1.55;
+  font-size:16px;
+}
+
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:20px;
+}
+
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.07);
+  color:#e6f7ff;
+  border-radius:999px;
+  padding:8px 11px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.location-panel{
+  background:rgba(5,17,25,.5);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:16px;
+}
+
+.eyebrow{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.location-name{
+  margin-top:8px;
+  font-size:24px;
+  font-weight:800;
+}
+
+.coords{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.search-row{
+  display:grid;
+  grid-template-columns:1fr 44px 44px;
+  gap:8px;
+  margin-top:14px;
+}
+
+.city-input{
+  min-width:0;
+  width:100%;
+  height:44px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(3,13,19,.72);
+  color:white;
+  padding:0 13px;
+  outline:none;
+}
+
+.city-input:focus{
+  border-color:rgba(35,167,255,.75);
+  box-shadow:0 0 0 3px rgba(35,167,255,.14);
+}
+
+.icon-btn{
+  height:44px;
+  width:44px;
+  border:0;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  color:white;
+  background:rgba(255,255,255,.11);
+  cursor:pointer;
+  font-size:21px;
+}
+
+.icon-btn.primary{
+  background:linear-gradient(135deg,var(--blue),var(--green));
+}
+
+.hint{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+}
+
+.notice{
+  border-top:1px solid var(--line);
+  padding:13px 24px;
+  color:#d8ecf4;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  background:rgba(255,255,255,.04);
+  font-size:13px;
+  line-height:1.45;
+}
+
+.notice i{
+  color:var(--yellow);
+  font-size:18px;
+  margin-top:1px;
+}
+
+.content{
+  margin-top:18px;
+  display:grid;
+  gap:18px;
+}
+
+.section{
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:rgba(13,27,36,.92);
+  box-shadow:0 12px 36px rgba(0,0,0,.18);
+  padding:18px;
+}
+
+.section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:14px;
+}
+
+.section-title{
+  margin:0;
+  font-size:16px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.section-title i{
+  color:var(--blue);
+  font-size:20px;
+}
+
+.section-meta{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.forecast-grid{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(120px,1fr));
+  gap:10px;
+  overflow-x:auto;
+  padding-bottom:2px;
 }
 
 .day-card{
-  background:linear-gradient(180deg,#12263a,#0d1b28);
-  border-radius:18px;
-  padding:16px;
-  border:1px solid var(--border);
+  min-width:120px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:linear-gradient(180deg,#102837,#0b1b25);
+  padding:13px;
   cursor:pointer;
-  transition:.25s;
-  text-align:center;
+  transition:transform .18s ease,border-color .18s ease;
 }
 
 .day-card:hover{
-  transform:translateY(-5px);
+  transform:translateY(-2px);
 }
 
 .day-card.selected{
-  border:2px solid var(--primary);
-  box-shadow:0 0 20px rgba(0,180,255,.25);
+  border-color:rgba(35,167,255,.95);
+  box-shadow:0 0 0 3px rgba(35,167,255,.14);
 }
 
 .day-name{
-  color:var(--sub);
+  color:var(--muted);
   font-size:12px;
-  margin-bottom:8px;
-}
-
-.day-temp{
-  font-size:24px;
-  font-weight:700;
-  margin:8px 0;
+  font-weight:800;
+  text-transform:uppercase;
 }
 
 .day-icon{
-  font-size:36px;
+  margin-top:10px;
+  font-size:31px;
 }
 
-.score-bar{
-  margin-top:15px;
+.day-temp{
+  margin-top:6px;
+  font-size:25px;
+  font-weight:800;
+}
+
+.day-small{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px;
+}
+
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+}
+
+.metric{
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:linear-gradient(180deg,#102737,#0c1d27);
+  padding:14px;
+  min-height:108px;
+}
+
+.metric-label{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+.metric-value{
+  margin-top:10px;
+  font-size:32px;
+  font-weight:800;
+  line-height:1;
+}
+
+.metric-sub{
+  color:var(--muted);
+  margin-top:8px;
+  font-size:13px;
+}
+
+.score-wrap{
+  margin-top:14px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  background:rgba(255,255,255,.035);
+}
+
+.score-line{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+}
+
+.score-label{
+  font-weight:800;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:28px;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.good{
+  background:rgba(25,195,125,.16);
+  color:#6df0b5;
+}
+
+.medium{
+  background:rgba(244,182,63,.16);
+  color:#ffd36c;
+}
+
+.bad{
+  background:rgba(239,98,98,.17);
+  color:#ff9393;
 }
 
 .track{
-  width:100%;
-  height:16px;
-  border-radius:999px;
-  background:#132637;
-  overflow:hidden;
   margin-top:12px;
+  height:12px;
+  overflow:hidden;
+  border-radius:999px;
+  background:#132a35;
 }
 
 .fill{
   height:100%;
   border-radius:999px;
-  transition:1s;
+  transition:width .45s ease;
 }
 
 .fish-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:14px;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:12px;
 }
 
 .fish-card{
-  background:linear-gradient(180deg,#112334,#0d1d2b);
-  border-radius:18px;
-  padding:18px;
-  border:1px solid var(--border);
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:linear-gradient(180deg,#102736,#0b1b25);
+  padding:0;
+  min-height:360px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+.fish-photo-wrap{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/10;
+  background:#07131a;
+  overflow:hidden;
+}
+
+.fish-photo{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+
+.fish-photo-wrap::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,transparent 42%,rgba(7,19,26,.82));
+  pointer-events:none;
+}
+
+.fish-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.fish-body{
+  padding:14px;
+  display:flex;
+  flex:1;
+  flex-direction:column;
+  gap:10px;
 }
 
 .fish-emoji{
-  font-size:42px;
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:rgba(255,255,255,.08);
+  font-size:25px;
 }
 
 .fish-name{
-  font-size:20px;
-  font-weight:700;
-  margin-top:8px;
+  font-size:18px;
+  font-weight:800;
 }
 
 .fish-desc{
-  color:var(--sub);
-  margin-top:8px;
+  color:var(--soft);
   font-size:13px;
-  line-height:1.5;
+  line-height:1.48;
 }
 
-.active{
-  display:inline-block;
-  margin-top:10px;
-  padding:6px 12px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:700;
-}
-
-.good{
-  background:rgba(25,195,125,.15);
-  color:#33ffab;
-}
-
-.bad{
-  background:rgba(255,93,93,.15);
-  color:#ff7d7d;
-}
-
-.medium{
-  background:rgba(247,183,49,.15);
-  color:#ffd166;
-}
-
-.moon{
+.fish-note{
+  margin-top:auto;
   display:flex;
-  align-items:center;
-  gap:20px;
-  background:linear-gradient(135deg,#09111f,#132741);
-  border-radius:20px;
-  padding:24px;
-  margin-top:20px;
+  flex-wrap:wrap;
+  gap:6px;
 }
 
-.moon-emoji{
-  font-size:72px;
+.fish-source{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.35;
 }
 
-.moon-title{
-  font-size:28px;
-  font-weight:900;
-  font-family:'Exo 2',sans-serif;
+.fish-source a{
+  color:#bfe7ff;
+  text-decoration:none;
 }
 
-.moon-desc{
-  margin-top:8px;
-  color:#d2e5f3;
-  line-height:1.6;
+.mini-tag{
+  border:1px solid var(--line);
+  border-radius:999px;
+  color:#cde2eb;
+  background:rgba(255,255,255,.05);
+  padding:5px 8px;
+  font-size:11px;
+  font-weight:700;
 }
 
 .tips{
   list-style:none;
+  margin:0;
+  padding:0;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
 }
 
 .tips li{
-  display:flex;
-  gap:12px;
-  padding:14px 0;
-  border-bottom:1px solid rgba(255,255,255,0.05);
-}
-
-.tips li:last-child{
-  border:none;
-}
-
-.footer{
-  text-align:center;
-  color:var(--sub);
-  margin-top:24px;
-  font-size:13px;
-}
-
-.btn{
-  background:linear-gradient(135deg,var(--primary),var(--primary2));
-  color:white;
-  border:none;
-  padding:14px 22px;
+  border:1px solid var(--line);
   border-radius:14px;
-  font-weight:700;
-  cursor:pointer;
-  font-size:15px;
+  background:rgba(255,255,255,.035);
+  padding:13px;
+  color:#d7e8ef;
+  line-height:1.45;
+  display:flex;
+  gap:10px;
+}
+
+.tips i{
+  color:var(--green);
+  font-size:20px;
+  flex:none;
+  margin-top:1px;
 }
 
 .loading{
+  min-height:310px;
+  display:grid;
+  place-items:center;
   text-align:center;
-  padding:50px;
 }
 
 .loading i{
-  font-size:50px;
+  font-size:44px;
+  color:var(--blue);
   animation:spin 1s linear infinite;
 }
 
+.loading h2{
+  margin:16px 0 0;
+}
+
+.error-card{
+  max-width:620px;
+  margin:0 auto;
+  text-align:center;
+}
+
+.btn{
+  border:0;
+  border-radius:12px;
+  padding:12px 16px;
+  color:white;
+  background:linear-gradient(135deg,var(--blue),var(--green));
+  cursor:pointer;
+  font-weight:800;
+}
+
+.footer{
+  color:var(--muted);
+  text-align:center;
+  font-size:12px;
+  margin-top:22px;
+}
+
 @keyframes spin{
-  from{transform:rotate(0deg)}
   to{transform:rotate(360deg)}
 }
 
-@media(max-width:700px){
-
-  .title{
-    font-size:26px;
+@media(max-width:880px){
+  .hero-main,
+  .metrics,
+  .tips{
+    grid-template-columns:1fr;
   }
-
-  .card-value{
-    font-size:30px;
-  }
-
-  .moon{
-    flex-direction:column;
-    text-align:center;
-  }
-
 }
 
+@media(max-width:540px){
+  .app{
+    width:min(100% - 20px,1180px);
+    padding-top:10px;
+  }
+
+  .hero-main,
+  .section{
+    padding:14px;
+  }
+
+  .brand{
+    align-items:center;
+  }
+
+  .brand-mark{
+    width:48px;
+    height:48px;
+  }
+
+  .notice{
+    padding:12px 14px;
+  }
+
+  .section-head{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+}
 </style>
 </head>
 
 <body>
+<main class="app">
+  <header class="hero">
+    <div class="hero-main">
+      <div>
+        <div class="brand">
+          <div class="brand-mark">🤿</div>
+          <div>
+            <h1>Pesca Subaquática Inteligente</h1>
+            <p class="hero-copy">
+              Consulta de clima, lua e espécies não nativas para apoiar uma pesca mais consciente na bacia do rio Paraná.
+            </p>
+          </div>
+        </div>
 
-<div class="app">
+        <div class="chips">
+          <span class="chip"><i class="ti ti-map-pin"></i> Cidade ou GPS</span>
+          <span class="chip"><i class="ti ti-cloud"></i> Clima em tempo real</span>
+          <span class="chip"><i class="ti ti-fish"></i> Foco em invasoras</span>
+        </div>
+      </div>
 
-<div class="header">
+      <aside class="location-panel" aria-label="Busca de localização">
+        <div class="eyebrow">Localização</div>
+        <div class="location-name" id="location-name">Localizando...</div>
+        <div class="coords" id="coords">---</div>
 
-<div class="header-top">
+        <div class="search-row">
+          <input class="city-input" id="city-input" placeholder="Ex: Itapagipe-MG" autocomplete="address-level2" />
+          <button class="icon-btn primary" id="search-btn" title="Buscar cidade" aria-label="Buscar cidade">
+            <i class="ti ti-search"></i>
+          </button>
+          <button class="icon-btn" id="gps-btn" title="Usar GPS" aria-label="Usar GPS">
+            <i class="ti ti-current-location"></i>
+          </button>
+        </div>
 
-<div class="logo-area">
+        <p class="hint">Digite cidade-UF ou permita o GPS para detectar automaticamente sua região.</p>
+      </aside>
+    </div>
 
-<div class="logo">
-🤿
-</div>
+    <div class="notice">
+      <i class="ti ti-alert-triangle"></i>
+      <span>
+        Consulte sempre a legislação atual, cota, tamanho mínimo, período de defeso e normas do local. O painel é informativo e não substitui fiscalização ambiental.
+      </span>
+    </div>
+  </header>
 
-<div>
-<div class="title">
-Pesca Subaquática Inteligente
-</div>
+  <div class="content" id="content">
+    <div class="section loading">
+      <div>
+        <i class="ti ti-loader"></i>
+        <h2>Obtendo GPS e clima...</h2>
+      </div>
+    </div>
+  </div>
 
-<div class="subtitle" id="subtitle">
-Sistema avançado com GPS e clima em tempo real
-</div>
-</div>
-
-</div>
-
-<div class="location-box">
-
-<div class="location-title">
-LOCALIZAÇÃO ATUAL
-</div>
-
-<div class="location-name" id="location-name">
-Localizando...
-</div>
-
-<div class="location-coords" id="coords">
----
-</div>
-
-<div class="location-actions">
-  <input class="city-input" id="city-input" placeholder="Ex: Itapagipe-MG" />
-  <button class="icon-btn primary" onclick="searchCity()" title="Buscar cidade" aria-label="Buscar cidade">
-    <i class="ti ti-search"></i>
-  </button>
-  <button class="icon-btn" onclick="loadAll()" title="Usar GPS" aria-label="Usar GPS">
-    <i class="ti ti-current-location"></i>
-  </button>
-</div>
-
-<div class="location-hint">
-Digite a cidade ou use o GPS.
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="content">
-
-<div class="loading">
-<i class="ti ti-loader"></i>
-<h2 style="margin-top:20px;">
-Obtendo GPS e clima...
-</h2>
-</div>
-
-</div>
-
-<div class="footer">
-Desenvolvido por Adolfo Queiroz · Sistema Inteligente de Pesca · GPS Real Time
-</div>
-
-</div>
+  <footer class="footer">
+    Desenvolvido por Adolfo Queiroz · Sistema inteligente de apoio à pesca · Dados climáticos Open-Meteo
+  </footer>
+</main>
 
 <script>
-
 let LAT = null;
 let LON = null;
 let CITY = 'Região Atual';
@@ -530,58 +686,133 @@ let selectedDay = 0;
 let weatherData = null;
 
 const PEIXES = [
-
-{
-emoji:'🐟',
-nome:'Tilápia',
-desc:'Espécie exótica/invasora comum na bacia do Paraná. Em geral é uma das espécies que a pesca busca controlar.',
-sol:true
-},
-
-{
-emoji:'🐠',
-nome:'Tucunaré',
-desc:'Predador introduzido fora de sua área natural em muitos reservatórios da bacia. Costuma ficar mais ativo com sol e água clara.',
-sol:true
-},
-
-{
-emoji:'🐡',
-nome:'Pirarucu',
-desc:'Espécie amazônica e não nativa da bacia do Paraná. Onde aparece como introduzida, exige atenção às regras locais.',
-sol:false
-},
-
-{
-emoji:'🐟',
-nome:'Carpa',
-desc:'Peixe exótico introduzido, encontrado em represas e ambientes mais lentos.',
-sol:false
-},
-
-{
-emoji:'🐠',
-nome:'Bagre-africano',
-desc:'Espécie invasora resistente, associada a ambientes alterados e de baixa oxigenação.',
-sol:false
-}
-
+  {
+    emoji:'🐟',
+    nome:'Tilápia',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Tilapia_oreochromis_niloticus_fish.jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Tilapia_oreochromis_niloticus_fish.jpg',
+    credit:'Raver Duane / USFWS',
+    desc:'Espécie exótica/invasora comum em represas e rios alterados. Em muitas regiões a retirada ajuda no controle populacional.',
+    sol:true,
+    tags:['Exótica','Controle','Água parada']
+  },
+  {
+    emoji:'🐠',
+    nome:'Tucunaré',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Tucunar%C3%A9%20(Peacock%20Bass)%20(20750719960).jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Tucunar%C3%A9_(Peacock_Bass)_(20750719960).jpg',
+    credit:'Under the same moon...',
+    desc:'Predador introduzido fora da área natural em vários reservatórios. Costuma caçar melhor com sol, água clara e estrutura.',
+    sol:true,
+    tags:['Introduzido','Predador','Sol']
+  },
+  {
+    emoji:'🐡',
+    nome:'Pirarucu',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Arapaima-full.jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Arapaima-full.jpg',
+    credit:'Wikimedia Commons',
+    desc:'Espécie amazônica, não nativa da bacia do Paraná. Onde aparece introduzida, confira autorização e regra específica.',
+    sol:false,
+    tags:['Não nativo','Atenção legal','Grande porte']
+  },
+  {
+    emoji:'🐟',
+    nome:'Carpa',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Common_Carp_(Cyprinus_carpio)_(1)_(51222524826).jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Common_Carp_(Cyprinus_carpio)_(1)_(51222524826).jpg',
+    credit:'Sam Stukel / USFWS',
+    desc:'Peixe exótico associado a lagos, cavas e reservatórios. Tolera água turva e ambientes com pouca correnteza.',
+    sol:false,
+    tags:['Exótica','Reservatório','Água lenta']
+  },
+  {
+    emoji:'🐠',
+    nome:'Bagre-africano',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Clarias_gariepinus%2C_African_sharptooth_catfish.jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Clarias_gariepinus,_African_sharptooth_catfish.jpg',
+    credit:'Zahara5555',
+    desc:'Espécie invasora resistente, capaz de ocupar ambientes degradados. Verifique normas locais para captura e transporte.',
+    sol:false,
+    tags:['Invasor','Resistente','Controle']
+  }
 ];
 
+const PEIXES_ORIGINAIS = [
+  {
+    emoji:'🐟',
+    nome:'Dourado',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Dourado(Salminus_brasiliensis)emBonito.jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Dourado(Salminus_brasiliensis)emBonito.jpg',
+    credit:'David Morimoto',
+    desc:'Peixe nativo emblemático da bacia do Paraná. Normalmente tem regras específicas de proteção, tamanho e período.',
+    sol:true,
+    tags:['Nativo','Predador','Consultar regra']
+  },
+  {
+    emoji:'🐠',
+    nome:'Pacu',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Pacu_Piaractus_2008_G1.jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Pacu_Piaractus_2008_G1.jpg',
+    credit:'George Chernilevsky',
+    desc:'Espécie nativa de grande importância ecológica, associada a frutos, margens e áreas alagadas.',
+    sol:false,
+    tags:['Nativo','Frugívoro','Atenção legal']
+  },
+  {
+    emoji:'🐡',
+    nome:'Pintado',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Pescaria_de_pintado_no_pantanal.jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Pescaria_de_pintado_no_pantanal.jpg',
+    credit:'Wikimedia Commons',
+    desc:'Bagre nativo de grande porte. Pode ter restrições importantes conforme estado, rio, época e tamanho.',
+    sol:false,
+    tags:['Nativo','Grande porte','Defeso']
+  },
+  {
+    emoji:'🐟',
+    nome:'Curimbatá',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Curimbat%C3%A1%20%E2%80%93%20Prochilodus%20lineatus%20(5257755240).jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Curimbat%C3%A1_%E2%80%93_Prochilodus_lineatus_(5257755240).jpg',
+    credit:'Wikimedia Commons',
+    desc:'Peixe migrador nativo, muito relevante para a cadeia alimentar. Costuma ser protegido em períodos reprodutivos.',
+    sol:true,
+    tags:['Nativo','Migrador','Piracema']
+  },
+  {
+    emoji:'🐠',
+    nome:'Piraputanga',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Brycon_hilarii_-_Piraputanga_no_Monumento_Natural_do_Rio_Formoso.jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Brycon_hilarii_-_Piraputanga_no_Monumento_Natural_do_Rio_Formoso.jpg',
+    credit:'BRASIL AQUA',
+    desc:'Espécie nativa de águas claras, comum em ambientes preservados. Deve ser tratada com cuidado e regra local em mãos.',
+    sol:true,
+    tags:['Nativo','Água clara','Preservação']
+  }
+];
+
+const cityInput = document.getElementById('city-input');
+const searchBtn = document.getElementById('search-btn');
+const gpsBtn = document.getElementById('gps-btn');
+
+searchBtn.addEventListener('click', searchCity);
+gpsBtn.addEventListener('click', loadAll);
+cityInput.addEventListener('keydown', event=>{
+  if(event.key === 'Enter'){
+    searchCity();
+  }
+});
+
 function normalizeText(value){
-
   return String(value || '')
-  .normalize('NFD')
-  .replace(/[\u0300-\u036f]/g,'')
-  .toLowerCase()
-  .trim();
-
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase()
+    .trim();
 }
 
 function stateToUF(value){
-
   const text = String(value || '').trim();
-
   if(/^[A-Z]{2}$/.test(text)) return text;
 
   const iso = text.match(/BR-([A-Z]{2})/i);
@@ -597,20 +828,17 @@ function stateToUF(value){
   };
 
   return states[normalizeText(text)] || text;
-
 }
 
 function formatCityRegion(address){
-
   address = address || {};
-
   const city =
-  address.city ||
-  address.town ||
-  address.village ||
-  address.municipality ||
-  address.county ||
-  'Região Atual';
+    address.city ||
+    address.town ||
+    address.village ||
+    address.municipality ||
+    address.county ||
+    'Região Atual';
 
   const uf = stateToUF(
     address['ISO3166-2-lvl4'] ||
@@ -619,614 +847,386 @@ function formatCityRegion(address){
   );
 
   return uf && uf !== city ? `${city}-${uf}` : city;
+}
 
+function setLocationUI(name, coords){
+  document.getElementById('location-name').textContent = name;
+  document.getElementById('coords').textContent = coords || '---';
 }
 
 async function updatePlaceFromCoordinates(){
-
-  document.getElementById('coords').innerHTML =
-  `${LAT.toFixed(5)} , ${LON.toFixed(5)}`;
+  const coords = `${LAT.toFixed(5)} , ${LON.toFixed(5)}`;
+  setLocationUI('Identificando região...', coords);
 
   try{
-
-    const geo =
-    await fetch(
-    `https://geocode.maps.co/reverse?lat=${LAT}&lon=${LON}`
-    );
-
+    const geo = await fetch(`https://geocode.maps.co/reverse?lat=${LAT}&lon=${LON}`);
     const geoData = await geo.json();
-
     CITY = formatCityRegion(geoData.address);
-
   }catch(e){
-
     CITY = 'Região Atual';
-
   }
 
-  document.getElementById('location-name').innerHTML = CITY;
-  document.getElementById('city-input').value =
-  CITY !== 'Região Atual' ? CITY : '';
-
+  setLocationUI(CITY, coords);
+  cityInput.value = CITY !== 'Região Atual' ? CITY : '';
 }
 
 async function getLocation(){
+  if(!navigator.geolocation){
+    throw new Error('GPS indisponível neste navegador');
+  }
 
   return new Promise((resolve,reject)=>{
-
     navigator.geolocation.getCurrentPosition(
-
-      async(pos)=>{
-
+      async pos=>{
         LAT = pos.coords.latitude;
         LON = pos.coords.longitude;
-
         await updatePlaceFromCoordinates();
-
         resolve();
-
       },
-
-      (err)=>{
-
-        reject(err);
-
-      },
-
+      reject,
       {
         enableHighAccuracy:true,
-        timeout:10000,
+        timeout:12000,
         maximumAge:0
       }
-
     );
-
   });
-
 }
 
 async function searchCity(){
-
-  const input = document.getElementById('city-input');
-  const query = input.value.trim();
-
+  const query = cityInput.value.trim();
   if(!query){
-
-    input.focus();
+    cityInput.focus();
     return;
-
   }
 
-  document.getElementById('location-name').innerHTML = 'Buscando cidade...';
-  document.getElementById('content').innerHTML = `
-  <div class="loading">
-  <i class="ti ti-loader"></i>
-  <h2 style="margin-top:20px;">
-  Buscando região e clima...
-  </h2>
-  </div>
-  `;
+  setLocationUI('Buscando cidade...', '---');
+  showLoading('Buscando região e clima...');
 
   try{
-
-    const url =
-    `https://geocode.maps.co/search?q=${encodeURIComponent(query)}&country=BR&limit=1`;
-
+    const url = `https://geocode.maps.co/search?q=${encodeURIComponent(query)}&country=BR&limit=1`;
     const response = await fetch(url);
     const places = await response.json();
 
     if(!places.length){
-
       throw new Error('Cidade não encontrada');
-
     }
 
     const place = places[0];
-
     LAT = Number(place.lat);
     LON = Number(place.lon);
-
     CITY = formatCityRegion(place.address);
 
     if(CITY === 'Região Atual'){
-
       CITY = query.toUpperCase();
-
     }
 
-    document.getElementById('location-name').innerHTML = CITY;
-    document.getElementById('coords').innerHTML =
-    `${LAT.toFixed(5)} , ${LON.toFixed(5)}`;
-
+    setLocationUI(CITY, `${LAT.toFixed(5)} , ${LON.toFixed(5)}`);
     const data = await fetchWeather();
-
     render(data);
-
   }catch(e){
-
-    document.getElementById('location-name').innerHTML = CITY;
-    document.getElementById('content').innerHTML = `
-    <div class="section">
-      <h2>
-      Erro ao buscar cidade
-      </h2>
-      <p style="margin-top:12px;color:#9fb5c8;">
-      Confira o nome da cidade. Exemplo: Itapagipe-MG.
-      </p>
-    </div>
-    `;
-
+    showError('Erro ao buscar cidade', 'Confira o nome da cidade. Exemplo: Itapagipe-MG.');
   }
-
 }
 
 async function fetchWeather(){
-
   const url =
-  `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,weathercode&timezone=auto&forecast_days=7`;
+    `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,weathercode&timezone=auto&forecast_days=7`;
 
-  const r = await fetch(url);
-
-  if(!r.ok){
-
+  const response = await fetch(url);
+  if(!response.ok){
     throw new Error('Erro ao buscar clima');
-
   }
 
-  return await r.json();
-
+  return response.json();
 }
 
 function weatherCode(code){
-
-  if(code===0) return ['☀️','Sol'];
-
-  if(code<=3) return ['⛅','Nublado'];
-
-  if(code<=55) return ['🌫️','Neblina'];
-
-  if(code<=65) return ['🌧️','Chuva'];
-
-  if(code<=82) return ['⛈️','Tempestade'];
-
+  if(code === 0) return ['☀️','Sol'];
+  if(code <= 3) return ['⛅','Parcialmente nublado'];
+  if(code <= 55) return ['🌫️','Neblina'];
+  if(code <= 65) return ['🌧️','Chuva'];
+  if(code <= 82) return ['⛈️','Temporal'];
   return ['🌥️','Variável'];
-
 }
 
 function moonPhase(date){
-
   const known = new Date(2000,0,6,18,14);
-
   const days = (date - known)/(1000*60*60*24);
-
   const cycle = 29.53058867;
+  const phase = ((days % cycle)+cycle)%cycle;
 
-  let phase = ((days % cycle)+cycle)%cycle;
-
-  if(phase<1.85)
-  return ['🌑','Lua Nova','Excelente para pesca'];
-
-  if(phase<7.38)
-  return ['🌒','Crescente','Muito boa'];
-
-  if(phase<9.22)
-  return ['🌓','Quarto Crescente','Boa'];
-
-  if(phase<14.77)
-  return ['🌔','Gibosa Crescente','Regular'];
-
-  if(phase<16.61)
-  return ['🌕','Lua Cheia','Ruim'];
-
-  if(phase<22.15)
-  return ['🌖','Gibosa Minguante','Regular'];
-
-  if(phase<24)
-  return ['🌗','Quarto Minguante','Boa'];
-
-  return ['🌘','Minguante','Excelente'];
-
+  if(phase < 1.85) return ['🌑','Lua Nova','Excelente para baixa luminosidade e aproximação discreta.'];
+  if(phase < 7.38) return ['🌒','Crescente','Boa atividade no amanhecer e fim de tarde.'];
+  if(phase < 9.22) return ['🌓','Quarto Crescente','Condição equilibrada para leitura da água.'];
+  if(phase < 14.77) return ['🌔','Gibosa Crescente','Regular, observe vento e transparência.'];
+  if(phase < 16.61) return ['🌕','Lua Cheia','Mais luminosidade pode deixar peixes ariscos.'];
+  if(phase < 22.15) return ['🌖','Gibosa Minguante','Regular, prefira horários de transição.'];
+  if(phase < 24) return ['🌗','Quarto Minguante','Boa para movimentação moderada.'];
+  return ['🌘','Minguante','Excelente para aproximação em baixa luz.'];
 }
 
 function calcScore(code,rain,wind,moon){
+  let score = 82;
+  if(moon[1] === 'Lua Nova' || moon[1] === 'Minguante') score += 18;
+  if(moon[1] === 'Lua Cheia') score -= 22;
+  if(code === 0) score += 12;
+  if(code >= 60) score -= 18;
+  if(rain > 8) score -= 16;
+  if(wind > 24) score -= 18;
+  score = Math.max(20,Math.min(130,score));
 
-  let score = 100;
-
-  if(moon[1]==='Lua Nova') score += 25;
-  if(moon[1]==='Lua Cheia') score -= 30;
-
-  if(code===0) score += 15;
-
-  if(code>=60) score -= 20;
-
-  if(rain>10) score -= 15;
-
-  if(wind>25) score -= 20;
-
-  if(score>=110) return ['EXCELENTE','good',score];
-
-  if(score>=80) return ['BOM','medium',score];
-
-  if(score>=55) return ['REGULAR','medium',score];
-
-  return ['RUIM','bad',score];
-
+  if(score >= 105) return ['EXCELENTE','good',score];
+  if(score >= 78) return ['BOM','medium',score];
+  if(score >= 55) return ['REGULAR','medium',score];
+  return ['DIFÍCIL','bad',score];
 }
 
-function render(data){
-
-  weatherData = data;
-
+function getDays(data){
   const daily = data.daily;
-
   const days = [];
 
   for(let i=0;i<7;i++){
-
     const date = new Date();
-
     date.setDate(date.getDate()+i);
-
     const moon = moonPhase(date);
-
-    const score =
-    calcScore(
+    const score = calcScore(
       daily.weathercode[i],
       daily.precipitation_sum[i],
       daily.windspeed_10m_max[i],
       moon
     );
+    const weather = weatherCode(daily.weathercode[i]);
 
     days.push({
-
       date,
       moon,
       score,
-      icon:weatherCode(daily.weathercode[i])[0],
-      desc:weatherCode(daily.weathercode[i])[1],
+      icon:weather[0],
+      desc:weather[1],
       temp:Math.round(daily.temperature_2m_max[i]),
       min:Math.round(daily.temperature_2m_min[i]),
       rain:Math.round(daily.precipitation_sum[i]),
       wind:Math.round(daily.windspeed_10m_max[i])
-
     });
-
   }
 
+  return days;
+}
+
+function render(data){
+  weatherData = data;
+  const days = getDays(data);
   window.days = days;
+  const selected = days[selectedDay] || days[0];
+  const week = ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+  const width = Math.min(100,(selected.score[2]/130)*100);
+  const fillColor = selected.score[1] === 'good' ? '#19c37d' : selected.score[1] === 'medium' ? '#f4b63f' : '#ef6262';
 
-  const selected = days[selectedDay];
+  const daysHTML = days.map((day,index)=>`
+    <button class="day-card ${index === selectedDay ? 'selected' : ''}" onclick="selectDay(${index})">
+      <div class="day-name">${index === 0 ? 'Hoje' : week[day.date.getDay()]}</div>
+      <div class="day-icon">${day.icon}</div>
+      <div class="day-temp">${day.temp}°</div>
+      <div class="day-small">${day.min}° mín · ${day.moon[0]}</div>
+    </button>
+  `).join('');
 
-  let daysHTML = '';
+  const fishHTML = PEIXES.map(fish=>{
+    const active = (selected.icon === '☀️' && fish.sol) || (selected.icon !== '☀️' && !fish.sol);
+    let label = active ? 'MAIS ATIVO' : 'MODERADO';
+    let cls = active ? 'good' : 'medium';
 
-  const week =
-  ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
-
-  days.forEach((d,i)=>{
-
-    daysHTML += `
-    <div class="day-card ${i===selectedDay?'selected':''}"
-    onclick="selectDay(${i})">
-
-      <div class="day-name">
-      ${i===0?'Hoje':week[d.date.getDay()]}
-      </div>
-
-      <div class="day-icon">
-      ${d.icon}
-      </div>
-
-      <div class="day-temp">
-      ${d.temp}°
-      </div>
-
-      <div style="color:#9fb5c8;font-size:13px;">
-      ${d.min}° min
-      </div>
-
-      <div style="margin-top:8px;">
-      ${d.moon[0]}
-      </div>
-
-    </div>
-    `;
-
-  });
-
-  const width =
-  Math.min(100,(selected.score[2]/140)*100);
-
-  const fishHTML = PEIXES.map(f=>{
-
-    let active =
-    (selected.icon==='☀️' && f.sol)
-    ||
-    (selected.icon!=='☀️' && !f.sol);
-
-    let label =
-    active ? 'ATIVO' : 'MÉDIO';
-
-    let cls =
-    active ? 'good' : 'medium';
-
-    if(selected.score[0]==='RUIM'){
-
-      label = 'DIFÍCIL';
+    if(selected.score[0] === 'DIFÍCIL'){
+      label = 'BAIXA ATIVIDADE';
       cls = 'bad';
-
     }
 
     return `
-    <div class="fish-card">
-
-      <div class="fish-emoji">
-      ${f.emoji}
-      </div>
-
-      <div class="fish-name">
-      ${f.nome}
-      </div>
-
-      <div class="fish-desc">
-      ${f.desc}
-      </div>
-
-      <div class="active ${cls}">
-      ${label}
-      </div>
-
-    </div>
+      <article class="fish-card">
+        <div class="fish-photo-wrap">
+          <img class="fish-photo" src="${fish.img}" alt="Foto de ${fish.nome}" loading="lazy">
+        </div>
+        <div class="fish-body">
+          <div class="fish-top">
+            <div class="fish-emoji">${fish.emoji}</div>
+            <span class="badge ${cls}">${label}</span>
+          </div>
+          <div class="fish-name">${fish.nome}</div>
+          <div class="fish-desc">${fish.desc}</div>
+          <div class="fish-note">
+            ${fish.tags.map(tag=>`<span class="mini-tag">${tag}</span>`).join('')}
+          </div>
+          <div class="fish-source">
+            Foto: <a href="${fish.source}" target="_blank" rel="noopener">${fish.credit}</a>
+          </div>
+        </div>
+      </article>
     `;
+  }).join('');
 
+  const originalFishHTML = PEIXES_ORIGINAIS.map(fish=>{
+    const active = (selected.icon === '☀️' && fish.sol) || (selected.icon !== '☀️' && !fish.sol);
+    let label = active ? 'NATIVO ATIVO' : 'NATIVO';
+    let cls = active ? 'medium' : 'good';
+
+    if(selected.score[0] === 'DIFÍCIL'){
+      label = 'PRESERVAR';
+      cls = 'bad';
+    }
+
+    return `
+      <article class="fish-card">
+        <div class="fish-photo-wrap">
+          <img class="fish-photo" src="${fish.img}" alt="Foto de ${fish.nome}" loading="lazy">
+        </div>
+        <div class="fish-body">
+          <div class="fish-top">
+            <div class="fish-emoji">${fish.emoji}</div>
+            <span class="badge ${cls}">${label}</span>
+          </div>
+          <div class="fish-name">${fish.nome}</div>
+          <div class="fish-desc">${fish.desc}</div>
+          <div class="fish-note">
+            ${fish.tags.map(tag=>`<span class="mini-tag">${tag}</span>`).join('')}
+          </div>
+          <div class="fish-source">
+            Foto: <a href="${fish.source}" target="_blank" rel="noopener">${fish.credit}</a>
+          </div>
+        </div>
+      </article>
+    `;
   }).join('');
 
   document.getElementById('content').innerHTML = `
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-calendar-week"></i> Previsão dos próximos 7 dias</h2>
+        <div class="section-meta">${CITY}</div>
+      </div>
+      <div class="forecast-grid">${daysHTML}</div>
+    </section>
 
-  <div class="main-grid">
-
-  <div class="section">
-
-    <div class="section-title">
-      <i class="ti ti-calendar-week"></i>
-      PREVISÃO DOS PRÓXIMOS 7 DIAS
-    </div>
-
-    <div class="days-grid">
-      ${daysHTML}
-    </div>
-
-  </div>
-
-  <div class="section">
-
-    <div class="section-title">
-      <i class="ti ti-chart-bar"></i>
-      CONDIÇÕES ATUAIS
-    </div>
-
-    <div class="cards-grid">
-
-      <div class="card">
-
-        <div class="card-label">
-        Temperatura
-        </div>
-
-        <div class="card-value">
-        ${selected.temp}°
-        </div>
-
-        <div class="card-sub">
-        mínima ${selected.min}°
-        </div>
-
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-chart-bar"></i> Condições do dia selecionado</h2>
+        <div class="section-meta">${selected.desc}</div>
       </div>
 
-      <div class="card">
-
-        <div class="card-label">
-        Chuva
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-label">Temperatura</div>
+          <div class="metric-value">${selected.temp}°</div>
+          <div class="metric-sub">mínima ${selected.min}°</div>
         </div>
-
-        <div class="card-value">
-        ${selected.rain}mm
+        <div class="metric">
+          <div class="metric-label">Chuva</div>
+          <div class="metric-value">${selected.rain}mm</div>
+          <div class="metric-sub">${selected.desc}</div>
         </div>
-
-        <div class="card-sub">
-        ${selected.desc}
+        <div class="metric">
+          <div class="metric-label">Vento</div>
+          <div class="metric-value">${selected.wind}</div>
+          <div class="metric-sub">km/h</div>
         </div>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-label">
-        Vento
-        </div>
-
-        <div class="card-value">
-        ${selected.wind}
-        </div>
-
-        <div class="card-sub">
-        km/h
-        </div>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-label">
-        Lua
-        </div>
-
-        <div class="card-value">
-        ${selected.moon[0]}
-        </div>
-
-        <div class="card-sub">
-        ${selected.moon[1]}
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="score-bar">
-
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-size:18px;font-weight:700;">
-        Índice de Pesca
-        </div>
-
-        <div class="active ${selected.score[1]}">
-        ${selected.score[0]}
+        <div class="metric">
+          <div class="metric-label">Lua</div>
+          <div class="metric-value">${selected.moon[0]}</div>
+          <div class="metric-sub">${selected.moon[1]}</div>
         </div>
       </div>
 
-      <div class="track">
-        <div class="fill"
-        style="
-        width:${width}%;
-        background:
-        ${selected.score[1]==='good'
-        ?'#19c37d'
-        :selected.score[1]==='medium'
-        ?'#f7b731'
-        :'#ff5d5d'};
-        ">
+      <div class="score-wrap">
+        <div class="score-line">
+          <div>
+            <div class="score-label">Índice de pesca</div>
+            <div class="metric-sub">${selected.moon[2]}</div>
+          </div>
+          <span class="badge ${selected.score[1]}">${selected.score[0]}</span>
         </div>
+        <div class="track"><div class="fill" style="width:${width}%;background:${fillColor};"></div></div>
       </div>
+    </section>
 
-    </div>
-
-    <div class="moon">
-
-      <div class="moon-emoji">
-      ${selected.moon[0]}
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-fish"></i> Peixes invasores / permitidos</h2>
+        <div class="section-meta">Bacia do rio Paraná</div>
       </div>
+      <div class="fish-grid">${fishHTML}</div>
+    </section>
 
-      <div>
-
-        <div class="moon-title">
-        ${selected.moon[1]}
-        </div>
-
-        <div class="moon-desc">
-        ${selected.moon[2]}
-        </div>
-
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-leaf"></i> Peixes originais da bacia</h2>
+        <div class="section-meta">Nativos: consultar legislação antes da captura</div>
       </div>
+      <div class="fish-grid">${originalFishHTML}</div>
+    </section>
 
-    </div>
-
-  </div>
-
-  <div class="section">
-
-    <div class="section-title">
-      <i class="ti ti-fish"></i>
-      PEIXES INVASORES / PERMITIDOS
-    </div>
-
-    <div class="fish-grid">
-      ${fishHTML}
-    </div>
-
-  </div>
-
-  <div class="section">
-
-    <div class="section-title">
-      <i class="ti ti-bulb"></i>
-      DICAS INTELIGENTES
-    </div>
-
-    <ul class="tips">
-
-      <li>
-        <i class="ti ti-clock"></i>
-        Melhor horário: 6h às 9h e 16h às 18h.
-      </li>
-
-      <li>
-        <i class="ti ti-wave-square"></i>
-        Priorize espécies não nativas da bacia do Paraná e confira regras locais antes da pesca.
-      </li>
-
-      <li>
-        <i class="ti ti-wind"></i>
-        Vento atual: ${selected.wind}km/h.
-      </li>
-
-      <li>
-        <i class="ti ti-droplet"></i>
-        Chuva prevista: ${selected.rain}mm.
-      </li>
-
-      <li>
-        <i class="ti ti-map-pin"></i>
-        Região atual: ${CITY}.
-      </li>
-
-    </ul>
-
-  </div>
-
-  </div>
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-bulb"></i> Recomendações rápidas</h2>
+      </div>
+      <ul class="tips">
+        <li><i class="ti ti-clock"></i><span>Melhores janelas: 6h às 9h e 16h às 18h, principalmente com vento controlado.</span></li>
+        <li><i class="ti ti-ruler-measure"></i><span>Antes da saída, confirme regra local, defeso, tamanho mínimo e autorização para pesca subaquática.</span></li>
+        <li><i class="ti ti-wave-square"></i><span>Procure estruturas, margens de reservatório e água com boa visibilidade.</span></li>
+        <li><i class="ti ti-map-pin"></i><span>Região atual: ${CITY}.</span></li>
+      </ul>
+    </section>
   `;
-
 }
 
-function selectDay(i){
+function showLoading(message){
+  document.getElementById('content').innerHTML = `
+    <div class="section loading">
+      <div>
+        <i class="ti ti-loader"></i>
+        <h2>${message}</h2>
+      </div>
+    </div>
+  `;
+}
 
-  selectedDay = i;
+function showError(title,message){
+  document.getElementById('content').innerHTML = `
+    <section class="section">
+      <div class="error-card">
+        <h2>${title}</h2>
+        <p style="color:#9bb1c0;line-height:1.55;">${message}</p>
+        <button class="btn" onclick="loadAll()">Tentar GPS novamente</button>
+      </div>
+    </section>
+  `;
+}
 
+function selectDay(index){
+  selectedDay = index;
   render(weatherData);
-
 }
 
 async function loadAll(){
-
   try{
-
+    showLoading('Obtendo GPS e clima...');
     await getLocation();
-
     const data = await fetchWeather();
-
     render(data);
-
   }catch(e){
-
-    document.getElementById('content').innerHTML = `
-    <div class="section">
-
-      <h2>
-      Erro ao obter GPS ou clima
-      </h2>
-
-      <p style="margin-top:12px;color:#9fb5c8;">
-      Permita localização no navegador ou digite a cidade, por exemplo Itapagipe-MG.
-      </p>
-
-      <button class="btn"
-      onclick="loadAll()"
-      style="margin-top:20px;">
-      Tentar novamente
-      </button>
-
-    </div>
-    `;
-
+    setLocationUI(CITY, LAT && LON ? `${LAT.toFixed(5)} , ${LON.toFixed(5)}` : '---');
+    showError(
+      'GPS ou clima indisponível',
+      'Permita localização no navegador ou digite a cidade no campo acima, por exemplo Itapagipe-MG.'
+    );
   }
-
 }
 
 loadAll();
-
-setInterval(loadAll,600000);
-
+setInterval(()=>{
+  if(LAT && LON){
+    fetchWeather().then(render).catch(()=>{});
+  }
+},600000);
 </script>
-
 </body>
 </html>
