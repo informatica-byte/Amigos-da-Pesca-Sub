@@ -950,6 +950,30 @@ function weatherCode(code){
   return ['🌥️','Variável'];
 }
 
+function windDirection(degrees){
+  if(degrees === undefined || degrees === null) return '---';
+
+  const directions = ['N','NE','L','SE','S','SO','O','NO'];
+  const index = Math.round(Number(degrees) / 45) % 8;
+
+  return `${directions[index]} (${Math.round(degrees)}°)`;
+}
+
+function formatWeatherTime(value){
+  if(!value) return 'agora';
+
+  const date = new Date(value);
+
+  if(Number.isNaN(date.getTime())) return value;
+
+  return date.toLocaleString('pt-BR',{
+    day:'2-digit',
+    month:'2-digit',
+    hour:'2-digit',
+    minute:'2-digit'
+  });
+}
+
 function moonPhase(date){
   const known = new Date(2000,0,6,18,14);
   const days = (date - known)/(1000*60*60*24);
@@ -1019,6 +1043,12 @@ function render(data){
   const days = getDays(data);
   window.days = days;
   const selected = days[selectedDay] || days[0];
+  const current = data.current_weather || {};
+  const currentWeather = weatherCode(current.weathercode ?? data.daily.weathercode[0]);
+  const currentTemp = current.temperature !== undefined ? Math.round(current.temperature) : selected.temp;
+  const currentWind = current.windspeed !== undefined ? Math.round(current.windspeed) : selected.wind;
+  const currentDirection = windDirection(current.winddirection);
+  const currentUpdated = formatWeatherTime(current.time);
   const week = ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
   const width = Math.min(100,(selected.score[2]/130)*100);
   const fillColor = selected.score[1] === 'good' ? '#19c37d' : selected.score[1] === 'medium' ? '#f4b63f' : '#ef6262';
@@ -1099,6 +1129,36 @@ function render(data){
   }).join('');
 
   document.getElementById('content').innerHTML = `
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-cloud-bolt"></i> Condições climáticas em tempo real</h2>
+        <div class="section-meta">Atualizado em ${currentUpdated}</div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-label">Agora</div>
+          <div class="metric-value">${currentTemp}°</div>
+          <div class="metric-sub">temperatura atual</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Condição</div>
+          <div class="metric-value">${currentWeather[0]}</div>
+          <div class="metric-sub">${currentWeather[1]}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Vento atual</div>
+          <div class="metric-value">${currentWind}</div>
+          <div class="metric-sub">km/h</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Direção</div>
+          <div class="metric-value" style="font-size:26px;">${currentDirection}</div>
+          <div class="metric-sub">direção do vento</div>
+        </div>
+      </div>
+    </section>
+
     <section class="section">
       <div class="section-head">
         <h2 class="section-title"><i class="ti ti-calendar-week"></i> Previsão dos próximos 7 dias</h2>
