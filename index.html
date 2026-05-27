@@ -7,610 +7,624 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
 <style>
 :root{
-  --bg:#07131a;
-  --panel:#0d1b24;
-  --panel-2:#102633;
-  --line:rgba(255,255,255,.1);
-  --text:#f7fbff;
-  --muted:#9bb1c0;
-  --soft:#d5e7ef;
+  --bg:#06111a;
+  --panel:#0c1b26;
+  --panel-2:#102533;
+  --line:rgba(255,255,255,.09);
+  --line-accent:rgba(35,167,255,.28);
+  --text:#f0f9ff;
+  --muted:#8aacbd;
+  --soft:#cde4ef;
   --blue:#23a7ff;
+  --blue-dim:rgba(35,167,255,.12);
   --green:#19c37d;
+  --green-dim:rgba(25,195,125,.12);
   --yellow:#f4b63f;
+  --yellow-dim:rgba(244,182,63,.12);
   --red:#ef6262;
-  --shadow:0 20px 60px rgba(0,0,0,.28);
+  --red-dim:rgba(239,98,98,.12);
+  --cyan:#00d4e8;
+  --shadow:0 24px 64px rgba(0,0,0,.35);
+  --radius:16px;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box;margin:0;padding:0;}
 
 body{
-  margin:0;
   min-height:100vh;
-  background:
-    linear-gradient(135deg,rgba(35,167,255,.18),transparent 32%),
-    linear-gradient(315deg,rgba(25,195,125,.14),transparent 26%),
-    var(--bg);
+  background:var(--bg);
   color:var(--text);
-  font-family:Inter,Arial,sans-serif;
+  font-family:'Space Grotesk',sans-serif;
+  line-height:1.5;
 }
 
-button,
-input{
-  font:inherit;
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 0%,rgba(35,167,255,.1),transparent),
+    radial-gradient(ellipse 50% 60% at 90% 100%,rgba(25,195,125,.08),transparent);
+  z-index:0;
 }
 
 .app{
-  width:min(1180px,calc(100% - 32px));
+  position:relative;
+  z-index:1;
+  width:min(1220px,calc(100% - 32px));
   margin:0 auto;
-  padding:24px 0 32px;
+  padding:24px 0 40px;
 }
 
+/* ===== HERO ===== */
 .hero{
   border:1px solid var(--line);
-  border-radius:18px;
-  background:linear-gradient(135deg,rgba(15,44,61,.96),rgba(10,31,42,.94));
+  border-radius:20px;
+  background:rgba(12,27,38,.94);
+  backdrop-filter:blur(12px);
   box-shadow:var(--shadow);
   overflow:hidden;
 }
 
 .hero-main{
   display:grid;
-  grid-template-columns:1fr minmax(320px,420px);
-  gap:22px;
-  padding:24px;
-  align-items:stretch;
+  grid-template-columns:1fr minmax(300px,400px);
+  gap:20px;
+  padding:22px;
+  align-items:start;
 }
 
 .brand{
   display:flex;
   align-items:flex-start;
-  gap:16px;
+  gap:14px;
 }
 
 .brand-mark{
-  width:58px;
-  height:58px;
+  width:56px;height:56px;
   border-radius:14px;
-  display:grid;
-  place-items:center;
-  background:rgba(255,255,255,.1);
-  border:1px solid var(--line);
-  font-size:30px;
-  flex:none;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,rgba(35,167,255,.2),rgba(25,195,125,.2));
+  border:1px solid rgba(35,167,255,.25);
+  font-size:28px;flex:none;
 }
 
-h1{
-  margin:0;
-  font-size:clamp(28px,4vw,46px);
+.hero-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(26px,3.5vw,44px);
   line-height:1.02;
-  letter-spacing:0;
+  letter-spacing:-.02em;
+  font-weight:800;
 }
 
 .hero-copy{
-  margin:12px 0 0;
-  max-width:720px;
+  margin:10px 0 0;
   color:var(--soft);
+  font-size:15px;
   line-height:1.55;
-  font-size:16px;
+  max-width:680px;
 }
 
 .chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:20px;
+  display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;
 }
 
 .chip{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
+  display:inline-flex;align-items:center;gap:6px;
   border:1px solid var(--line);
-  background:rgba(255,255,255,.07);
-  color:#e6f7ff;
+  background:rgba(255,255,255,.06);
+  color:#e0f4ff;
   border-radius:999px;
-  padding:8px 11px;
-  font-size:13px;
-  font-weight:700;
+  padding:6px 11px;font-size:12px;font-weight:700;
 }
 
+.chip i{font-size:14px;color:var(--blue);}
+
 .location-panel{
-  background:rgba(5,17,25,.5);
+  background:rgba(4,14,22,.6);
   border:1px solid var(--line);
-  border-radius:16px;
-  padding:16px;
+  border-radius:14px;
+  padding:14px;
 }
 
 .eyebrow{
-  color:var(--muted);
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:.08em;
-  text-transform:uppercase;
+  color:var(--muted);font-size:11px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
 }
 
-.location-name{
-  margin-top:8px;
-  font-size:24px;
-  font-weight:800;
-}
-
-.coords{
-  margin-top:4px;
-  color:var(--muted);
-  font-size:13px;
-}
+.location-name{margin-top:6px;font-size:22px;font-weight:700;font-family:'Syne',sans-serif;}
+.coords{margin-top:2px;color:var(--muted);font-size:12px;}
 
 .search-row{
-  display:grid;
-  grid-template-columns:1fr 44px 44px;
-  gap:8px;
-  margin-top:14px;
+  display:grid;grid-template-columns:1fr 42px 42px;gap:7px;margin-top:12px;
 }
 
 .city-input{
-  min-width:0;
-  width:100%;
-  height:44px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.16);
-  background:rgba(3,13,19,.72);
-  color:white;
-  padding:0 13px;
-  outline:none;
+  min-width:0;width:100%;height:42px;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(2,10,16,.7);
+  color:white;padding:0 12px;outline:none;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:14px;
 }
 
 .city-input:focus{
-  border-color:rgba(35,167,255,.75);
-  box-shadow:0 0 0 3px rgba(35,167,255,.14);
+  border-color:rgba(35,167,255,.65);
+  box-shadow:0 0 0 3px rgba(35,167,255,.12);
 }
 
 .icon-btn{
-  height:44px;
-  width:44px;
-  border:0;
-  border-radius:12px;
-  display:grid;
-  place-items:center;
-  color:white;
-  background:rgba(255,255,255,.11);
-  cursor:pointer;
-  font-size:21px;
+  height:42px;width:42px;border:0;
+  border-radius:11px;
+  display:grid;place-items:center;
+  color:white;background:rgba(255,255,255,.1);
+  cursor:pointer;font-size:20px;
+  transition:background .15s;
 }
 
-.icon-btn.primary{
-  background:linear-gradient(135deg,var(--blue),var(--green));
-}
-
-.hint{
-  margin-top:10px;
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.45;
-}
+.icon-btn:hover{background:rgba(255,255,255,.18);}
+.icon-btn.primary{background:linear-gradient(135deg,var(--blue),var(--green));}
+.hint{margin-top:9px;color:var(--muted);font-size:11px;line-height:1.45;}
 
 .notice{
   border-top:1px solid var(--line);
-  padding:13px 24px;
-  color:#d8ecf4;
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-  background:rgba(255,255,255,.04);
-  font-size:13px;
-  line-height:1.45;
+  padding:12px 22px;color:#cfe9f5;
+  display:flex;gap:10px;align-items:flex-start;
+  background:rgba(244,182,63,.04);font-size:12.5px;line-height:1.45;
 }
 
-.notice i{
-  color:var(--yellow);
-  font-size:18px;
-  margin-top:1px;
-}
+.notice i{color:var(--yellow);font-size:17px;margin-top:1px;flex:none;}
 
-.content{
+/* ===== NAV TABS ===== */
+.tab-bar{
+  display:flex;gap:6px;flex-wrap:wrap;
   margin-top:18px;
-  display:grid;
-  gap:18px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:rgba(12,27,38,.9);
+  padding:8px;
 }
 
+.tab-btn{
+  flex:1;min-width:120px;
+  height:40px;border:0;
+  border-radius:10px;
+  color:var(--muted);
+  background:transparent;
+  cursor:pointer;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:13px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  transition:all .18s;
+  white-space:nowrap;
+}
+
+.tab-btn i{font-size:16px;}
+.tab-btn:hover{background:rgba(255,255,255,.07);color:var(--text);}
+.tab-btn.active{
+  background:linear-gradient(135deg,rgba(35,167,255,.18),rgba(25,195,125,.12));
+  border:1px solid rgba(35,167,255,.3);
+  color:var(--text);
+}
+
+/* ===== CONTENT ===== */
+.content{margin-top:16px;display:grid;gap:16px;}
+
+.tab-panel{display:none;}
+.tab-panel.active{display:grid;gap:16px;}
+
+/* ===== SECTION ===== */
 .section{
   border:1px solid var(--line);
-  border-radius:18px;
-  background:rgba(13,27,36,.92);
-  box-shadow:0 12px 36px rgba(0,0,0,.18);
-  padding:18px;
+  border-radius:var(--radius);
+  background:rgba(12,27,38,.88);
+  padding:16px;
 }
 
 .section-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-  margin-bottom:14px;
+  display:flex;align-items:center;
+  justify-content:space-between;gap:12px;margin-bottom:14px;
 }
 
 .section-title{
-  margin:0;
-  font-size:16px;
-  font-weight:800;
-  display:flex;
-  align-items:center;
-  gap:9px;
+  margin:0;font-size:15px;font-weight:700;font-family:'Syne',sans-serif;
+  display:flex;align-items:center;gap:8px;
 }
 
-.section-title i{
-  color:var(--blue);
-  font-size:20px;
-}
+.section-title i{color:var(--blue);font-size:19px;}
+.section-meta{color:var(--muted);font-size:12px;}
 
-.section-meta{
-  color:var(--muted);
-  font-size:13px;
-}
-
-.forecast-grid{
-  display:grid;
-  grid-template-columns:repeat(7,minmax(120px,1fr));
-  gap:10px;
-  overflow-x:auto;
-  padding-bottom:2px;
-}
-
-.day-card{
-  min-width:120px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:linear-gradient(180deg,#102837,#0b1b25);
-  padding:13px;
-  cursor:pointer;
-  transition:transform .18s ease,border-color .18s ease;
-}
-
-.day-card:hover{
-  transform:translateY(-2px);
-}
-
-.day-card.selected{
-  border-color:rgba(35,167,255,.95);
-  box-shadow:0 0 0 3px rgba(35,167,255,.14);
-}
-
-.day-name{
-  color:var(--muted);
-  font-size:12px;
-  font-weight:800;
-  text-transform:uppercase;
-}
-
-.day-icon{
-  margin-top:10px;
-  font-size:31px;
-}
-
-.day-temp{
-  margin-top:6px;
-  font-size:25px;
-  font-weight:800;
-}
-
-.day-small{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:4px;
-}
-
+/* ===== METRICS ===== */
 .metrics{
   display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:12px;
+  gap:10px;
 }
 
 .metric{
   border:1px solid var(--line);
-  border-radius:14px;
-  background:linear-gradient(180deg,#102737,#0c1d27);
-  padding:14px;
-  min-height:108px;
+  border-radius:13px;
+  background:linear-gradient(180deg,#102737,#0b1c27);
+  padding:13px;min-height:100px;
 }
 
 .metric-label{
-  color:var(--muted);
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:.06em;
-  text-transform:uppercase;
+  color:var(--muted);font-size:11px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
 }
 
-.metric-value{
-  margin-top:10px;
-  font-size:32px;
-  font-weight:800;
-  line-height:1;
-}
+.metric-value{margin-top:9px;font-size:30px;font-weight:700;line-height:1;font-family:'Syne',sans-serif;}
+.metric-sub{color:var(--muted);margin-top:7px;font-size:12px;}
 
-.metric-sub{
-  color:var(--muted);
-  margin-top:8px;
-  font-size:13px;
-}
-
+/* ===== SCORE ===== */
 .score-wrap{
-  margin-top:14px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:14px;
-  background:rgba(255,255,255,.035);
+  margin-top:12px;border:1px solid var(--line);
+  border-radius:13px;padding:13px;
+  background:rgba(255,255,255,.03);
 }
 
-.score-line{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  align-items:center;
-}
-
-.score-label{
-  font-weight:800;
-}
+.score-line{display:flex;justify-content:space-between;gap:12px;align-items:center;}
+.score-label{font-weight:700;}
 
 .badge{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:28px;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:800;
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:26px;padding:4px 10px;
+  border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.04em;
 }
 
-.good{
-  background:rgba(25,195,125,.16);
-  color:#6df0b5;
-}
-
-.medium{
-  background:rgba(244,182,63,.16);
-  color:#ffd36c;
-}
-
-.bad{
-  background:rgba(239,98,98,.17);
-  color:#ff9393;
-}
+.good{background:rgba(25,195,125,.16);color:#5eeaae;}
+.medium{background:rgba(244,182,63,.16);color:#ffd060;}
+.bad{background:rgba(239,98,98,.17);color:#ff9090;}
+.info{background:rgba(35,167,255,.14);color:#7fd4ff;}
 
 .track{
-  margin-top:12px;
-  height:12px;
-  overflow:hidden;
-  border-radius:999px;
-  background:#132a35;
+  margin-top:10px;height:10px;overflow:hidden;
+  border-radius:999px;background:#0f2130;
 }
 
-.fill{
-  height:100%;
-  border-radius:999px;
-  transition:width .45s ease;
+.fill{height:100%;border-radius:999px;transition:width .5s ease;}
+
+/* ===== FORECAST ===== */
+.forecast-grid{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(110px,1fr));
+  gap:9px;overflow-x:auto;padding-bottom:2px;
 }
 
+.day-card{
+  min-width:110px;border:1px solid var(--line);
+  border-radius:13px;
+  background:linear-gradient(180deg,#102837,#0b1b25);
+  padding:11px;cursor:pointer;
+  transition:transform .18s,border-color .18s;
+  text-align:left;
+}
+
+.day-card:hover{transform:translateY(-2px);}
+.day-card.selected{border-color:rgba(35,167,255,.85);box-shadow:0 0 0 3px rgba(35,167,255,.12);}
+
+.day-name{color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;}
+.day-icon{margin-top:9px;font-size:28px;}
+.day-temp{margin-top:5px;font-size:22px;font-weight:700;font-family:'Syne',sans-serif;}
+.day-small{color:var(--muted);font-size:11px;margin-top:3px;}
+
+/* ===== FISH ===== */
 .fish-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-  gap:12px;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:11px;
 }
 
 .fish-card{
-  border:1px solid var(--line);
-  border-radius:14px;
+  border:1px solid var(--line);border-radius:13px;
   background:linear-gradient(180deg,#102736,#0b1b25);
-  padding:0;
-  min-height:360px;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
+  display:flex;flex-direction:column;overflow:hidden;
 }
 
 .fish-photo-wrap{
-  position:relative;
-  width:100%;
-  aspect-ratio:16/10;
-  background:#07131a;
-  overflow:hidden;
+  position:relative;width:100%;aspect-ratio:16/10;
+  background:#06111a;overflow:hidden;
 }
 
-.fish-photo{
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:cover;
-}
+.fish-photo{width:100%;height:100%;display:block;object-fit:cover;}
 
 .fish-photo-wrap::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:linear-gradient(180deg,transparent 42%,rgba(7,19,26,.82));
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 42%,rgba(6,17,26,.85));
   pointer-events:none;
 }
 
-.fish-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
+.fish-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
 
-.fish-body{
-  padding:14px;
-  display:flex;
-  flex:1;
-  flex-direction:column;
-  gap:10px;
-}
+.fish-body{padding:13px;display:flex;flex:1;flex-direction:column;gap:8px;}
 
 .fish-emoji{
-  width:42px;
-  height:42px;
-  display:grid;
-  place-items:center;
-  border-radius:12px;
-  background:rgba(255,255,255,.08);
-  font-size:25px;
+  width:40px;height:40px;display:grid;place-items:center;
+  border-radius:11px;background:rgba(255,255,255,.08);font-size:22px;
 }
 
-.fish-name{
-  font-size:18px;
-  font-weight:800;
-}
+.fish-name{font-size:17px;font-weight:700;font-family:'Syne',sans-serif;}
+.fish-desc{color:var(--soft);font-size:12.5px;line-height:1.48;}
 
-.fish-desc{
-  color:var(--soft);
-  font-size:13px;
-  line-height:1.48;
-}
+.fish-note{margin-top:auto;display:flex;flex-wrap:wrap;gap:5px;}
 
-.fish-note{
-  margin-top:auto;
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-}
-
-.fish-source{
-  color:var(--muted);
-  font-size:11px;
-  line-height:1.35;
-}
-
-.fish-source a{
-  color:#bfe7ff;
-  text-decoration:none;
-}
+.fish-source{color:var(--muted);font-size:11px;line-height:1.35;}
+.fish-source a{color:#b8e4ff;text-decoration:none;}
 
 .mini-tag{
-  border:1px solid var(--line);
-  border-radius:999px;
-  color:#cde2eb;
-  background:rgba(255,255,255,.05);
-  padding:5px 8px;
-  font-size:11px;
-  font-weight:700;
+  border:1px solid var(--line);border-radius:999px;
+  color:#cde2eb;background:rgba(255,255,255,.05);
+  padding:4px 8px;font-size:10.5px;font-weight:700;
 }
 
+/* ===== TIPS ===== */
 .tips{
-  list-style:none;
-  margin:0;
-  padding:0;
-  display:grid;
+  list-style:none;display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
+  gap:9px;
 }
 
 .tips li{
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:rgba(255,255,255,.035);
+  border:1px solid var(--line);border-radius:13px;
+  background:rgba(255,255,255,.03);
+  padding:12px;color:#d2e7ef;
+  line-height:1.45;display:flex;gap:9px;font-size:13.5px;
+}
+
+.tips i{color:var(--green);font-size:19px;flex:none;margin-top:1px;}
+
+/* ===== DIVE CALC ===== */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+.calc-card{
+  border:1px solid var(--line);border-radius:13px;
+  background:linear-gradient(180deg,#0f2434,#0b1b27);
+  padding:15px;
+}
+
+.calc-card h3{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:800;
+  margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--soft);
+}
+
+.calc-card h3 i{color:var(--blue);}
+
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px;}
+.field-row.single{grid-template-columns:1fr;}
+
+.field label{display:block;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px;}
+
+.field input,.field select{
+  width:100%;height:38px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.13);
+  background:rgba(2,10,16,.7);
+  color:white;padding:0 10px;outline:none;
+  font-family:'Space Grotesk',sans-serif;font-size:13px;
+}
+
+.field input:focus,.field select:focus{border-color:rgba(35,167,255,.6);}
+.field select option{background:#0c1b26;}
+
+.calc-btn{
+  width:100%;height:38px;border:0;border-radius:10px;
+  background:linear-gradient(135deg,var(--blue),var(--green));
+  color:white;font-family:'Space Grotesk',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;
+  transition:opacity .15s;
+}
+
+.calc-btn:hover{opacity:.88;}
+
+.calc-result{
+  margin-top:12px;border:1px solid var(--line-accent);
+  border-radius:11px;background:rgba(35,167,255,.06);
+  padding:11px;display:none;
+}
+
+.calc-result.visible{display:block;}
+.calc-result-title{font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+.calc-result-value{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
+.calc-result-sub{color:var(--muted);font-size:12px;margin-top:4px;}
+
+/* ===== EQUIPMENT LIST ===== */
+.equip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;}
+
+.equip-card{
+  border:1px solid var(--line);border-radius:13px;
+  background:rgba(255,255,255,.03);
   padding:13px;
-  color:#d7e8ef;
-  line-height:1.45;
-  display:flex;
-  gap:10px;
+  display:flex;flex-direction:column;gap:7px;
 }
 
-.tips i{
-  color:var(--green);
-  font-size:20px;
-  flex:none;
-  margin-top:1px;
+.equip-icon{font-size:26px;}
+.equip-name{font-size:14px;font-weight:700;font-family:'Syne',sans-serif;}
+.equip-desc{color:var(--muted);font-size:12px;line-height:1.45;}
+.equip-badge{align-self:flex-start;}
+
+/* ===== VISIBILITY CALC ===== */
+.vis-result{
+  margin-top:12px;padding:13px;
+  border-radius:12px;border:1px solid var(--line);
+  background:rgba(255,255,255,.03);
+  display:none;
 }
 
-.loading{
-  min-height:310px;
-  display:grid;
-  place-items:center;
-  text-align:center;
+.vis-result.visible{display:block;}
+.vis-bar-wrap{margin-top:10px;height:14px;border-radius:999px;background:#0f2130;overflow:hidden;}
+.vis-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,#23a7ff,#19c37d);transition:width .5s ease;}
+.vis-label{display:flex;justify-content:space-between;margin-top:5px;font-size:11px;color:var(--muted);}
+
+/* ===== NARCOSIS CALC ===== */
+.narco-scale{
+  display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;
 }
 
-.loading i{
-  font-size:44px;
-  color:var(--blue);
-  animation:spin 1s linear infinite;
+.narco-step{
+  flex:1;min-width:70px;border:1px solid var(--line);
+  border-radius:10px;padding:9px 7px;text-align:center;
+  font-size:11px;font-weight:700;color:var(--muted);
+  transition:all .2s;
 }
 
-.loading h2{
-  margin:16px 0 0;
+.narco-step.active{
+  border-color:rgba(244,182,63,.5);
+  background:rgba(244,182,63,.12);
+  color:var(--yellow);
 }
 
-.error-card{
-  max-width:620px;
-  margin:0 auto;
-  text-align:center;
+/* ===== CHECKLIST ===== */
+.checklist{display:grid;gap:7px;}
+
+.check-item{
+  display:flex;align-items:center;gap:10px;
+  border:1px solid var(--line);border-radius:11px;
+  padding:10px 13px;cursor:pointer;
+  transition:background .15s;
+  user-select:none;
 }
+
+.check-item:hover{background:rgba(255,255,255,.05);}
+.check-item.checked{background:rgba(25,195,125,.07);border-color:rgba(25,195,125,.25);}
+.check-item.checked .check-box{background:var(--green);border-color:var(--green);}
+.check-item.checked .check-box::after{content:'✓';}
+
+.check-box{
+  width:22px;height:22px;border-radius:7px;
+  border:2px solid rgba(255,255,255,.2);
+  flex:none;display:grid;place-items:center;
+  font-size:12px;font-weight:700;
+  transition:all .2s;
+}
+
+.check-text{font-size:13.5px;font-weight:600;}
+.check-cat{color:var(--muted);font-size:11px;margin-left:auto;}
+
+.check-progress{
+  display:flex;align-items:center;gap:10px;margin-bottom:12px;
+}
+
+.check-prog-bar{flex:1;height:8px;border-radius:999px;background:#0f2130;overflow:hidden;}
+.check-prog-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--blue),var(--green));transition:width .3s ease;}
+.check-prog-label{color:var(--muted);font-size:12px;font-weight:700;white-space:nowrap;}
+
+/* ===== SIGNS / EMERGENCY ===== */
+.signs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;}
+
+.sign-card{
+  border:1px solid var(--line);border-radius:13px;
+  background:rgba(255,255,255,.03);padding:13px;
+}
+
+.sign-icon{font-size:26px;margin-bottom:7px;}
+.sign-title{font-size:14px;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:4px;}
+.sign-desc{color:var(--muted);font-size:12.5px;line-height:1.45;}
+
+.emergency-bar{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(239,98,98,.1);border:1px solid rgba(239,98,98,.3);
+  border-radius:13px;padding:13px;margin-bottom:14px;
+}
+
+.emergency-bar i{color:var(--red);font-size:22px;flex:none;}
+.emergency-bar p{font-size:13px;line-height:1.45;color:#ffd5d5;}
+.emergency-bar strong{color:white;}
+
+/* ===== LOG TABLE ===== */
+.log-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px;}
+
+.log-empty{
+  text-align:center;padding:32px;color:var(--muted);
+  border:1px dashed rgba(255,255,255,.1);border-radius:12px;
+  font-size:14px;
+}
+
+.log-empty i{display:block;font-size:32px;margin-bottom:8px;color:rgba(255,255,255,.2);}
+
+.log-table{width:100%;border-collapse:collapse;}
+.log-table th,.log-table td{
+  padding:9px 12px;text-align:left;font-size:12.5px;
+  border-bottom:1px solid var(--line);
+}
+
+.log-table th{color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+.log-table td{color:var(--soft);}
+.log-table tr:last-child td{border-bottom:0;}
+
+.log-form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:12px;}
+.log-form-grid .field{display:flex;flex-direction:column;}
+
+.log-del{
+  background:none;border:0;color:var(--muted);cursor:pointer;
+  font-size:16px;padding:3px;border-radius:6px;
+  transition:color .15s;
+}
+
+.log-del:hover{color:var(--red);}
+
+/* ===== SAFETY STOPS ===== */
+.safety-timeline{display:flex;flex-direction:column;gap:0;}
+
+.stop-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 13px;
+  border-left:2px solid var(--line);
+  margin-left:14px;
+  position:relative;
+}
+
+.stop-row::before{
+  content:'';position:absolute;left:-7px;top:50%;transform:translateY(-50%);
+  width:12px;height:12px;border-radius:999px;
+  border:2px solid var(--blue);background:#06111a;
+}
+
+.stop-row.mandatory::before{background:var(--yellow);border-color:var(--yellow);}
+.stop-row.safety::before{background:var(--green);border-color:var(--green);}
+
+.stop-depth{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;min-width:60px;}
+.stop-detail{flex:1;}
+.stop-name{font-size:13px;font-weight:700;}
+.stop-time{color:var(--muted);font-size:12px;}
+
+/* ===== LOADING ===== */
+.loading{min-height:280px;display:grid;place-items:center;text-align:center;}
+.loading i{font-size:42px;color:var(--blue);animation:spin 1s linear infinite;}
+.loading h2{margin:14px 0 0;font-family:'Syne',sans-serif;}
+
+.error-card{max-width:580px;margin:0 auto;text-align:center;}
+.error-card h2{font-family:'Syne',sans-serif;}
+.error-card p{color:var(--muted);margin:10px 0 16px;line-height:1.55;}
 
 .btn{
-  border:0;
-  border-radius:12px;
-  padding:12px 16px;
-  color:white;
-  background:linear-gradient(135deg,var(--blue),var(--green));
-  cursor:pointer;
-  font-weight:800;
+  border:0;border-radius:11px;padding:11px 16px;
+  color:white;background:linear-gradient(135deg,var(--blue),var(--green));
+  cursor:pointer;font-weight:700;font-family:'Space Grotesk',sans-serif;
 }
 
-.footer{
-  color:var(--muted);
-  text-align:center;
-  font-size:12px;
-  margin-top:22px;
+.footer{color:var(--muted);text-align:center;font-size:12px;margin-top:20px;}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:900px){
+  .hero-main,.metrics,.tips,.calc-grid,.log-form-grid{grid-template-columns:1fr;}
+  .tab-btn{min-width:100px;}
 }
 
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-@media(max-width:880px){
-  .hero-main,
-  .metrics,
-  .tips{
-    grid-template-columns:1fr;
-  }
-}
-
-@media(max-width:540px){
-  .app{
-    width:min(100% - 20px,1180px);
-    padding-top:10px;
-  }
-
-  .hero-main,
-  .section{
-    padding:14px;
-  }
-
-  .brand{
-    align-items:center;
-  }
-
-  .brand-mark{
-    width:48px;
-    height:48px;
-  }
-
-  .notice{
-    padding:12px 14px;
-  }
-
-  .section-head{
-    align-items:flex-start;
-    flex-direction:column;
-  }
+@media(max-width:560px){
+  .app{width:calc(100% - 20px);}
+  .hero-main,.section{padding:13px;}
+  .brand{align-items:center;}
+  .brand-mark{width:46px;height:46px;}
+  .notice{padding:11px 13px;}
+  .section-head{flex-direction:column;align-items:flex-start;}
+  .field-row{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -623,669 +637,1084 @@ h1{
         <div class="brand">
           <div class="brand-mark">🤿</div>
           <div>
-            <h1>Pesca Subaquática Inteligente</h1>
+            <h1 class="hero-title">Pesca Subaquática Inteligente</h1>
             <p class="hero-copy">
-              Consulta de clima, lua e espécies não nativas para apoiar uma pesca mais consciente na bacia do rio Paraná.
+              Clima, lua, visibilidade e espécies — tudo que você precisa antes de entrar na água. Bacia do rio Paraná.
             </p>
           </div>
         </div>
 
         <div class="chips">
-          <span class="chip"><i class="ti ti-map-pin"></i> Cidade ou GPS</span>
-          <span class="chip"><i class="ti ti-cloud"></i> Clima em tempo real</span>
-          <span class="chip"><i class="ti ti-fish"></i> Foco em invasoras</span>
+          <span class="chip"><i class="ti ti-map-pin"></i> GPS ou Cidade</span>
+          <span class="chip"><i class="ti ti-cloud"></i> Clima 7 dias</span>
+          <span class="chip"><i class="ti ti-fish"></i> Espécies invasoras</span>
+          <span class="chip"><i class="ti ti-calculator"></i> Calculadoras</span>
+          <span class="chip"><i class="ti ti-checklist"></i> Checklist</span>
+          <span class="chip"><i class="ti ti-notebook"></i> Diário</span>
         </div>
       </div>
 
-      <aside class="location-panel" aria-label="Busca de localização">
+      <aside class="location-panel">
         <div class="eyebrow">Localização</div>
         <div class="location-name" id="location-name">Localizando...</div>
         <div class="coords" id="coords">---</div>
-
         <div class="search-row">
           <input class="city-input" id="city-input" placeholder="Ex: Itapagipe-MG" autocomplete="address-level2" />
-          <button class="icon-btn primary" id="search-btn" title="Buscar cidade" aria-label="Buscar cidade">
-            <i class="ti ti-search"></i>
-          </button>
-          <button class="icon-btn" id="gps-btn" title="Usar GPS" aria-label="Usar GPS">
-            <i class="ti ti-current-location"></i>
-          </button>
+          <button class="icon-btn primary" id="search-btn" title="Buscar cidade"><i class="ti ti-search"></i></button>
+          <button class="icon-btn" id="gps-btn" title="Usar GPS"><i class="ti ti-current-location"></i></button>
         </div>
-
-        <p class="hint">Digite cidade-UF ou permita o GPS para detectar automaticamente sua região.</p>
+        <p class="hint">Digite cidade-UF ou permita o GPS para detectar automaticamente.</p>
       </aside>
     </div>
 
     <div class="notice">
       <i class="ti ti-alert-triangle"></i>
-      <span>
-        Consulte sempre a legislação atual, cota, tamanho mínimo, período de defeso e normas do local. O painel é informativo e não substitui fiscalização ambiental.
-      </span>
+      <span>Consulte sempre a legislação atual, defeso, tamanho mínimo e normas do local. Painel informativo — não substitui fiscalização ambiental ou treinamento técnico de mergulho.</span>
     </div>
   </header>
 
+  <!-- TAB BAR -->
+  <nav class="tab-bar" id="tab-bar">
+    <button class="tab-btn active" data-tab="clima" onclick="switchTab('clima')">
+      <i class="ti ti-cloud-bolt"></i> Clima & Lua
+    </button>
+    <button class="tab-btn" data-tab="especies" onclick="switchTab('especies')">
+      <i class="ti ti-fish"></i> Espécies
+    </button>
+    <button class="tab-btn" data-tab="calculadoras" onclick="switchTab('calculadoras')">
+      <i class="ti ti-calculator"></i> Calculadoras
+    </button>
+    <button class="tab-btn" data-tab="checklist" onclick="switchTab('checklist')">
+      <i class="ti ti-checklist"></i> Checklist
+    </button>
+    <button class="tab-btn" data-tab="diario" onclick="switchTab('diario')">
+      <i class="ti ti-notebook"></i> Diário
+    </button>
+    <button class="tab-btn" data-tab="seguranca" onclick="switchTab('seguranca')">
+      <i class="ti ti-shield-heart"></i> Segurança
+    </button>
+  </nav>
+
   <div class="content" id="content">
     <div class="section loading">
-      <div>
-        <i class="ti ti-loader"></i>
-        <h2>Obtendo GPS e clima...</h2>
-      </div>
+      <div><i class="ti ti-loader"></i><h2>Obtendo GPS e clima...</h2></div>
     </div>
   </div>
 
   <footer class="footer">
-    Desenvolvido por Adolfo Queiroz · Sistema inteligente de apoio à pesca · Dados climáticos Open-Meteo
+    Desenvolvido por Adolfo Queiroz · Pesca Subaquática Inteligente · Dados climáticos Open-Meteo
   </footer>
 </main>
 
 <script>
-let LAT = null;
-let LON = null;
-let CITY = 'Região Atual';
-let selectedDay = 0;
-let weatherData = null;
+// ========== STATE ==========
+let LAT = null, LON = null, CITY = 'Região Atual';
+let selectedDay = 0, weatherData = null;
+let currentTab = 'clima';
+let diveLogs = JSON.parse(localStorage.getItem('diveLogs') || '[]');
+let checkState = JSON.parse(localStorage.getItem('checkState') || '{}');
 
-const PEIXES = [
+// ========== FISH DATA ==========
+const PEIXES_INVASORES = [
   {
-    emoji:'🐟',
-    nome:'Tilápia',
+    emoji:'🐟',nome:'Tilápia',
     img:'https://commons.wikimedia.org/wiki/Special:FilePath/Tilapia_oreochromis_niloticus_fish.jpg?width=900',
     source:'https://commons.wikimedia.org/wiki/File:Tilapia_oreochromis_niloticus_fish.jpg',
     credit:'Raver Duane / USFWS',
-    desc:'Espécie exótica/invasora comum em represas e rios alterados. Em muitas regiões a retirada ajuda no controle populacional.',
-    sol:true,
-    tags:['Exótica','Controle','Água parada']
+    desc:'Espécie exótica comum em represas. A retirada ajuda no controle populacional.',
+    sol:true,tags:['Exótica','Controle','Água parada']
   },
   {
-    emoji:'🐠',
-    nome:'Tucunaré',
+    emoji:'🐠',nome:'Tucunaré',
     img:'https://commons.wikimedia.org/wiki/Special:FilePath/Tucunar%C3%A9%20(Peacock%20Bass)%20(20750719960).jpg?width=900',
     source:'https://commons.wikimedia.org/wiki/File:Tucunar%C3%A9_(Peacock_Bass)_(20750719960).jpg',
     credit:'Under the same moon...',
-    desc:'Predador introduzido fora da área natural em vários reservatórios. Costuma caçar melhor com sol, água clara e estrutura.',
-    sol:true,
-    tags:['Introduzido','Predador','Sol']
+    desc:'Predador introduzido. Caça melhor com sol, água clara e estrutura.',
+    sol:true,tags:['Introduzido','Predador','Sol']
   },
   {
-    emoji:'🐡',
-    nome:'Pirarucu',
+    emoji:'🐡',nome:'Pirarucu',
     img:'https://commons.wikimedia.org/wiki/Special:FilePath/Arapaima-full.jpg?width=900',
     source:'https://commons.wikimedia.org/wiki/File:Arapaima-full.jpg',
     credit:'Wikimedia Commons',
-    desc:'Espécie amazônica, não nativa da bacia do Paraná. Onde aparece introduzida, confira autorização e regra específica.',
-    sol:false,
-    tags:['Não nativo','Atenção legal','Grande porte']
+    desc:'Espécie amazônica. Onde aparece introduzida, confirme autorização e regra.',
+    sol:false,tags:['Não nativo','Atenção legal','Grande porte']
   },
   {
-    emoji:'🐟',
-    nome:'Carpa',
+    emoji:'🐟',nome:'Carpa',
     img:'https://commons.wikimedia.org/wiki/Special:FilePath/Common_Carp_(Cyprinus_carpio)_(1)_(51222524826).jpg?width=900',
     source:'https://commons.wikimedia.org/wiki/File:Common_Carp_(Cyprinus_carpio)_(1)_(51222524826).jpg',
     credit:'Sam Stukel / USFWS',
-    desc:'Peixe exótico associado a lagos, cavas e reservatórios. Tolera água turva e ambientes com pouca correnteza.',
-    sol:false,
-    tags:['Exótica','Reservatório','Água lenta']
+    desc:'Exótico em lagos e reservatórios. Tolera água turva e pouca correnteza.',
+    sol:false,tags:['Exótica','Reservatório','Água lenta']
   },
   {
-    emoji:'🐠',
-    nome:'Bagre-africano',
+    emoji:'🐠',nome:'Bagre-africano',
     img:'https://commons.wikimedia.org/wiki/Special:FilePath/Clarias_gariepinus%2C_African_sharptooth_catfish.jpg?width=900',
     source:'https://commons.wikimedia.org/wiki/File:Clarias_gariepinus,_African_sharptooth_catfish.jpg',
     credit:'Zahara5555',
-    desc:'Espécie invasora resistente, capaz de ocupar ambientes degradados. Verifique normas locais para captura e transporte.',
-    sol:false,
-    tags:['Invasor','Resistente','Controle']
+    desc:'Invasor resistente, ocupa ambientes degradados. Verifique normas locais.',
+    sol:false,tags:['Invasor','Resistente','Controle']
   }
 ];
 
-const PEIXES_ORIGINAIS = [
+const PEIXES_NATIVOS = [
   {
-    emoji:'🐟',
-    nome:'Dourado',
+    emoji:'🐟',nome:'Dourado',
     img:'https://commons.wikimedia.org/wiki/Special:FilePath/Dourado(Salminus_brasiliensis)emBonito.jpg?width=900',
     source:'https://commons.wikimedia.org/wiki/File:Dourado(Salminus_brasiliensis)emBonito.jpg',
     credit:'David Morimoto',
-    desc:'Peixe nativo emblemático da bacia do Paraná. Normalmente tem regras específicas de proteção, tamanho e período.',
-    sol:true,
-    tags:['Nativo','Predador','Consultar regra']
+    desc:'Emblemático da bacia. Regras específicas de proteção, tamanho e período.',
+    sol:true,tags:['Nativo','Predador','Consultar regra']
   },
   {
-    emoji:'🐠',
-    nome:'Pacu',
+    emoji:'🐠',nome:'Pacu',
     img:'https://commons.wikimedia.org/wiki/Special:FilePath/Pacu_Piaractus_2008_G1.jpg?width=900',
     source:'https://commons.wikimedia.org/wiki/File:Pacu_Piaractus_2008_G1.jpg',
     credit:'George Chernilevsky',
-    desc:'Espécie nativa de grande importância ecológica, associada a frutos, margens e áreas alagadas.',
-    sol:false,
-    tags:['Nativo','Frugívoro','Atenção legal']
+    desc:'Grande importância ecológica, associado a frutos e áreas alagadas.',
+    sol:false,tags:['Nativo','Frugívoro','Atenção legal']
   },
   {
-    emoji:'🐡',
-    nome:'Pintado',
+    emoji:'🐡',nome:'Pintado',
     img:'https://commons.wikimedia.org/wiki/Special:FilePath/Pescaria_de_pintado_no_pantanal.jpg?width=900',
     source:'https://commons.wikimedia.org/wiki/File:Pescaria_de_pintado_no_pantanal.jpg',
     credit:'Wikimedia Commons',
-    desc:'Bagre nativo de grande porte. Pode ter restrições importantes conforme estado, rio, época e tamanho.',
-    sol:false,
-    tags:['Nativo','Grande porte','Defeso']
+    desc:'Bagre nativo de grande porte. Restrições por estado, época e tamanho.',
+    sol:false,tags:['Nativo','Grande porte','Defeso']
   },
   {
-    emoji:'🐟',
-    nome:'Curimbatá',
-    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Curimbat%C3%A1%20%E2%80%93%20Prochilodus%20lineatus%20(5257755240).jpg?width=900',
+    emoji:'🐟',nome:'Curimbatá',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Curimbat%C3%A1%20%E2%80%93%20Prochilodus_lineatus%20(5257755240).jpg?width=900',
     source:'https://commons.wikimedia.org/wiki/File:Curimbat%C3%A1_%E2%80%93_Prochilodus_lineatus_(5257755240).jpg',
     credit:'Wikimedia Commons',
-    desc:'Peixe migrador nativo, muito relevante para a cadeia alimentar. Costuma ser protegido em períodos reprodutivos.',
-    sol:true,
-    tags:['Nativo','Migrador','Piracema']
+    desc:'Migrador nativo, relevante para a cadeia alimentar. Protegido em piracema.',
+    sol:true,tags:['Nativo','Migrador','Piracema']
   },
   {
-    emoji:'🐠',
-    nome:'Piraputanga',
+    emoji:'🐠',nome:'Piraputanga',
     img:'https://commons.wikimedia.org/wiki/Special:FilePath/Brycon_hilarii_-_Piraputanga_no_Monumento_Natural_do_Rio_Formoso.jpg?width=900',
     source:'https://commons.wikimedia.org/wiki/File:Brycon_hilarii_-_Piraputanga_no_Monumento_Natural_do_Rio_Formoso.jpg',
     credit:'BRASIL AQUA',
-    desc:'Espécie nativa de águas claras, comum em ambientes preservados. Deve ser tratada com cuidado e regra local em mãos.',
-    sol:true,
-    tags:['Nativo','Água clara','Preservação']
+    desc:'Águas claras e ambientes preservados. Tratar com cuidado e regra local.',
+    sol:true,tags:['Nativo','Água clara','Preservação']
   }
 ];
 
+// ========== CHECKLIST DATA ==========
+const CHECKLIST_ITEMS = [
+  {id:'c1',cat:'Equipamento',text:'Espingarda / roupa verificada e funcional'},
+  {id:'c2',cat:'Equipamento',text:'Máscara limpa, sem risco e vedação OK'},
+  {id:'c3',cat:'Equipamento',text:'Nadadeiras sem trincas'},
+  {id:'c4',cat:'Equipamento',text:'Boia de mergulho (bandeira) visível'},
+  {id:'c5',cat:'Equipamento',text:'Arpão e pontas conferidos'},
+  {id:'c6',cat:'Equipamento',text:'Faca de mergulho acessível'},
+  {id:'c7',cat:'Segurança',text:'Parceiro de diving (buddy) definido'},
+  {id:'c8',cat:'Segurança',text:'Informou onde e quando volta para alguém'},
+  {id:'c9',cat:'Segurança',text:'Verificou condições climáticas e marés'},
+  {id:'c10',cat:'Segurança',text:'Hidratado e descansado'},
+  {id:'c11',cat:'Segurança',text:'Conhece a área e correntes locais'},
+  {id:'c12',cat:'Legal',text:'Licença de pesca em mãos'},
+  {id:'c13',cat:'Legal',text:'Verificou espécies permitidas e defeso'},
+  {id:'c14',cat:'Legal',text:'Conferiu tamanho mínimo e cota diária'},
+  {id:'c15',cat:'Emergência',text:'Celular carregado em embalagem estanque'},
+  {id:'c16',cat:'Emergência',text:'Sabe o número do resgate local / SAMU 192'},
+];
+
+// ========== EQUIPMENT DATA ==========
+const EQUIPAMENTOS = [
+  {icon:'🤿',nome:'Máscara',desc:'Volume interno baixo facilita equalização. Lente individual ou dupla; vedação de silicone.',badge:'Essencial',cls:'good'},
+  {icon:'🦈',nome:'Roupa de neoprene',desc:'Proteção térmica e contra cortes. Espessura 3mm a 5mm dependendo da água.',badge:'Essencial',cls:'good'},
+  {icon:'🏊',nome:'Nadadeiras',desc:'Longas e rígidas aumentam propulsão. Ajuste preciso para evitar câimbras.',badge:'Essencial',cls:'good'},
+  {icon:'🎯',nome:'Espingarda / roupa',desc:'Pneumática, elástico ou de cano. Pesca de emboscada a longa distância.',badge:'Essencial',cls:'good'},
+  {icon:'🦺',nome:'Roupa lastro',desc:'Cinturão e lastros: peso certo evita hiperventilação e síncope.',badge:'Segurança',cls:'medium'},
+  {icon:'🚩',nome:'Boia e bandeira',desc:'Obrigatória. Sinaliza mergulhador para barcos. Cabo mínimo 5m.',badge:'Obrigatório',cls:'bad'},
+  {icon:'🔪',nome:'Faca de mergulho',desc:'Corta linha, rede. Sempre acessível. Nunca use como arpão.',badge:'Segurança',cls:'medium'},
+  {icon:'🐟',nome:'Bag de captura',desc:'Filete bag ou bag para peixes. Evita deixar presas soltas no cinturão.',badge:'Recomendado',cls:'info'},
+  {icon:'📡',nome:'Computador / relógio',desc:'Cronometra apneias, marca profundidade máxima e intervalo de descanso.',badge:'Recomendado',cls:'info'},
+];
+
+// ========== HAND SIGNALS ==========
+const SINAIS = [
+  {icon:'👍',nome:'OK (superfície)',desc:'Polegar para cima: estou bem — use apenas em superfície.'},
+  {icon:'🤙',nome:'OK (submerso)',desc:'OK circular com polegar e indicador: estou bem submerso.'},
+  {icon:'✋',nome:'Para / Atenção',desc:'Mão aberta, palma para o parceiro: pare e observe.'},
+  {icon:'👇',nome:'Descemos',desc:'Polegar apontando para baixo: vamos descer.'},
+  {icon:'☝️',nome:'Subimos',desc:'Polegar apontando para cima (submerso): vamos subir.'},
+  {icon:'🤏',nome:'Pouco ar / Frio',desc:'Mão comprimida: ar acabando / estou com frio.'},
+  {icon:'✌️',nome:'Peixes / número 2',desc:'Dois dedos: indica peixe ou número dois.'},
+  {icon:'🤜',nome:'Alerta / Urgente',desc:'Punho fechado agitado: situação urgente, venha imediatamente.'},
+];
+
+// ========== UTILS ==========
 const cityInput = document.getElementById('city-input');
 const searchBtn = document.getElementById('search-btn');
 const gpsBtn = document.getElementById('gps-btn');
 
 searchBtn.addEventListener('click', searchCity);
 gpsBtn.addEventListener('click', loadAll);
-cityInput.addEventListener('keydown', event=>{
-  if(event.key === 'Enter'){
-    searchCity();
-  }
-});
+cityInput.addEventListener('keydown', e => { if(e.key==='Enter') searchCity(); });
 
-function normalizeText(value){
-  return String(value || '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g,'')
-    .toLowerCase()
-    .trim();
+function norm(v){
+  return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
 }
 
-function stateToUF(value){
-  const text = String(value || '').trim();
-  if(/^[A-Z]{2}$/.test(text)) return text;
-
-  const iso = text.match(/BR-([A-Z]{2})/i);
+function stateToUF(v){
+  const t=String(v||'').trim();
+  if(/^[A-Z]{2}$/.test(t)) return t;
+  const iso=t.match(/BR-([A-Z]{2})/i);
   if(iso) return iso[1].toUpperCase();
-
-  const states = {
-    'acre':'AC','alagoas':'AL','amapa':'AP','amazonas':'AM','bahia':'BA','ceara':'CE',
-    'distrito federal':'DF','espirito santo':'ES','goias':'GO','maranhao':'MA',
-    'mato grosso':'MT','mato grosso do sul':'MS','minas gerais':'MG','para':'PA',
-    'paraiba':'PB','parana':'PR','pernambuco':'PE','piaui':'PI','rio de janeiro':'RJ',
-    'rio grande do norte':'RN','rio grande do sul':'RS','rondonia':'RO','roraima':'RR',
-    'santa catarina':'SC','sao paulo':'SP','sergipe':'SE','tocantins':'TO'
-  };
-
-  return states[normalizeText(text)] || text;
+  const m={'acre':'AC','alagoas':'AL','amapa':'AP','amazonas':'AM','bahia':'BA','ceara':'CE','distrito federal':'DF','espirito santo':'ES','goias':'GO','maranhao':'MA','mato grosso':'MT','mato grosso do sul':'MS','minas gerais':'MG','para':'PA','paraiba':'PB','parana':'PR','pernambuco':'PE','piaui':'PI','rio de janeiro':'RJ','rio grande do norte':'RN','rio grande do sul':'RS','rondonia':'RO','roraima':'RR','santa catarina':'SC','sao paulo':'SP','sergipe':'SE','tocantins':'TO'};
+  return m[norm(t)]||t;
 }
 
-function formatCityRegion(address){
-  address = address || {};
-  const city =
-    address.city ||
-    address.town ||
-    address.village ||
-    address.municipality ||
-    address.county ||
-    'Região Atual';
-
-  const uf = stateToUF(
-    address['ISO3166-2-lvl4'] ||
-    address.state_code ||
-    address.state
-  );
-
-  return uf && uf !== city ? `${city}-${uf}` : city;
+function formatCity(addr){
+  addr=addr||{};
+  const c=addr.city||addr.town||addr.village||addr.municipality||addr.county||'Região Atual';
+  const uf=stateToUF(addr['ISO3166-2-lvl4']||addr.state_code||addr.state);
+  return uf&&uf!==c?`${c}-${uf}`:c;
 }
 
-function setLocationUI(name, coords){
-  document.getElementById('location-name').textContent = name;
-  document.getElementById('coords').textContent = coords || '---';
+function setLocationUI(name,coords){
+  document.getElementById('location-name').textContent=name;
+  document.getElementById('coords').textContent=coords||'---';
 }
 
-async function updatePlaceFromCoordinates(){
-  const coords = `${LAT.toFixed(5)} , ${LON.toFixed(5)}`;
-  setLocationUI('Identificando região...', coords);
-
+async function updatePlaceFromCoords(){
+  const c=`${LAT.toFixed(5)} , ${LON.toFixed(5)}`;
+  setLocationUI('Identificando...', c);
   try{
-    const geo = await fetch(`https://geocode.maps.co/reverse?lat=${LAT}&lon=${LON}`);
-    const geoData = await geo.json();
-    CITY = formatCityRegion(geoData.address);
-  }catch(e){
-    CITY = 'Região Atual';
-  }
-
-  setLocationUI(CITY, coords);
-  cityInput.value = CITY !== 'Região Atual' ? CITY : '';
+    const r=await fetch(`https://geocode.maps.co/reverse?lat=${LAT}&lon=${LON}`);
+    const d=await r.json();
+    CITY=formatCity(d.address);
+  }catch{CITY='Região Atual';}
+  setLocationUI(CITY,c);
+  cityInput.value=CITY!=='Região Atual'?CITY:'';
 }
 
 async function getLocation(){
-  if(!navigator.geolocation){
-    throw new Error('GPS indisponível neste navegador');
-  }
-
-  return new Promise((resolve,reject)=>{
+  if(!navigator.geolocation) throw new Error('GPS indisponível');
+  return new Promise((res,rej)=>{
     navigator.geolocation.getCurrentPosition(
-      async pos=>{
-        LAT = pos.coords.latitude;
-        LON = pos.coords.longitude;
-        await updatePlaceFromCoordinates();
-        resolve();
-      },
-      reject,
-      {
-        enableHighAccuracy:true,
-        timeout:12000,
-        maximumAge:0
-      }
+      async pos=>{LAT=pos.coords.latitude;LON=pos.coords.longitude;await updatePlaceFromCoords();res();},
+      rej,{enableHighAccuracy:true,timeout:12000,maximumAge:0}
     );
   });
 }
 
 async function searchCity(){
-  const query = cityInput.value.trim();
-  if(!query){
-    cityInput.focus();
-    return;
-  }
-
-  setLocationUI('Buscando cidade...', '---');
+  const q=cityInput.value.trim();
+  if(!q){cityInput.focus();return;}
+  setLocationUI('Buscando...','---');
   showLoading('Buscando região e clima...');
-
   try{
-    const url = `https://geocode.maps.co/search?q=${encodeURIComponent(query)}&country=BR&limit=1`;
-    const response = await fetch(url);
-    const places = await response.json();
-
-    if(!places.length){
-      throw new Error('Cidade não encontrada');
-    }
-
-    const place = places[0];
-    LAT = Number(place.lat);
-    LON = Number(place.lon);
-    CITY = formatCityRegion(place.address);
-
-    if(CITY === 'Região Atual'){
-      CITY = query.toUpperCase();
-    }
-
-    setLocationUI(CITY, `${LAT.toFixed(5)} , ${LON.toFixed(5)}`);
-    const data = await fetchWeather();
+    const r=await fetch(`https://geocode.maps.co/search?q=${encodeURIComponent(q)}&country=BR&limit=1`);
+    const places=await r.json();
+    if(!places.length) throw new Error('Não encontrada');
+    const p=places[0];
+    LAT=Number(p.lat);LON=Number(p.lon);
+    CITY=formatCity(p.address)||q.toUpperCase();
+    setLocationUI(CITY,`${LAT.toFixed(5)} , ${LON.toFixed(5)}`);
+    const data=await fetchWeather();
     render(data);
-  }catch(e){
-    showError('Erro ao buscar cidade', 'Confira o nome da cidade. Exemplo: Itapagipe-MG.');
-  }
+  }catch{showError('Erro ao buscar cidade','Confira o nome. Ex: Itapagipe-MG.');}
 }
 
 async function fetchWeather(){
-  const url =
-    `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,weathercode&timezone=auto&forecast_days=7`;
-
-  const response = await fetch(url);
-  if(!response.ok){
-    throw new Error('Erro ao buscar clima');
-  }
-
-  return response.json();
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,weathercode&timezone=auto&forecast_days=7`;
+  const r=await fetch(url);
+  if(!r.ok) throw new Error('Erro clima');
+  return r.json();
 }
 
-function weatherCode(code){
-  if(code === 0) return ['☀️','Sol'];
-  if(code <= 3) return ['⛅','Parcialmente nublado'];
-  if(code <= 55) return ['🌫️','Neblina'];
-  if(code <= 65) return ['🌧️','Chuva'];
-  if(code <= 82) return ['⛈️','Temporal'];
-  return ['🌥️','Variável'];
+function weatherCode(c){
+  if(c===0) return['☀️','Sol'];
+  if(c<=3) return['⛅','Parcialmente nublado'];
+  if(c<=55) return['🌫️','Neblina'];
+  if(c<=65) return['🌧️','Chuva'];
+  if(c<=82) return['⛈️','Temporal'];
+  return['🌥️','Variável'];
 }
 
-function windDirection(degrees){
-  if(degrees === undefined || degrees === null) return '---';
-
-  const directions = ['N','NE','L','SE','S','SO','O','NO'];
-  const index = Math.round(Number(degrees) / 45) % 8;
-
-  return `${directions[index]} (${Math.round(degrees)}°)`;
+function windDir(d){
+  if(d===undefined||d===null) return'---';
+  const dirs=['N','NE','L','SE','S','SO','O','NO'];
+  return `${dirs[Math.round(Number(d)/45)%8]} (${Math.round(d)}°)`;
 }
 
-function formatWeatherTime(value){
-  if(!value) return 'agora';
-
-  const date = new Date(value);
-
-  if(Number.isNaN(date.getTime())) return value;
-
-  return date.toLocaleString('pt-BR',{
-    day:'2-digit',
-    month:'2-digit',
-    hour:'2-digit',
-    minute:'2-digit'
-  });
+function fmtTime(v){
+  if(!v) return'agora';
+  const d=new Date(v);
+  if(isNaN(d.getTime())) return v;
+  return d.toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
 }
 
 function moonPhase(date){
-  const known = new Date(2000,0,6,18,14);
-  const days = (date - known)/(1000*60*60*24);
-  const cycle = 29.53058867;
-  const phase = ((days % cycle)+cycle)%cycle;
-
-  if(phase < 1.85) return ['🌑','Lua Nova','Excelente para baixa luminosidade e aproximação discreta.'];
-  if(phase < 7.38) return ['🌒','Crescente','Boa atividade no amanhecer e fim de tarde.'];
-  if(phase < 9.22) return ['🌓','Quarto Crescente','Condição equilibrada para leitura da água.'];
-  if(phase < 14.77) return ['🌔','Gibosa Crescente','Regular, observe vento e transparência.'];
-  if(phase < 16.61) return ['🌕','Lua Cheia','Mais luminosidade pode deixar peixes ariscos.'];
-  if(phase < 22.15) return ['🌖','Gibosa Minguante','Regular, prefira horários de transição.'];
-  if(phase < 24) return ['🌗','Quarto Minguante','Boa para movimentação moderada.'];
-  return ['🌘','Minguante','Excelente para aproximação em baixa luz.'];
+  const known=new Date(2000,0,6,18,14);
+  const days=(date-known)/(864e5);
+  const cycle=29.53058867;
+  const phase=((days%cycle)+cycle)%cycle;
+  if(phase<1.85) return['🌑','Lua Nova','Excelente — baixa luminosidade.'];
+  if(phase<7.38) return['🌒','Crescente','Boa atividade amanhecer e fim de tarde.'];
+  if(phase<9.22) return['🌓','Quarto Crescente','Condição equilibrada.'];
+  if(phase<14.77) return['🌔','Gibosa Crescente','Regular, observe vento e claridade.'];
+  if(phase<16.61) return['🌕','Lua Cheia','Peixes mais ariscos — maior luminosidade.'];
+  if(phase<22.15) return['🌖','Gibosa Minguante','Regular, prefira transição.'];
+  if(phase<24) return['🌗','Quarto Minguante','Boa movimentação moderada.'];
+  return['🌘','Minguante','Excelente em baixa luz.'];
 }
 
 function calcScore(code,rain,wind,moon){
-  let score = 82;
-  if(moon[1] === 'Lua Nova' || moon[1] === 'Minguante') score += 18;
-  if(moon[1] === 'Lua Cheia') score -= 22;
-  if(code === 0) score += 12;
-  if(code >= 60) score -= 18;
-  if(rain > 8) score -= 16;
-  if(wind > 24) score -= 18;
-  score = Math.max(20,Math.min(130,score));
-
-  if(score >= 105) return ['EXCELENTE','good',score];
-  if(score >= 78) return ['BOM','medium',score];
-  if(score >= 55) return ['REGULAR','medium',score];
-  return ['DIFÍCIL','bad',score];
+  let s=82;
+  if(['Lua Nova','Minguante'].includes(moon[1])) s+=18;
+  if(moon[1]==='Lua Cheia') s-=22;
+  if(code===0) s+=12;
+  if(code>=60) s-=18;
+  if(rain>8) s-=16;
+  if(wind>24) s-=18;
+  s=Math.max(20,Math.min(130,s));
+  if(s>=105) return['EXCELENTE','good',s];
+  if(s>=78) return['BOM','medium',s];
+  if(s>=55) return['REGULAR','medium',s];
+  return['DIFÍCIL','bad',s];
 }
 
 function getDays(data){
-  const daily = data.daily;
-  const days = [];
-
+  const daily=data.daily, days=[];
   for(let i=0;i<7;i++){
-    const date = new Date();
+    const date=new Date();
     date.setDate(date.getDate()+i);
-    const moon = moonPhase(date);
-    const score = calcScore(
-      daily.weathercode[i],
-      daily.precipitation_sum[i],
-      daily.windspeed_10m_max[i],
-      moon
-    );
-    const weather = weatherCode(daily.weathercode[i]);
-
-    days.push({
-      date,
-      moon,
-      score,
-      icon:weather[0],
-      desc:weather[1],
+    const moon=moonPhase(date);
+    const score=calcScore(daily.weathercode[i],daily.precipitation_sum[i],daily.windspeed_10m_max[i],moon);
+    const weather=weatherCode(daily.weathercode[i]);
+    days.push({date,moon,score,icon:weather[0],desc:weather[1],
       temp:Math.round(daily.temperature_2m_max[i]),
       min:Math.round(daily.temperature_2m_min[i]),
       rain:Math.round(daily.precipitation_sum[i]),
       wind:Math.round(daily.windspeed_10m_max[i])
     });
   }
-
   return days;
 }
 
-function render(data){
-  weatherData = data;
-  const days = getDays(data);
-  window.days = days;
-  const selected = days[selectedDay] || days[0];
-  const current = data.current_weather || {};
-  const currentWeather = weatherCode(current.weathercode ?? data.daily.weathercode[0]);
-  const currentTemp = current.temperature !== undefined ? Math.round(current.temperature) : selected.temp;
-  const currentWind = current.windspeed !== undefined ? Math.round(current.windspeed) : selected.wind;
-  const currentDirection = windDirection(current.winddirection);
-  const currentUpdated = formatWeatherTime(current.time);
-  const week = ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
-  const width = Math.min(100,(selected.score[2]/130)*100);
-  const fillColor = selected.score[1] === 'good' ? '#19c37d' : selected.score[1] === 'medium' ? '#f4b63f' : '#ef6262';
-
-  const daysHTML = days.map((day,index)=>`
-    <button class="day-card ${index === selectedDay ? 'selected' : ''}" onclick="selectDay(${index})">
-      <div class="day-name">${index === 0 ? 'Hoje' : week[day.date.getDay()]}</div>
-      <div class="day-icon">${day.icon}</div>
-      <div class="day-temp">${day.temp}°</div>
-      <div class="day-small">${day.min}° mín · ${day.moon[0]}</div>
-    </button>
-  `).join('');
-
-  const fishHTML = PEIXES.map(fish=>{
-    const active = (selected.icon === '☀️' && fish.sol) || (selected.icon !== '☀️' && !fish.sol);
-    let label = active ? 'MAIS ATIVO' : 'MODERADO';
-    let cls = active ? 'good' : 'medium';
-
-    if(selected.score[0] === 'DIFÍCIL'){
-      label = 'BAIXA ATIVIDADE';
-      cls = 'bad';
-    }
-
-    return `
-      <article class="fish-card">
-        <div class="fish-photo-wrap">
-          <img class="fish-photo" src="${fish.img}" alt="Foto de ${fish.nome}" loading="lazy">
-        </div>
-        <div class="fish-body">
-          <div class="fish-top">
-            <div class="fish-emoji">${fish.emoji}</div>
-            <span class="badge ${cls}">${label}</span>
-          </div>
-          <div class="fish-name">${fish.nome}</div>
-          <div class="fish-desc">${fish.desc}</div>
-          <div class="fish-note">
-            ${fish.tags.map(tag=>`<span class="mini-tag">${tag}</span>`).join('')}
-          </div>
-          <div class="fish-source">
-            Foto: <a href="${fish.source}" target="_blank" rel="noopener">${fish.credit}</a>
-          </div>
-        </div>
-      </article>
-    `;
-  }).join('');
-
-  const originalFishHTML = PEIXES_ORIGINAIS.map(fish=>{
-    const active = (selected.icon === '☀️' && fish.sol) || (selected.icon !== '☀️' && !fish.sol);
-    let label = active ? 'NATIVO ATIVO' : 'NATIVO';
-    let cls = active ? 'medium' : 'good';
-
-    if(selected.score[0] === 'DIFÍCIL'){
-      label = 'PRESERVAR';
-      cls = 'bad';
-    }
-
-    return `
-      <article class="fish-card">
-        <div class="fish-photo-wrap">
-          <img class="fish-photo" src="${fish.img}" alt="Foto de ${fish.nome}" loading="lazy">
-        </div>
-        <div class="fish-body">
-          <div class="fish-top">
-            <div class="fish-emoji">${fish.emoji}</div>
-            <span class="badge ${cls}">${label}</span>
-          </div>
-          <div class="fish-name">${fish.nome}</div>
-          <div class="fish-desc">${fish.desc}</div>
-          <div class="fish-note">
-            ${fish.tags.map(tag=>`<span class="mini-tag">${tag}</span>`).join('')}
-          </div>
-          <div class="fish-source">
-            Foto: <a href="${fish.source}" target="_blank" rel="noopener">${fish.credit}</a>
-          </div>
-        </div>
-      </article>
-    `;
-  }).join('');
-
-  document.getElementById('content').innerHTML = `
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title"><i class="ti ti-cloud-bolt"></i> Condições climáticas em tempo real</h2>
-        <div class="section-meta">Atualizado em ${currentUpdated}</div>
-      </div>
-
-      <div class="metrics">
-        <div class="metric">
-          <div class="metric-label">Agora</div>
-          <div class="metric-value">${currentTemp}°</div>
-          <div class="metric-sub">temperatura atual</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Condição</div>
-          <div class="metric-value">${currentWeather[0]}</div>
-          <div class="metric-sub">${currentWeather[1]}</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Vento atual</div>
-          <div class="metric-value">${currentWind}</div>
-          <div class="metric-sub">km/h</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Direção</div>
-          <div class="metric-value" style="font-size:26px;">${currentDirection}</div>
-          <div class="metric-sub">direção do vento</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title"><i class="ti ti-calendar-week"></i> Previsão dos próximos 7 dias</h2>
-        <div class="section-meta">${CITY}</div>
-      </div>
-      <div class="forecast-grid">${daysHTML}</div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title"><i class="ti ti-chart-bar"></i> Condições do dia selecionado</h2>
-        <div class="section-meta">${selected.desc}</div>
-      </div>
-
-      <div class="metrics">
-        <div class="metric">
-          <div class="metric-label">Temperatura</div>
-          <div class="metric-value">${selected.temp}°</div>
-          <div class="metric-sub">mínima ${selected.min}°</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Chuva</div>
-          <div class="metric-value">${selected.rain}mm</div>
-          <div class="metric-sub">${selected.desc}</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Vento</div>
-          <div class="metric-value">${selected.wind}</div>
-          <div class="metric-sub">km/h</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">Lua</div>
-          <div class="metric-value">${selected.moon[0]}</div>
-          <div class="metric-sub">${selected.moon[1]}</div>
-        </div>
-      </div>
-
-      <div class="score-wrap">
-        <div class="score-line">
-          <div>
-            <div class="score-label">Índice de pesca</div>
-            <div class="metric-sub">${selected.moon[2]}</div>
-          </div>
-          <span class="badge ${selected.score[1]}">${selected.score[0]}</span>
-        </div>
-        <div class="track"><div class="fill" style="width:${width}%;background:${fillColor};"></div></div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title"><i class="ti ti-fish"></i> Peixes invasores / permitidos</h2>
-        <div class="section-meta">Bacia do rio Paraná</div>
-      </div>
-      <div class="fish-grid">${fishHTML}</div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title"><i class="ti ti-leaf"></i> Peixes originais da bacia</h2>
-        <div class="section-meta">Nativos: consultar legislação antes da captura</div>
-      </div>
-      <div class="fish-grid">${originalFishHTML}</div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title"><i class="ti ti-bulb"></i> Recomendações rápidas</h2>
-      </div>
-      <ul class="tips">
-        <li><i class="ti ti-clock"></i><span>Melhores janelas: 6h às 9h e 16h às 18h, principalmente com vento controlado.</span></li>
-        <li><i class="ti ti-ruler-measure"></i><span>Antes da saída, confirme regra local, defeso, tamanho mínimo e autorização para pesca subaquática.</span></li>
-        <li><i class="ti ti-wave-square"></i><span>Procure estruturas, margens de reservatório e água com boa visibilidade.</span></li>
-        <li><i class="ti ti-map-pin"></i><span>Região atual: ${CITY}.</span></li>
-      </ul>
-    </section>
-  `;
+// ========== TAB SWITCH ==========
+function switchTab(tab){
+  currentTab=tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.tab===tab);
+  });
+  if(weatherData) render(weatherData);
+  else renderStaticTab(tab);
 }
 
-function showLoading(message){
-  document.getElementById('content').innerHTML = `
-    <div class="section loading">
-      <div>
-        <i class="ti ti-loader"></i>
-        <h2>${message}</h2>
+function renderStaticTab(tab){
+  const content=document.getElementById('content');
+  if(tab==='calculadoras'){content.innerHTML=renderCalculadoras();attachCalcEvents();}
+  else if(tab==='checklist'){content.innerHTML=renderChecklist();attachChecklistEvents();}
+  else if(tab==='diario'){content.innerHTML=renderDiario();attachDiarioEvents();}
+  else if(tab==='seguranca'){content.innerHTML=renderSeguranca();}
+}
+
+// ========== RENDER MAIN ==========
+function render(data){
+  weatherData=data;
+  const days=getDays(data);
+  window.days=days;
+  const sel=days[selectedDay]||days[0];
+  const cur=data.current_weather||{};
+  const curW=weatherCode(cur.weathercode??data.daily.weathercode[0]);
+  const curT=cur.temperature!==undefined?Math.round(cur.temperature):sel.temp;
+  const curWind=cur.windspeed!==undefined?Math.round(cur.windspeed):sel.wind;
+  const week=['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+  const width=Math.min(100,(sel.score[2]/130)*100);
+  const fillColor=sel.score[1]==='good'?'#19c37d':sel.score[1]==='medium'?'#f4b63f':'#ef6262';
+
+  const content=document.getElementById('content');
+
+  if(currentTab==='clima'){
+    content.innerHTML=`
+      <div class="tab-panel active">
+        <section class="section">
+          <div class="section-head">
+            <h2 class="section-title"><i class="ti ti-cloud-bolt"></i> Condições em tempo real</h2>
+            <div class="section-meta">Atualizado ${fmtTime(cur.time)}</div>
+          </div>
+          <div class="metrics">
+            <div class="metric"><div class="metric-label">Agora</div><div class="metric-value">${curT}°</div><div class="metric-sub">temperatura atual</div></div>
+            <div class="metric"><div class="metric-label">Condição</div><div class="metric-value">${curW[0]}</div><div class="metric-sub">${curW[1]}</div></div>
+            <div class="metric"><div class="metric-label">Vento</div><div class="metric-value">${curWind}</div><div class="metric-sub">km/h</div></div>
+            <div class="metric"><div class="metric-label">Direção</div><div class="metric-value" style="font-size:22px">${windDir(cur.winddirection)}</div><div class="metric-sub">direção</div></div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h2 class="section-title"><i class="ti ti-calendar-week"></i> Próximos 7 dias</h2>
+            <div class="section-meta">${CITY}</div>
+          </div>
+          <div class="forecast-grid">
+            ${days.map((d,i)=>`
+              <button class="day-card ${i===selectedDay?'selected':''}" onclick="selectDay(${i})">
+                <div class="day-name">${i===0?'Hoje':week[d.date.getDay()]}</div>
+                <div class="day-icon">${d.icon}</div>
+                <div class="day-temp">${d.temp}°</div>
+                <div class="day-small">${d.min}° mín · ${d.moon[0]}</div>
+              </button>
+            `).join('')}
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h2 class="section-title"><i class="ti ti-chart-bar"></i> Dia selecionado</h2>
+            <div class="section-meta">${sel.desc}</div>
+          </div>
+          <div class="metrics">
+            <div class="metric"><div class="metric-label">Temperatura</div><div class="metric-value">${sel.temp}°</div><div class="metric-sub">mín ${sel.min}°</div></div>
+            <div class="metric"><div class="metric-label">Chuva</div><div class="metric-value">${sel.rain}mm</div><div class="metric-sub">${sel.desc}</div></div>
+            <div class="metric"><div class="metric-label">Vento</div><div class="metric-value">${sel.wind}</div><div class="metric-sub">km/h máx</div></div>
+            <div class="metric"><div class="metric-label">Lua</div><div class="metric-value">${sel.moon[0]}</div><div class="metric-sub">${sel.moon[1]}</div></div>
+          </div>
+          <div class="score-wrap">
+            <div class="score-line">
+              <div>
+                <div class="score-label">Índice de pesca sub</div>
+                <div class="metric-sub">${sel.moon[2]}</div>
+              </div>
+              <span class="badge ${sel.score[1]}">${sel.score[0]}</span>
+            </div>
+            <div class="track"><div class="fill" style="width:${width}%;background:${fillColor}"></div></div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h2 class="section-title"><i class="ti ti-bulb"></i> Recomendações</h2>
+          </div>
+          <ul class="tips">
+            <li><i class="ti ti-clock"></i><span>Melhores janelas: 6h às 9h e 16h às 18h, principalmente com vento controlado.</span></li>
+            <li><i class="ti ti-ruler-measure"></i><span>Confirme defeso, tamanho mínimo e autorização para pesca subaquática no local.</span></li>
+            <li><i class="ti ti-wave-square"></i><span>Procure estruturas, margens e água com boa visibilidade horizontal.</span></li>
+            <li><i class="ti ti-map-pin"></i><span>Região atual: ${CITY}. Verifique normas estaduais antes de mergulhar.</span></li>
+          </ul>
+        </section>
+      </div>
+    `;
+  }
+  else if(currentTab==='especies'){
+    const fishHtml=(arr,labelAtivo,labelMod,labelBad,clsAtivo,clsMod)=>arr.map(fish=>{
+      const active=(sel.icon==='☀️'&&fish.sol)||(sel.icon!=='☀️'&&!fish.sol);
+      let label=active?labelAtivo:labelMod;let cls=active?clsAtivo:clsMod;
+      if(sel.score[0]==='DIFÍCIL'){label=labelBad;cls='bad';}
+      return `
+        <article class="fish-card">
+          <div class="fish-photo-wrap">
+            <img class="fish-photo" src="${fish.img}" alt="${fish.nome}" loading="lazy">
+          </div>
+          <div class="fish-body">
+            <div class="fish-top">
+              <div class="fish-emoji">${fish.emoji}</div>
+              <span class="badge ${cls}">${label}</span>
+            </div>
+            <div class="fish-name">${fish.nome}</div>
+            <div class="fish-desc">${fish.desc}</div>
+            <div class="fish-note">${fish.tags.map(t=>`<span class="mini-tag">${t}</span>`).join('')}</div>
+            <div class="fish-source">Foto: <a href="${fish.source}" target="_blank">${fish.credit}</a></div>
+          </div>
+        </article>`;
+    }).join('');
+
+    content.innerHTML=`
+      <div class="tab-panel active">
+        <section class="section">
+          <div class="section-head">
+            <h2 class="section-title"><i class="ti ti-fish"></i> Espécies invasoras / permitidas</h2>
+            <div class="section-meta">Bacia do Paraná</div>
+          </div>
+          <div class="fish-grid">${fishHtml(PEIXES_INVASORES,'MAIS ATIVO','MODERADO','BAIXA ATIVIDADE','good','medium')}</div>
+        </section>
+        <section class="section">
+          <div class="section-head">
+            <h2 class="section-title"><i class="ti ti-leaf"></i> Espécies nativas</h2>
+            <div class="section-meta">Consultar legislação antes da captura</div>
+          </div>
+          <div class="fish-grid">${fishHtml(PEIXES_NATIVOS,'NATIVO ATIVO','NATIVO','PRESERVAR','medium','good')}</div>
+        </section>
+      </div>
+    `;
+  }
+  else if(currentTab==='calculadoras'){
+    content.innerHTML=renderCalculadoras();
+    attachCalcEvents();
+  }
+  else if(currentTab==='checklist'){
+    content.innerHTML=renderChecklist();
+    attachChecklistEvents();
+  }
+  else if(currentTab==='diario'){
+    content.innerHTML=renderDiario();
+    attachDiarioEvents();
+  }
+  else if(currentTab==='seguranca'){
+    content.innerHTML=renderSeguranca();
+  }
+}
+
+// ========== CALCULADORAS ==========
+function renderCalculadoras(){
+  return `
+  <div class="tab-panel active">
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-calculator"></i> Calculadoras de Mergulho</h2>
+        <div class="section-meta">Apneia · Visibilidade · Segurança</div>
+      </div>
+      <div class="calc-grid">
+
+        <!-- VISIBILIDADE -->
+        <div class="calc-card">
+          <h3><i class="ti ti-eye"></i> Visibilidade da Água</h3>
+          <div class="field-row">
+            <div class="field">
+              <label>Transparência</label>
+              <select id="transp">
+                <option value="95">Água cristalina (>10m)</option>
+                <option value="75">Boa (5–10m)</option>
+                <option value="55">Moderada (2–5m)</option>
+                <option value="30">Turva (1–2m)</option>
+                <option value="10">Muito turva (<1m)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Condição do dia</label>
+              <select id="dia-cond">
+                <option value="20">Ensolarado</option>
+                <option value="10">Nublado</option>
+                <option value="0">Chuvoso / Temporal</option>
+                <option value="-10">Noite / crepúsculo</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Fundo (tipo)</label>
+              <select id="fundo">
+                <option value="5">Pedra / rochoso</option>
+                <option value="0">Areia</option>
+                <option value="-10">Lama / silte</option>
+                <option value="-15">Macrófitas densas</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Correnteza</label>
+              <select id="corrente">
+                <option value="5">Calma</option>
+                <option value="0">Moderada</option>
+                <option value="-15">Forte</option>
+              </select>
+            </div>
+          </div>
+          <button class="calc-btn" id="btn-vis">Calcular Visibilidade</button>
+          <div class="calc-result" id="res-vis">
+            <div class="calc-result-title">Índice de Visibilidade</div>
+            <div class="calc-result-value" id="vis-val">—</div>
+            <div class="vis-bar-wrap"><div class="vis-bar" id="vis-bar" style="width:0%"></div></div>
+            <div class="vis-label"><span>Ruim</span><span>Excelente</span></div>
+            <div class="calc-result-sub" id="vis-sub">—</div>
+          </div>
+        </div>
+
+        <!-- APNEIA / INTERVALO -->
+        <div class="calc-card">
+          <h3><i class="ti ti-activity"></i> Intervalo de Recuperação</h3>
+          <div class="field-row">
+            <div class="field">
+              <label>Duração da apneia (s)</label>
+              <input type="number" id="apneia-dur" placeholder="Ex: 45" min="5" max="600">
+            </div>
+            <div class="field">
+              <label>Profundidade (m)</label>
+              <input type="number" id="apneia-prof" placeholder="Ex: 6" min="0" max="40">
+            </div>
+          </div>
+          <div class="field-row single">
+            <div class="field">
+              <label>Nível do mergulhador</label>
+              <select id="nivel">
+                <option value="3">Iniciante (1-3m)</option>
+                <option value="2">Intermediário (3-10m)</option>
+                <option value="1.5">Avançado (10m+)</option>
+              </select>
+            </div>
+          </div>
+          <button class="calc-btn" id="btn-apneia">Calcular Intervalo</button>
+          <div class="calc-result" id="res-apneia">
+            <div class="calc-result-title">Descanso Mínimo Recomendado</div>
+            <div class="calc-result-value" id="apneia-val">—</div>
+            <div class="calc-result-sub" id="apneia-sub">—</div>
+          </div>
+        </div>
+
+        <!-- NARCOSE -->
+        <div class="calc-card">
+          <h3><i class="ti ti-brain"></i> Estimador de Risco de Narcose</h3>
+          <div class="field-row">
+            <div class="field">
+              <label>Profundidade máx (m)</label>
+              <input type="number" id="narco-prof" placeholder="Ex: 30" min="0" max="60">
+            </div>
+            <div class="field">
+              <label>Duração no fundo (min)</label>
+              <input type="number" id="narco-dur" placeholder="Ex: 20" min="1" max="60">
+            </div>
+          </div>
+          <div class="field-row single">
+            <div class="field">
+              <label>Experiência no local</label>
+              <select id="narco-exp">
+                <option value="0">Primeira vez no local</option>
+                <option value="-5">Pouco familiarizado</option>
+                <option value="-10">Bem familiarizado</option>
+              </select>
+            </div>
+          </div>
+          <button class="calc-btn" id="btn-narco">Estimar Risco</button>
+          <div class="calc-result" id="res-narco">
+            <div class="calc-result-title">Nível de Risco</div>
+            <div class="narco-scale" id="narco-scale">
+              <div class="narco-step" data-level="0">Baixo</div>
+              <div class="narco-step" data-level="1">Moderado</div>
+              <div class="narco-step" data-level="2">Alto</div>
+              <div class="narco-step" data-level="3">Muito Alto</div>
+            </div>
+            <div class="calc-result-sub" id="narco-sub" style="margin-top:8px">—</div>
+          </div>
+        </div>
+
+        <!-- PARADAS DE SEGURANÇA -->
+        <div class="calc-card">
+          <h3><i class="ti ti-trending-down"></i> Paradas de Segurança</h3>
+          <div class="field-row single">
+            <div class="field">
+              <label>Profundidade máxima (m)</label>
+              <input type="number" id="stop-prof" placeholder="Ex: 20" min="5" max="60">
+            </div>
+          </div>
+          <div class="field-row single">
+            <div class="field">
+              <label>Tipo de mergulho</label>
+              <select id="stop-tipo">
+                <option value="apneia">Apneia / Pesca sub</option>
+                <option value="scuba">Scuba / Recreativo</option>
+              </select>
+            </div>
+          </div>
+          <button class="calc-btn" id="btn-stops">Calcular Paradas</button>
+          <div class="calc-result" id="res-stops">
+            <div class="calc-result-title">Plano de Subida</div>
+            <div class="safety-timeline" id="stops-timeline"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>`;
+}
+
+function attachCalcEvents(){
+  document.getElementById('btn-vis')?.addEventListener('click',calcVis);
+  document.getElementById('btn-apneia')?.addEventListener('click',calcApneia);
+  document.getElementById('btn-narco')?.addEventListener('click',calcNarco);
+  document.getElementById('btn-stops')?.addEventListener('click',calcStops);
+}
+
+function calcVis(){
+  const t=+document.getElementById('transp').value;
+  const d=+document.getElementById('dia-cond').value;
+  const f=+document.getElementById('fundo').value;
+  const c=+document.getElementById('corrente').value;
+  const score=Math.max(0,Math.min(100,t+d+f+c));
+  const res=document.getElementById('res-vis');
+  res.classList.add('visible');
+  document.getElementById('vis-val').textContent=`${score}/100`;
+  document.getElementById('vis-bar').style.width=`${score}%`;
+  let sub='';
+  if(score>=80) sub='🟢 Excelente — visibilidade favorável para emboscada precisa.';
+  else if(score>=55) sub='🟡 Boa — detecte peixes, mas ajuste estratégia de aproximação.';
+  else if(score>=30) sub='🟠 Moderada — pesque em estruturas e use distâncias curtas.';
+  else sub='🔴 Ruim — considere adiar. Risco de desorientação e perda de referência.';
+  document.getElementById('vis-sub').textContent=sub;
+}
+
+function calcApneia(){
+  const dur=+document.getElementById('apneia-dur').value||45;
+  const prof=+document.getElementById('apneia-prof').value||5;
+  const nivel=+document.getElementById('nivel').value;
+  // Regra: mínimo 2x a duração, acrescida da profundidade proporcionalmente
+  const base=dur*nivel;
+  const extra=Math.round(prof*4);
+  const total=Math.round(base+extra);
+  const res=document.getElementById('res-apneia');
+  res.classList.add('visible');
+  const mins=Math.floor(total/60);
+  const secs=total%60;
+  document.getElementById('apneia-val').textContent=mins>0?`${mins}min ${secs}s`:`${secs}s`;
+  document.getElementById('apneia-sub').textContent=`Apneia de ${dur}s a ${prof}m. Descanse completamente antes do próximo mergulho. Nunca hiperventile.`;
+}
+
+function calcNarco(){
+  const prof=+document.getElementById('narco-prof').value||30;
+  const dur=+document.getElementById('narco-dur').value||20;
+  const exp=+document.getElementById('narco-exp').value;
+  let score=0;
+  if(prof>10) score+=Math.floor((prof-10)/10);
+  if(prof>30) score+=2;
+  if(dur>20) score+=1;
+  if(dur>40) score+=1;
+  score=Math.max(0,Math.min(3,score+exp+3));
+  const res=document.getElementById('res-narco');
+  res.classList.add('visible');
+  document.querySelectorAll('.narco-step').forEach((el,i)=>{
+    el.classList.toggle('active',i===score);
+  });
+  const msgs=[
+    'Risco baixo — profundidade dentro do conforto para apneia.',
+    'Atenção — monitore sensações e reduza tempo no fundo.',
+    'Alto — risco real de narcose. Reduza profundidade ou duração.',
+    'Muito Alto — não mergulhe sem buddy experiente e treinamento específico.'
+  ];
+  document.getElementById('narco-sub').textContent=msgs[score]||msgs[0];
+}
+
+function calcStops(){
+  const prof=+document.getElementById('stop-prof').value||20;
+  const tipo=document.getElementById('stop-tipo').value;
+  const res=document.getElementById('res-stops');
+  res.classList.add('visible');
+  const timeline=document.getElementById('stops-timeline');
+
+  let stops=[];
+  if(tipo==='apneia'){
+    // Pesca sub: subida lenta, parada opcional a 5m
+    stops=[
+      {depth:prof,name:'Ponto máximo',time:'Saída do fundo',cls:''},
+      {depth:Math.round(prof*0.5),name:'Subida lenta',time:'0,3 m/s máximo',cls:''},
+      {depth:5,name:'Parada de segurança',time:'1–2 min (recomendado)',cls:'safety'},
+      {depth:0,name:'Superfície',time:'Respire fundo antes do próximo mergulho',cls:'safety'},
+    ];
+  } else {
+    // Scuba
+    const stops3=prof>30?[{depth:3,name:'Parada obrigatória DECO',time:'3+ min',cls:'mandatory'}]:[];
+    stops=[
+      {depth:prof,name:'Ponto máximo / saída do fundo',time:'Inicie subida controlada',cls:''},
+      {depth:Math.round(prof*0.6),name:'Subida (9m/min)',time:'Reduza ritmo conforme conforto',cls:''},
+      {depth:6,name:'Parada de segurança',time:'3 min — obrigatória',cls:'mandatory'},
+      ...stops3,
+      {depth:0,name:'Superfície',time:'Aguarde 10 min em superfície',cls:'safety'},
+    ];
+  }
+
+  timeline.innerHTML=stops.map(s=>`
+    <div class="stop-row ${s.cls}">
+      <div class="stop-depth">${s.depth}m</div>
+      <div class="stop-detail">
+        <div class="stop-name">${s.name}</div>
+        <div class="stop-time">${s.time}</div>
       </div>
     </div>
-  `;
+  `).join('');
 }
 
-function showError(title,message){
-  document.getElementById('content').innerHTML = `
+// ========== CHECKLIST ==========
+function renderChecklist(){
+  const done=CHECKLIST_ITEMS.filter(i=>checkState[i.id]).length;
+  const pct=Math.round((done/CHECKLIST_ITEMS.length)*100);
+  const cats=[...new Set(CHECKLIST_ITEMS.map(i=>i.cat))];
+
+  return `
+  <div class="tab-panel active">
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-checklist"></i> Checklist Pré-Mergulho</h2>
+        <div class="section-meta">${done}/${CHECKLIST_ITEMS.length} itens</div>
+      </div>
+      <div class="check-progress">
+        <div class="check-prog-bar">
+          <div class="check-prog-fill" style="width:${pct}%"></div>
+        </div>
+        <div class="check-prog-label">${pct}%</div>
+      </div>
+      <div class="checklist" id="checklist-list">
+        ${cats.map(cat=>`
+          <div class="mini-tag" style="margin-bottom:4px">${cat}</div>
+          ${CHECKLIST_ITEMS.filter(i=>i.cat===cat).map(item=>`
+            <div class="check-item ${checkState[item.id]?'checked':''}" onclick="toggleCheck('${item.id}')">
+              <div class="check-box"></div>
+              <div class="check-text">${item.text}</div>
+              <div class="check-cat">${item.cat}</div>
+            </div>
+          `).join('')}
+        `).join('')}
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px;">
+        <button class="calc-btn" style="flex:1" onclick="resetChecklist()">Reiniciar Checklist</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-scuba-mask"></i> Equipamentos Recomendados</h2>
+      </div>
+      <div class="equip-grid">
+        ${EQUIPAMENTOS.map(e=>`
+          <div class="equip-card">
+            <div class="equip-icon">${e.icon}</div>
+            <div class="equip-name">${e.nome}</div>
+            <div class="equip-desc">${e.desc}</div>
+            <span class="badge ${e.cls} equip-badge">${e.badge}</span>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+  </div>`;
+}
+
+function attachChecklistEvents(){}
+
+function toggleCheck(id){
+  checkState[id]=!checkState[id];
+  localStorage.setItem('checkState',JSON.stringify(checkState));
+  if(currentTab==='checklist') renderStaticTab('checklist');
+}
+
+function resetChecklist(){
+  checkState={};
+  localStorage.setItem('checkState','{}');
+  renderStaticTab('checklist');
+}
+
+// ========== DIÁRIO ==========
+function renderDiario(){
+  const hasLogs=diveLogs.length>0;
+  return `
+  <div class="tab-panel active">
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-notebook"></i> Diário de Mergulhos</h2>
+        <div class="section-meta">${diveLogs.length} registro(s)</div>
+      </div>
+
+      <div class="log-form-grid">
+        <div class="field">
+          <label>Data</label>
+          <input type="date" id="log-data" value="${new Date().toISOString().slice(0,10)}">
+        </div>
+        <div class="field">
+          <label>Local</label>
+          <input type="text" id="log-local" placeholder="Ex: Represa Jurumirim">
+        </div>
+        <div class="field">
+          <label>Profundidade máx (m)</label>
+          <input type="number" id="log-prof" placeholder="Ex: 8" min="0" max="60">
+        </div>
+        <div class="field">
+          <label>Melhor apneia (s)</label>
+          <input type="number" id="log-apneia" placeholder="Ex: 55" min="0">
+        </div>
+        <div class="field">
+          <label>Captura</label>
+          <input type="text" id="log-captura" placeholder="Ex: 2 tilápias">
+        </div>
+        <div class="field">
+          <label>Visibilidade</label>
+          <select id="log-vis">
+            <option value="Excelente">Excelente</option>
+            <option value="Boa">Boa</option>
+            <option value="Moderada">Moderada</option>
+            <option value="Ruim">Ruim</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:10px">
+        <label>Observações</label>
+        <input type="text" id="log-obs" placeholder="Condições, espécies vistas, etc.">
+      </div>
+      <button class="calc-btn" id="btn-log-add">Adicionar Registro</button>
+
+      <div style="margin-top:16px">
+        ${hasLogs?`
+          <div style="overflow-x:auto">
+            <table class="log-table">
+              <thead>
+                <tr>
+                  <th>Data</th><th>Local</th><th>Prof.</th><th>Apneia</th><th>Captura</th><th>Vis.</th><th>Obs.</th><th></th>
+                </tr>
+              </thead>
+              <tbody>
+                ${diveLogs.slice().reverse().map((l,ri)=>{
+                  const i=diveLogs.length-1-ri;
+                  return `<tr>
+                    <td>${l.data}</td>
+                    <td>${l.local||'—'}</td>
+                    <td>${l.prof?l.prof+'m':'—'}</td>
+                    <td>${l.apneia?l.apneia+'s':'—'}</td>
+                    <td>${l.captura||'—'}</td>
+                    <td>${l.vis||'—'}</td>
+                    <td>${l.obs||'—'}</td>
+                    <td><button class="log-del" onclick="deletLog(${i})"><i class="ti ti-trash"></i></button></td>
+                  </tr>`;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        `:`<div class="log-empty"><i class="ti ti-notebook-off"></i>Nenhum mergulho registrado ainda.<br>Preencha o formulário acima para começar.</div>`}
+      </div>
+    </section>
+  </div>`;
+}
+
+function attachDiarioEvents(){
+  document.getElementById('btn-log-add')?.addEventListener('click',()=>{
+    const entry={
+      data:document.getElementById('log-data').value,
+      local:document.getElementById('log-local').value,
+      prof:document.getElementById('log-prof').value,
+      apneia:document.getElementById('log-apneia').value,
+      captura:document.getElementById('log-captura').value,
+      vis:document.getElementById('log-vis').value,
+      obs:document.getElementById('log-obs').value,
+    };
+    if(!entry.local&&!entry.prof){alert('Informe ao menos o local ou profundidade.');return;}
+    diveLogs.push(entry);
+    localStorage.setItem('diveLogs',JSON.stringify(diveLogs));
+    renderStaticTab('diario');
+  });
+}
+
+function deletLog(i){
+  if(!confirm('Remover este registro?')) return;
+  diveLogs.splice(i,1);
+  localStorage.setItem('diveLogs',JSON.stringify(diveLogs));
+  renderStaticTab('diario');
+}
+
+// ========== SEGURANÇA ==========
+function renderSeguranca(){
+  return `
+  <div class="tab-panel active">
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-alert-triangle"></i> Emergências</h2>
+      </div>
+      <div class="emergency-bar">
+        <i class="ti ti-phone-call"></i>
+        <p><strong>SAMU: 192</strong> · <strong>Bombeiros: 193</strong> · <strong>Defesa Civil: 199</strong><br>
+        Em afogamento ou síncope: ligue imediatamente e inicie RCP se necessário.</p>
+      </div>
+      <div class="signs-grid">
+        <div class="sign-card">
+          <div class="sign-icon">💧</div>
+          <div class="sign-title">Síncope de Apneia (Blackout)</div>
+          <div class="sign-desc">Ocorre na subida por queda de O₂. Buddy deve estar pronto. Nunca mergulhe sozinho. Resgate imediato e RCP se inconsciente.</div>
+        </div>
+        <div class="sign-card">
+          <div class="sign-icon">⚠️</div>
+          <div class="sign-title">Samba / Pré-Síncope</div>
+          <div class="sign-desc">Espasmos musculares indicam início de hipóxia. Parceiro assume controle imediatamente, leva à superfície, mantém vias aéreas livres.</div>
+        </div>
+        <div class="sign-card">
+          <div class="sign-icon">🌀</div>
+          <div class="sign-title">Desorientação na Água</div>
+          <div class="sign-desc">Pare, equalize a pressão, observe bolhas subindo. Nunca prenda a respiração durante subida em SCUBA. Em apneia: suba devagar sempre.</div>
+        </div>
+        <div class="sign-card">
+          <div class="sign-icon">🌡️</div>
+          <div class="sign-title">Hipotermia</div>
+          <div class="sign-desc">Tremedeira, confusão, lentidão de raciocínio. Saia da água imediatamente. Aqueça gradualmente. Evite álcool e massagens.</div>
+        </div>
+        <div class="sign-card">
+          <div class="sign-icon">🦷</div>
+          <div class="sign-title">Barotrauma de Orelha</div>
+          <div class="sign-icon">🦷</div>
+          <div class="sign-title">Barotrauma</div>
+          <div class="sign-desc">Dor forte ao igualar pressão — suba imediatamente. Nunca force a descida com dor. Consulte médico antes de mergulhar novamente.</div>
+        </div>
+        <div class="sign-card">
+          <div class="sign-icon">🐟</div>
+          <div class="sign-title">Acidente com Animal</div>
+          <div class="sign-desc">Arraias, bagres e peixes com espinhos: lave a lesão, imobilize e procure atendimento. Nunca puxe arpão cravado sem auxílio médico.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-hand-gesture"></i> Sinais de Mão</h2>
+        <div class="section-meta">Comunicação submersa</div>
+      </div>
+      <div class="signs-grid">
+        ${SINAIS.map(s=>`
+          <div class="sign-card">
+            <div class="sign-icon">${s.icon}</div>
+            <div class="sign-title">${s.nome}</div>
+            <div class="sign-desc">${s.desc}</div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-bulb"></i> Regras de Ouro</h2>
+      </div>
+      <ul class="tips">
+        <li><i class="ti ti-user-check"></i><span>Nunca mergulhe sozinho. Buddy é regra, não sugestão — principalmente em apneia.</span></li>
+        <li><i class="ti ti-lungs"></i><span>Nunca hiperventile antes de apneia. Aumenta risco de síncope sem aviso.</span></li>
+        <li><i class="ti ti-clock-pause"></i><span>Respeite o intervalo de recuperação: no mínimo 2× o tempo submerso.</span></li>
+        <li><i class="ti ti-flag-3"></i><span>Boia e bandeira sempre na superfície. Obrigatório e salva vidas.</span></li>
+        <li><i class="ti ti-barrier-block"></i><span>Conheça os limites do seu equipamento e do seu preparo físico no dia.</span></li>
+        <li><i class="ti ti-leaf"></i><span>Preserve espécies nativas. Pesque apenas o que é permitido, com responsabilidade.</span></li>
+      </ul>
+    </section>
+  </div>`;
+}
+
+// ========== INFRA ==========
+function showLoading(msg){
+  document.getElementById('content').innerHTML=`
+    <div class="section loading">
+      <div><i class="ti ti-loader"></i><h2>${msg}</h2></div>
+    </div>`;
+}
+
+function showError(title,msg){
+  document.getElementById('content').innerHTML=`
     <section class="section">
       <div class="error-card">
         <h2>${title}</h2>
-        <p style="color:#9bb1c0;line-height:1.55;">${message}</p>
+        <p>${msg}</p>
         <button class="btn" onclick="loadAll()">Tentar GPS novamente</button>
       </div>
-    </section>
-  `;
+    </section>`;
 }
 
-function selectDay(index){
-  selectedDay = index;
-  render(weatherData);
-}
+function selectDay(i){selectedDay=i;render(weatherData);}
 
 async function loadAll(){
   try{
     showLoading('Obtendo GPS e clima...');
     await getLocation();
-    const data = await fetchWeather();
+    const data=await fetchWeather();
     render(data);
-  }catch(e){
-    setLocationUI(CITY, LAT && LON ? `${LAT.toFixed(5)} , ${LON.toFixed(5)}` : '---');
-    showError(
-      'GPS ou clima indisponível',
-      'Permita localização no navegador ou digite a cidade no campo acima, por exemplo Itapagipe-MG.'
-    );
+  }catch{
+    setLocationUI(CITY,LAT&&LON?`${LAT.toFixed(5)} , ${LON.toFixed(5)}`:'---');
+    showError('GPS ou clima indisponível','Permita localização ou digite a cidade. Ex: Itapagipe-MG.');
   }
 }
 
 loadAll();
 setInterval(()=>{
-  if(LAT && LON){
-    fetchWeather().then(render).catch(()=>{});
-  }
+  if(LAT&&LON&&currentTab==='clima'){fetchWeather().then(render).catch(()=>{});}
 },600000);
 </script>
 </body>
