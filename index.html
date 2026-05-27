@@ -1698,7 +1698,13 @@ function renderDiario(){
         </div>
         <div class="field">
           <label>Local</label>
-          <input type="text" id="log-local" placeholder="Ex: Represa Jurumirim" value="${editingLog?.local||''}">
+          <div style="display:flex;gap:7px;align-items:center;">
+            <input type="text" id="log-local" placeholder="Ex: Represa Jurumirim" value="${editingLog?.local||''}" style="flex:1;min-width:0;">
+            <button type="button" class="icon-btn" id="btn-gps-local" title="Capturar localização GPS" onclick="captureGpsForLog()" style="flex:none;height:38px;width:38px;font-size:18px;border-radius:10px;">
+              <i class="ti ti-current-location"></i>
+            </button>
+          </div>
+          <div id="gps-local-status" style="font-size:11px;color:var(--muted);margin-top:4px;min-height:16px;"></div>
         </div>
         <div class="field">
           <label>Profundidade máx (m)</label>
@@ -1772,6 +1778,60 @@ function renderDiario(){
       </div>
     </section>
   </div>`;
+}
+
+async function captureGpsForLog(){
+  const btn=document.getElementById('btn-gps-local');
+  const status=document.getElementById('gps-local-status');
+  const input=document.getElementById('log-local');
+  if(!btn||!status||!input) return;
+
+  btn.disabled=true;
+  btn.innerHTML='<i class="ti ti-loader" style="animation:spin 1s linear infinite;display:inline-block"></i>';
+  status.textContent='Obtendo GPS...';
+
+  if(!navigator.geolocation){
+    status.textContent='GPS não disponível neste dispositivo.';
+    btn.disabled=false;
+    btn.innerHTML='<i class="ti ti-current-location"></i>';
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    async pos=>{
+      const lat=pos.coords.latitude.toFixed(6);
+      const lon=pos.coords.longitude.toFixed(6);
+      status.textContent=`📍 ${lat}, ${lon} — buscando nome...`;
+
+      try{
+        const r=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=pt-BR`,{
+          headers:{'User-Agent':'PescaSubApp/1.0'}
+        });
+        const d=await r.json();
+        const a=d.address||{};
+        const nome=a.lake||a.reservoir||a.river||a.waterway||a.leisure||a.tourism||
+                   a.village||a.town||a.city||a.suburb||a.hamlet||a.county||a.state||'';
+        const estado=a.state_code||a.state||'';
+        const local=nome&&estado?`${nome} – ${estado}`:nome||`${lat}, ${lon}`;
+        input.value=local;
+        status.textContent=`✅ GPS capturado: ${lat}, ${lon}`;
+      }catch{
+        // fallback: use coordenadas
+        input.value=`${lat}, ${lon}`;
+        status.textContent=`✅ GPS: ${lat}, ${lon}`;
+      }
+
+      btn.disabled=false;
+      btn.innerHTML='<i class="ti ti-current-location"></i>';
+    },
+    err=>{
+      const msgs={1:'Permissão negada.',2:'Posição indisponível.',3:'Tempo esgotado.'};
+      status.textContent=`❌ ${msgs[err.code]||'Erro no GPS.'}`;
+      btn.disabled=false;
+      btn.innerHTML='<i class="ti ti-current-location"></i>';
+    },
+    {enableHighAccuracy:true,timeout:12000,maximumAge:0}
+  );
 }
 
 function attachDiarioEvents(){
