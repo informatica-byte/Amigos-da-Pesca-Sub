@@ -610,6 +610,24 @@ body::before{
 
 .footer{color:var(--muted);text-align:center;font-size:12px;margin-top:20px;}
 
+.db-status{
+  margin-top:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:5px 10px;
+  background:rgba(255,255,255,.05);
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+}
+
+.db-status.online{color:#72efbc;border-color:rgba(25,195,125,.3);background:rgba(25,195,125,.08);}
+.db-status.offline{color:#ffd060;border-color:rgba(244,182,63,.3);background:rgba(244,182,63,.08);}
+.db-status.error{color:#ff9090;border-color:rgba(239,98,98,.35);background:rgba(239,98,98,.08);}
+
 /* ===== SHARE BUTTONS ===== */
 .share-bar{
   display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;
@@ -759,6 +777,10 @@ body::before{
 
   <footer class="footer">
     Desenvolvido por Adolfo Queiroz · Pesca Subaquática Inteligente · Dados climáticos Open-Meteo
+    <div class="db-status offline" id="db-status">
+      <i class="ti ti-database"></i>
+      Banco aguardando conexão
+    </div>
   </footer>
 </main>
 
@@ -769,6 +791,9 @@ let selectedDay = 0, weatherData = null;
 let currentTab = 'clima';
 let diveLogs = JSON.parse(localStorage.getItem('diveLogs') || '[]');
 let checkState = JSON.parse(localStorage.getItem('checkState') || '{}');
+const FIREBASE_DB_URL = 'https://pescasub-5967d-default-rtdb.firebaseio.com';
+const FIREBASE_PATH = 'pescaSubApp';
+let firebaseOnline = false;
 
 // ========== FISH DATA ==========
 const PEIXES_INVASORES = [
@@ -936,6 +961,98 @@ function setLocationUI(name,coords){
   document.getElementById('coords').textContent=coords||'---';
 }
 
+function setDbStatus(text,state='offline'){
+  const el=document.getElementById('db-status');
+  if(!el) return;
+  el.className=`db-status ${state}`;
+  el.innerHTML=`<i class="ti ti-database"></i> ${text}`;
+}
+
+function firebaseUrl(path){
+  return `${FIREBASE_DB_URL}/${FIREBASE_PATH}/${path}.json`;
+}
+
+async function firebaseRead(path){
+  const r=await fetch(firebaseUrl(path));
+  if(!r.ok) throw new Error('Erro ao ler Firebase');
+  return r.json();
+}
+
+async function firebaseWrite(path,data){
+  const r=await fetch(firebaseUrl(path),{
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(data)
+  });
+  if(!r.ok) throw new Error('Erro ao gravar Firebase');
+  return r.json();
+}
+
+async function firebasePatch(path,data){
+  const r=await fetch(firebaseUrl(path),{
+    method:'PATCH',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(data)
+  });
+  if(!r.ok) throw new Error('Erro ao atualizar Firebase');
+  return r.json();
+}
+
+async function syncFromFirebase(){
+  setDbStatus('Conectando ao banco...','offline');
+  try{
+    const data=await firebaseRead('state');
+    firebaseOnline=true;
+    if(data&&Array.isArray(data.diveLogs)){
+      diveLogs=data.diveLogs;
+      localStorage.setItem('diveLogs',JSON.stringify(diveLogs));
+    }
+    if(data&&data.checkState&&typeof data.checkState==='object'){
+      checkState=data.checkState;
+      localStorage.setItem('checkState',JSON.stringify(checkState));
+    }
+    setDbStatus('Banco online','online');
+    if(currentTab==='checklist'||currentTab==='diario') renderStaticTab(currentTab);
+  }catch(e){
+    firebaseOnline=false;
+    setDbStatus('Banco offline: usando este aparelho','error');
+  }
+}
+
+async function saveAppStateToFirebase(){
+  localStorage.setItem('diveLogs',JSON.stringify(diveLogs));
+  localStorage.setItem('checkState',JSON.stringify(checkState));
+  try{
+    await firebasePatch('state',{
+      diveLogs,
+      checkState,
+      updatedAt:new Date().toISOString()
+    });
+    firebaseOnline=true;
+    setDbStatus('Banco online','online');
+  }catch(e){
+    firebaseOnline=false;
+    setDbStatus('Banco offline: salvo localmente','error');
+  }
+}
+
+async function saveWeatherSnapshot(data){
+  if(!LAT||!LON||!data) return;
+  try{
+    await firebaseWrite('latestWeather',{
+      city:CITY,
+      lat:LAT,
+      lon:LON,
+      current:data.current_weather||null,
+      updatedAt:new Date().toISOString()
+    });
+    if(firebaseOnline) setDbStatus('Banco online','online');
+  }catch(e){
+    firebaseOnline=false;
+    setDbStatus('Banco offline: clima não sincronizado','error');
+  }
+}
+
 async function updatePlaceFromCoords(){
   const c=`${LAT.toFixed(5)} , ${LON.toFixed(5)}`;
   setLocationUI('Identificando...', c);
@@ -973,6 +1090,7 @@ async function searchCity(){
     setLocationUI(CITY,`${LAT.toFixed(5)} , ${LON.toFixed(5)}`);
     const data=await fetchWeather();
     render(data);
+    saveWeatherSnapshot(data);
   }catch{showError('Erro ao buscar cidade','Confira o nome. Ex: Itapagipe-MG.');}
 }
 
@@ -1541,13 +1659,13 @@ function attachChecklistEvents(){}
 
 function toggleCheck(id){
   checkState[id]=!checkState[id];
-  localStorage.setItem('checkState',JSON.stringify(checkState));
+  saveAppStateToFirebase();
   if(currentTab==='checklist') renderStaticTab('checklist');
 }
 
 function resetChecklist(){
   checkState={};
-  localStorage.setItem('checkState','{}');
+  saveAppStateToFirebase();
   renderStaticTab('checklist');
 }
 
@@ -1653,7 +1771,7 @@ function attachDiarioEvents(){
     };
     if(!entry.local&&!entry.prof){alert('Informe ao menos o local ou profundidade.');return;}
     diveLogs.push(entry);
-    localStorage.setItem('diveLogs',JSON.stringify(diveLogs));
+    saveAppStateToFirebase();
     renderStaticTab('diario');
   });
 }
@@ -1661,7 +1779,7 @@ function attachDiarioEvents(){
 function deletLog(i){
   if(!confirm('Remover este registro?')) return;
   diveLogs.splice(i,1);
-  localStorage.setItem('diveLogs',JSON.stringify(diveLogs));
+  saveAppStateToFirebase();
   renderStaticTab('diario');
 }
 
@@ -1874,15 +1992,19 @@ async function loadAll(){
     await getLocation();
     const data=await fetchWeather();
     render(data);
+    saveWeatherSnapshot(data);
   }catch{
     setLocationUI(CITY,LAT&&LON?`${LAT.toFixed(5)} , ${LON.toFixed(5)}`:'---');
     showError('GPS ou clima indisponível','Permita localização ou digite a cidade. Ex: Itapagipe-MG.');
   }
 }
 
+syncFromFirebase();
 loadAll();
 setInterval(()=>{
-  if(LAT&&LON&&currentTab==='clima'){fetchWeather().then(render).catch(()=>{});}
+  if(LAT&&LON&&currentTab==='clima'){
+    fetchWeather().then(data=>{render(data);saveWeatherSnapshot(data);}).catch(()=>{});
+  }
 },600000);
 </script>
 </body>
