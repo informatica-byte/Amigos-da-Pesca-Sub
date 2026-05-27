@@ -683,6 +683,15 @@ body::before{
 }
 .log-share-btn:hover{opacity:.7;}
 
+.log-edit-btn{
+  background:none;border:0;
+  color:var(--blue);cursor:pointer;
+  font-size:18px;padding:3px 5px;
+  border-radius:7px;transition:opacity .15s;
+}
+
+.log-edit-btn:hover{opacity:.75;}
+
 @keyframes spin{to{transform:rotate(360deg)}}
 
 @media(max-width:900px){
@@ -791,6 +800,7 @@ let selectedDay = 0, weatherData = null;
 let currentTab = 'clima';
 let diveLogs = JSON.parse(localStorage.getItem('diveLogs') || '[]');
 let checkState = JSON.parse(localStorage.getItem('checkState') || '{}');
+let editingLogIndex = null;
 const FIREBASE_DB_URL = 'https://pescasub-5967d-default-rtdb.firebaseio.com';
 const FIREBASE_PATH = 'pescaSubApp';
 let firebaseOnline = false;
@@ -1672,6 +1682,7 @@ function resetChecklist(){
 // ========== DIÁRIO ==========
 function renderDiario(){
   const hasLogs=diveLogs.length>0;
+  const editingLog=editingLogIndex!==null?diveLogs[editingLogIndex]:null;
   return `
   <div class="tab-panel active">
     <section class="section">
@@ -1683,39 +1694,43 @@ function renderDiario(){
       <div class="log-form-grid">
         <div class="field">
           <label>Data</label>
-          <input type="date" id="log-data" value="${new Date().toISOString().slice(0,10)}">
+          <input type="date" id="log-data" value="${editingLog?.data||new Date().toISOString().slice(0,10)}">
         </div>
         <div class="field">
           <label>Local</label>
-          <input type="text" id="log-local" placeholder="Ex: Represa Jurumirim">
+          <input type="text" id="log-local" placeholder="Ex: Represa Jurumirim" value="${editingLog?.local||''}">
         </div>
         <div class="field">
           <label>Profundidade máx (m)</label>
-          <input type="number" id="log-prof" placeholder="Ex: 8" min="0" max="60">
+          <input type="number" id="log-prof" placeholder="Ex: 8" min="0" max="60" value="${editingLog?.prof||''}">
         </div>
         <div class="field">
           <label>Melhor apneia (s)</label>
-          <input type="number" id="log-apneia" placeholder="Ex: 55" min="0">
+          <input type="number" id="log-apneia" placeholder="Ex: 55" min="0" value="${editingLog?.apneia||''}">
         </div>
         <div class="field">
           <label>Captura</label>
-          <input type="text" id="log-captura" placeholder="Ex: 2 tilápias">
+          <input type="text" id="log-captura" placeholder="Ex: 2 tilápias" value="${editingLog?.captura||''}">
         </div>
         <div class="field">
           <label>Visibilidade</label>
           <select id="log-vis">
-            <option value="Excelente">Excelente</option>
-            <option value="Boa">Boa</option>
-            <option value="Moderada">Moderada</option>
-            <option value="Ruim">Ruim</option>
+            <option value="Excelente" ${editingLog?.vis==='Excelente'?'selected':''}>Excelente</option>
+            <option value="Boa" ${editingLog?.vis==='Boa'?'selected':''}>Boa</option>
+            <option value="Moderada" ${editingLog?.vis==='Moderada'?'selected':''}>Moderada</option>
+            <option value="Ruim" ${editingLog?.vis==='Ruim'?'selected':''}>Ruim</option>
           </select>
         </div>
       </div>
       <div class="field" style="margin-bottom:10px">
         <label>Observações</label>
-        <input type="text" id="log-obs" placeholder="Condições, espécies vistas, etc.">
+        <input type="text" id="log-obs" placeholder="Condições, espécies vistas, etc." value="${editingLog?.obs||''}">
       </div>
-      <button class="calc-btn" id="btn-log-add">Adicionar Registro</button>
+      ${editingLog?`<div class="mini-tag" style="margin-bottom:10px">Editando registro de ${editingLog.data||'data não informada'}</div>`:''}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="calc-btn" id="btn-log-add">${editingLog?'Salvar Alteração':'Adicionar Registro'}</button>
+        ${editingLog?`<button class="btn-copy" type="button" onclick="cancelEditLog()" style="flex:0 1 160px"><i class="ti ti-x"></i> Cancelar</button>`:''}
+      </div>
 
       <div class="share-bar" style="margin-top:14px;">
         <button class="btn-wa" onclick="shareAllLogs('wa')"><i class="ti ti-brand-whatsapp"></i> Enviar Diário no WhatsApp</button>
@@ -1745,6 +1760,7 @@ function renderDiario(){
                     <td style="display:flex;gap:4px;align-items:center;">
                       <button class="log-share-btn" title="Enviar este mergulho no WhatsApp" onclick="shareLog(${i},'wa')"><i class="ti ti-brand-whatsapp"></i></button>
                       <button class="log-share-btn" title="Copiar este mergulho" onclick="shareLog(${i},'copy')" style="color:var(--muted)"><i class="ti ti-copy"></i></button>
+                      <button class="log-edit-btn" title="Editar" onclick="editLog(${i})"><i class="ti ti-pencil"></i></button>
                       <button class="log-del" title="Apagar" onclick="deletLog(${i})"><i class="ti ti-trash"></i></button>
                     </td>
                   </tr>`;
@@ -1770,14 +1786,32 @@ function attachDiarioEvents(){
       obs:document.getElementById('log-obs').value,
     };
     if(!entry.local&&!entry.prof){alert('Informe ao menos o local ou profundidade.');return;}
-    diveLogs.push(entry);
+    if(editingLogIndex!==null){
+      diveLogs[editingLogIndex]=entry;
+      editingLogIndex=null;
+    }else{
+      diveLogs.push(entry);
+    }
     saveAppStateToFirebase();
     renderStaticTab('diario');
   });
 }
 
+function editLog(i){
+  editingLogIndex=i;
+  renderStaticTab('diario');
+  setTimeout(()=>document.getElementById('log-data')?.focus(),0);
+}
+
+function cancelEditLog(){
+  editingLogIndex=null;
+  renderStaticTab('diario');
+}
+
 function deletLog(i){
   if(!confirm('Remover este registro?')) return;
+  if(editingLogIndex===i) editingLogIndex=null;
+  else if(editingLogIndex!==null&&editingLogIndex>i) editingLogIndex--;
   diveLogs.splice(i,1);
   saveAppStateToFirebase();
   renderStaticTab('diario');
