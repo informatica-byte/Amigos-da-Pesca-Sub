@@ -610,6 +610,61 @@ body::before{
 
 .footer{color:var(--muted);text-align:center;font-size:12px;margin-top:20px;}
 
+/* ===== SHARE BUTTONS ===== */
+.share-bar{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;
+}
+
+.btn-wa{
+  display:inline-flex;align-items:center;gap:8px;
+  border:0;border-radius:11px;padding:11px 16px;
+  color:white;
+  background:linear-gradient(135deg,#25d366,#128c7e);
+  cursor:pointer;font-weight:700;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:13px;flex:1;justify-content:center;
+  transition:opacity .15s;
+  text-decoration:none;
+}
+
+.btn-wa:hover{opacity:.88;}
+.btn-wa i{font-size:18px;}
+
+.btn-copy{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--line);border-radius:11px;padding:11px 16px;
+  color:var(--soft);
+  background:rgba(255,255,255,.07);
+  cursor:pointer;font-weight:700;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:13px;flex:1;justify-content:center;
+  transition:all .15s;
+}
+
+.btn-copy:hover{background:rgba(255,255,255,.14);}
+.btn-copy i{font-size:18px;}
+
+.share-toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:#19c37d;color:white;
+  padding:10px 20px;border-radius:999px;
+  font-size:13px;font-weight:700;
+  opacity:0;pointer-events:none;
+  transition:opacity .25s;z-index:9999;
+  font-family:'Space Grotesk',sans-serif;
+}
+
+.share-toast.show{opacity:1;}
+
+/* Log share row per entry */
+.log-share-btn{
+  background:none;border:0;
+  color:#25d366;cursor:pointer;
+  font-size:18px;padding:3px 5px;
+  border-radius:7px;transition:opacity .15s;
+}
+.log-share-btn:hover{opacity:.7;}
+
 @keyframes spin{to{transform:rotate(360deg)}}
 
 @media(max-width:900px){
@@ -630,6 +685,7 @@ body::before{
 </head>
 
 <body>
+<div class="share-toast" id="share-toast">✓ Copiado para a área de transferência!</div>
 <main class="app">
   <header class="hero">
     <div class="hero-main">
@@ -1456,8 +1512,10 @@ function renderChecklist(){
           `).join('')}
         `).join('')}
       </div>
-      <div style="margin-top:12px;display:flex;gap:8px;">
-        <button class="calc-btn" style="flex:1" onclick="resetChecklist()">Reiniciar Checklist</button>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn-wa" onclick="shareChecklist('wa')"><i class="ti ti-brand-whatsapp"></i> Enviar Checklist no WhatsApp</button>
+        <button class="btn-copy" onclick="shareChecklist('copy')"><i class="ti ti-copy"></i> Copiar</button>
+        <button class="calc-btn" style="flex:1;min-width:140px" onclick="resetChecklist()"><i class="ti ti-refresh"></i> Reiniciar</button>
       </div>
     </section>
 
@@ -1541,7 +1599,12 @@ function renderDiario(){
       </div>
       <button class="calc-btn" id="btn-log-add">Adicionar Registro</button>
 
-      <div style="margin-top:16px">
+      <div class="share-bar" style="margin-top:14px;">
+        <button class="btn-wa" onclick="shareAllLogs('wa')"><i class="ti ti-brand-whatsapp"></i> Enviar Diário no WhatsApp</button>
+        <button class="btn-copy" onclick="shareAllLogs('copy')"><i class="ti ti-copy"></i> Copiar Diário</button>
+      </div>
+
+      <div style="margin-top:14px">
         ${hasLogs?`
           <div style="overflow-x:auto">
             <table class="log-table">
@@ -1561,7 +1624,11 @@ function renderDiario(){
                     <td>${l.captura||'—'}</td>
                     <td>${l.vis||'—'}</td>
                     <td>${l.obs||'—'}</td>
-                    <td><button class="log-del" onclick="deletLog(${i})"><i class="ti ti-trash"></i></button></td>
+                    <td style="display:flex;gap:4px;align-items:center;">
+                      <button class="log-share-btn" title="Enviar este mergulho no WhatsApp" onclick="shareLog(${i},'wa')"><i class="ti ti-brand-whatsapp"></i></button>
+                      <button class="log-share-btn" title="Copiar este mergulho" onclick="shareLog(${i},'copy')" style="color:var(--muted)"><i class="ti ti-copy"></i></button>
+                      <button class="log-del" title="Apagar" onclick="deletLog(${i})"><i class="ti ti-trash"></i></button>
+                    </td>
                   </tr>`;
                 }).join('')}
               </tbody>
@@ -1596,6 +1663,107 @@ function deletLog(i){
   diveLogs.splice(i,1);
   localStorage.setItem('diveLogs',JSON.stringify(diveLogs));
   renderStaticTab('diario');
+}
+
+// ========== SHARE / WHATSAPP ==========
+function showToast(msg){
+  const t=document.getElementById('share-toast');
+  t.textContent='✓ '+msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+function copyText(text){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>showToast('Copiado para a área de transferência!'));
+  } else {
+    const ta=document.createElement('textarea');
+    ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copiado!');
+  }
+}
+
+function openWhatsApp(text){
+  const encoded=encodeURIComponent(text);
+  // Opens WhatsApp with pre-filled message; user picks the group
+  window.open('https://wa.me/?text='+encoded,'_blank');
+}
+
+function buildChecklistMsg(){
+  const done=CHECKLIST_ITEMS.filter(i=>checkState[i.id]).length;
+  const total=CHECKLIST_ITEMS.length;
+  const pct=Math.round((done/total)*100);
+  const data=new Date().toLocaleDateString('pt-BR');
+  let msg=`🤿 *CHECKLIST PRÉ-MERGULHO*\n`;
+  msg+=`📅 ${data} · ${CITY||'Região atual'}\n`;
+  msg+=`✅ ${done}/${total} itens (${pct}%)\n\n`;
+
+  const cats=[...new Set(CHECKLIST_ITEMS.map(i=>i.cat))];
+  cats.forEach(cat=>{
+    msg+=`*${cat.toUpperCase()}*\n`;
+    CHECKLIST_ITEMS.filter(i=>i.cat===cat).forEach(item=>{
+      msg+=(checkState[item.id]?'✅':'⬜')+' '+item.text+'\n';
+    });
+    msg+='\n';
+  });
+
+  msg+=pct===100
+    ? '🟢 Checklist completo! Boa pesca e mergulho seguro! 🎯'
+    : `⚠️ ${total-done} item(s) pendente(s). Confira antes de entrar na água!`;
+  return msg;
+}
+
+function buildLogMsg(log){
+  if(!log) return '';
+  let msg=`🤿 *REGISTRO DE MERGULHO*\n`;
+  msg+=`📅 Data: ${log.data||'—'}\n`;
+  msg+=`📍 Local: ${log.local||'—'}\n`;
+  msg+=`📏 Profundidade: ${log.prof?log.prof+'m':'—'}\n`;
+  msg+=`⏱️ Melhor apneia: ${log.apneia?log.apneia+'s':'—'}\n`;
+  msg+=`🐟 Captura: ${log.captura||'—'}\n`;
+  msg+=`👁️ Visibilidade: ${log.vis||'—'}\n`;
+  if(log.obs) msg+=`📝 Obs: ${log.obs}\n`;
+  msg+=`\n_Enviado via Pesca Subaquática Inteligente 🤿_`;
+  return msg;
+}
+
+function buildAllLogsMsg(){
+  if(!diveLogs.length) return 'Nenhum registro no diário ainda.';
+  let msg=`🤿 *DIÁRIO DE MERGULHOS*\n`;
+  msg+=`📅 Gerado em ${new Date().toLocaleDateString('pt-BR')}\n`;
+  msg+=`📊 Total: ${diveLogs.length} mergulho(s)\n\n`;
+  msg+='─'.repeat(30)+'\n\n';
+  diveLogs.slice().reverse().forEach((l,i)=>{
+    msg+=`*#${diveLogs.length-i} — ${l.data||'?'}*\n`;
+    msg+=`📍 ${l.local||'—'} · 📏 ${l.prof?l.prof+'m':'—'} · ⏱️ ${l.apneia?l.apneia+'s':'—'}\n`;
+    msg+=`🐟 ${l.captura||'—'} · 👁️ ${l.vis||'—'}\n`;
+    if(l.obs) msg+=`📝 ${l.obs}\n`;
+    msg+='\n';
+  });
+  msg+=`_Enviado via Pesca Subaquática Inteligente 🤿_`;
+  return msg;
+}
+
+function shareChecklist(via){
+  const msg=buildChecklistMsg();
+  if(via==='wa') openWhatsApp(msg);
+  else copyText(msg);
+}
+
+function shareLog(i,via){
+  const log=diveLogs[i];
+  const msg=buildLogMsg(log);
+  if(via==='wa') openWhatsApp(msg);
+  else copyText(msg);
+}
+
+function shareAllLogs(via){
+  const msg=buildAllLogsMsg();
+  if(via==='wa') openWhatsApp(msg);
+  else copyText(msg);
 }
 
 // ========== SEGURANÇA ==========
