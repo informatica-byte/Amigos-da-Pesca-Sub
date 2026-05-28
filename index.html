@@ -1,870 +1,2168 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="App inteligente de pesca subaquática - Clima, lua, visibilidade e espécies da Bacia do Paraná" />
-  <meta name="theme-color" content="#06111a" />
-  <meta name="keywords" content="pesca, mergulho, subaquática, clima, Paraná" />
-  
-  <title>Pesca Subaquática Inteligente</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pesca Subaquática Inteligente</title>
 
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🤿</text></svg>" type="image/svg+xml" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
-  <style>
-    :root{
-      --bg:#06111a;
-      --panel:#0c1b26;
-      --panel-2:#102533;
-      --line:rgba(255,255,255,.09);
-      --line-accent:rgba(35,167,255,.28);
-      --text:#f0f9ff;
-      --muted:#8aacbd;
-      --soft:#cde4ef;
-      --blue:#23a7ff;
-      --blue-dim:rgba(35,167,255,.12);
-      --green:#19c37d;
-      --green-dim:rgba(25,195,125,.12);
-      --yellow:#f4b63f;
-      --yellow-dim:rgba(244,182,63,.12);
-      --red:#ef6262;
-      --red-dim:rgba(239,98,98,.12);
-      --cyan:#00d4e8;
-      --shadow:0 24px 64px rgba(0,0,0,.35);
-      --radius:16px;
-    }
-    
-    *{box-sizing:border-box;margin:0;padding:0;}
-    
-    html{scroll-behavior:smooth;}
-    
-    body{
-      min-height:100vh;
-      background:var(--bg);
-      color:var(--text);
-      font-family:'Space Grotesk',sans-serif;
-      line-height:1.5;
-    }
-    
-    body::before{
-      content:'';
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      background:
-        radial-gradient(ellipse 70% 50% at 10% 0%,rgba(35,167,255,.1),transparent),
-        radial-gradient(ellipse 50% 60% at 90% 100%,rgba(25,195,125,.08),transparent);
-      z-index:0;
-    }
-    
-    .app{
-      position:relative;
-      z-index:1;
-      width:min(1220px,calc(100% - 32px));
-      margin:0 auto;
-      padding:24px 0 40px;
-    }
-    
-    /* ===== HERO ===== */
-    .hero{
-      border:1px solid var(--line);
-      border-radius:20px;
-      background:rgba(12,27,38,.94);
-      backdrop-filter:blur(12px);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    
-    .hero-main{
-      display:grid;
-      grid-template-columns:1fr minmax(300px,400px);
-      gap:20px;
-      padding:22px;
-      align-items:start;
-    }
-    
-    .brand{
-      display:flex;
-      align-items:flex-start;
-      gap:14px;
-    }
-    
-    .brand-mark{
-      width:56px;height:56px;
-      border-radius:14px;
-      display:grid;place-items:center;
-      background:linear-gradient(135deg,rgba(35,167,255,.2),rgba(25,195,125,.2));
-      border:1px solid rgba(35,167,255,.25);
-      font-size:28px;flex:none;
-    }
-    
-    .hero-title{
-      font-family:'Syne',sans-serif;
-      font-size:clamp(26px,3.5vw,44px);
-      line-height:1.02;
-      letter-spacing:-.02em;
-      font-weight:800;
-    }
-    
-    .hero-copy{
-      margin:10px 0 0;
-      color:var(--soft);
-      font-size:15px;
-      line-height:1.55;
-      max-width:680px;
-    }
-    
-    .chips{
-      display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;
-    }
-    
-    .chip{
-      display:inline-flex;align-items:center;gap:6px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.06);
-      color:#e0f4ff;
-      border-radius:999px;
-      padding:6px 11px;font-size:12px;font-weight:700;
-    }
-    
-    .chip i{font-size:14px;color:var(--blue);}
-    
-    .location-panel{
-      background:rgba(4,14,22,.6);
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:14px;
-    }
-    
-    .eyebrow{
-      color:var(--muted);font-size:11px;font-weight:700;
-      letter-spacing:.08em;text-transform:uppercase;
-    }
-    
-    .location-name{margin-top:6px;font-size:22px;font-weight:700;font-family:'Syne',sans-serif;}
-    .coords{margin-top:2px;color:var(--muted);font-size:12px;}
-    
-    .search-row{
-      display:grid;grid-template-columns:1fr 42px 42px;gap:7px;margin-top:12px;
-    }
-    
-    .city-input{
-      min-width:0;width:100%;height:42px;
-      border-radius:11px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(2,10,16,.7);
-      color:white;padding:0 12px;outline:none;
-      font-family:'Space Grotesk',sans-serif;
-      font-size:14px;
-    }
-    
-    .city-input:focus{
-      border-color:rgba(35,167,255,.65);
-      box-shadow:0 0 0 3px rgba(35,167,255,.12);
-    }
-    
-    .icon-btn{
-      height:42px;width:42px;border:0;
-      border-radius:11px;
-      display:grid;place-items:center;
-      color:white;background:rgba(255,255,255,.1);
-      cursor:pointer;font-size:20px;
-      transition:background .15s;
-    }
-    
-    .icon-btn:hover{background:rgba(255,255,255,.18);}
-    .icon-btn.primary{background:linear-gradient(135deg,var(--blue),var(--green));}
-    .hint{margin-top:9px;color:var(--muted);font-size:11px;line-height:1.45;}
-    
-    .notice{
-      border-top:1px solid var(--line);
-      padding:12px 22px;color:#cfe9f5;
-      display:flex;gap:10px;align-items:flex-start;
-      background:rgba(244,182,63,.04);font-size:12.5px;line-height:1.45;
-    }
-    
-    .notice i{color:var(--yellow);font-size:17px;margin-top:1px;flex:none;}
-    
-    /* ===== NAV TABS ===== */
-    .tab-bar{
-      display:flex;gap:6px;flex-wrap:wrap;
-      margin-top:18px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:rgba(12,27,38,.9);
-      padding:8px;
-    }
-    
-    .tab-btn{
-      flex:1;min-width:120px;
-      height:40px;border:0;
-      border-radius:10px;
-      color:var(--muted);
-      background:transparent;
-      cursor:pointer;
-      font-family:'Space Grotesk',sans-serif;
-      font-size:13px;font-weight:700;
-      display:flex;align-items:center;justify-content:center;gap:7px;
-      transition:all .18s;
-      white-space:nowrap;
-    }
-    
-    .tab-btn i{font-size:16px;}
-    .tab-btn:hover{background:rgba(255,255,255,.07);color:var(--text);}
-    .tab-btn.active{
-      background:linear-gradient(135deg,rgba(35,167,255,.18),rgba(25,195,125,.12));
-      border:1px solid rgba(35,167,255,.3);
-      color:var(--text);
-    }
-    
-    /* ===== CONTENT ===== */
-    .content{margin-top:16px;display:grid;gap:16px;}
-    
-    .tab-panel{display:none;}
-    .tab-panel.active{display:grid;gap:16px;}
-    
-    /* ===== SECTION ===== */
-    .section{
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      background:rgba(12,27,38,.88);
-      padding:16px;
-    }
-    
-    .section-head{
-      display:flex;align-items:center;
-      justify-content:space-between;gap:12px;margin-bottom:14px;
-    }
-    
-    .section-title{
-      margin:0;font-size:15px;font-weight:700;font-family:'Syne',sans-serif;
-      display:flex;align-items:center;gap:8px;
-    }
-    
-    .section-title i{color:var(--blue);font-size:19px;}
-    .section-meta{color:var(--muted);font-size:12px;}
-    
-    /* ===== METRICS ===== */
-    .metrics{
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:10px;
-    }
-    
-    .metric{
-      border:1px solid var(--line);
-      border-radius:13px;
-      background:linear-gradient(180deg,#102737,#0b1c27);
-      padding:13px;min-height:100px;
-    }
-    
-    .metric-label{
-      color:var(--muted);font-size:11px;font-weight:700;
-      letter-spacing:.06em;text-transform:uppercase;
-    }
-    
-    .metric-value{margin-top:9px;font-size:30px;font-weight:700;line-height:1;font-family:'Syne',sans-serif;}
-    .metric-sub{color:var(--muted);margin-top:7px;font-size:12px;}
-    
-    /* ===== SCORE ===== */
-    .score-wrap{
-      margin-top:12px;border:1px solid var(--line);
-      border-radius:13px;padding:13px;
-      background:rgba(255,255,255,.03);
-    }
-    
-    .score-line{display:flex;justify-content:space-between;gap:12px;align-items:center;}
-    .score-label{font-weight:700;}
-    
-    .badge{
-      display:inline-flex;align-items:center;justify-content:center;
-      min-height:26px;padding:4px 10px;
-      border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.04em;
-    }
-    
-    .good{background:rgba(25,195,125,.16);color:#5eeaae;}
-    .medium{background:rgba(244,182,63,.16);color:#ffd060;}
-    .bad{background:rgba(239,98,98,.17);color:#ff9090;}
-    .info{background:rgba(35,167,255,.14);color:#7fd4ff;}
-    
-    .track{
-      margin-top:10px;height:10px;overflow:hidden;
-      border-radius:999px;background:#0f2130;
-    }
-    
-    .fill{height:100%;border-radius:999px;transition:width .5s ease;}
-    
-    /* ===== FORECAST ===== */
-    .forecast-grid{
-      display:grid;
-      grid-template-columns:repeat(7,minmax(110px,1fr));
-      gap:9px;overflow-x:auto;padding-bottom:2px;
-    }
-    
-    .day-card{
-      min-width:110px;border:1px solid var(--line);
-      border-radius:13px;
-      background:linear-gradient(180deg,#102837,#0b1b25);
-      padding:11px;cursor:pointer;
-      transition:transform .18s,border-color .18s;
-      text-align:left;
-    }
-    
-    .day-card:hover{transform:translateY(-2px);}
-    .day-card.selected{border-color:rgba(35,167,255,.85);box-shadow:0 0 0 3px rgba(35,167,255,.12);}
-    
-    .day-name{color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;}
-    .day-icon{margin-top:9px;font-size:28px;}
-    .day-temp{margin-top:5px;font-size:22px;font-weight:700;font-family:'Syne',sans-serif;}
-    .day-small{color:var(--muted);font-size:11px;margin-top:3px;}
-    
-    /* ===== FISH ===== */
-    .fish-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-      gap:11px;
-    }
-    
-    .fish-card{
-      border:1px solid var(--line);border-radius:13px;
-      background:linear-gradient(180deg,#102736,#0b1b25);
-      display:flex;flex-direction:column;overflow:hidden;
-    }
-    
-    .fish-photo-wrap{
-      position:relative;width:100%;aspect-ratio:16/10;
-      background:#06111a;overflow:hidden;
-    }
-    
-    .fish-photo{width:100%;height:100%;display:block;object-fit:cover;}
-    
-    .fish-photo-wrap::after{
-      content:'';position:absolute;inset:0;
-      background:linear-gradient(180deg,transparent 42%,rgba(6,17,26,.85));
-      pointer-events:none;
-    }
-    
-    .fish-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
-    
-    .fish-body{padding:13px;display:flex;flex:1;flex-direction:column;gap:8px;}
-    
-    .fish-emoji{
-      width:40px;height:40px;display:grid;place-items:center;
-      border-radius:11px;background:rgba(255,255,255,.08);font-size:22px;
-    }
-    
-    .fish-name{font-size:17px;font-weight:700;font-family:'Syne',sans-serif;}
-    .fish-desc{color:var(--soft);font-size:12.5px;line-height:1.48;}
-    
-    .fish-note{margin-top:auto;display:flex;flex-wrap:wrap;gap:5px;}
-    
-    .fish-source{color:var(--muted);font-size:11px;line-height:1.35;}
-    .fish-source a{color:#b8e4ff;text-decoration:none;}
-    
-    .mini-tag{
-      border:1px solid var(--line);border-radius:999px;
-      color:#cde2eb;background:rgba(255,255,255,.05);
-      padding:4px 8px;font-size:10.5px;font-weight:700;
-    }
-    
-    /* ===== TIPS ===== */
-    .tips{
-      list-style:none;display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:9px;
-    }
-    
-    .tips li{
-      border:1px solid var(--line);border-radius:13px;
-      background:rgba(255,255,255,.03);
-      padding:12px;color:#d2e7ef;
-      line-height:1.45;display:flex;gap:9px;font-size:13.5px;
-    }
-    
-    .tips i{color:var(--green);font-size:19px;flex:none;margin-top:1px;}
-    
-    /* ===== DIVE CALC ===== */
-    .calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-    
-    .calc-card{
-      border:1px solid var(--line);border-radius:13px;
-      background:linear-gradient(180deg,#0f2434,#0b1b27);
-      padding:15px;
-    }
-    
-    .calc-card h3{
-      font-family:'Syne',sans-serif;font-size:14px;font-weight:800;
-      margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--soft);
-    }
-    
-    .calc-card h3 i{color:var(--blue);}
-    
-    .field-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px;}
-    .field-row.single{grid-template-columns:1fr;}
-    
-    .field label{display:block;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px;}
-    
-    .field input,.field select{
-      width:100%;height:38px;border-radius:10px;
-      border:1px solid rgba(255,255,255,.13);
-      background:rgba(2,10,16,.7);
-      color:white;padding:0 10px;outline:none;
-      font-family:'Space Grotesk',sans-serif;font-size:13px;
-    }
-    
-    .field input:focus,.field select:focus{border-color:rgba(35,167,255,.6);}
-    .field select option{background:#0c1b26;}
-    
-    .calc-btn{
-      width:100%;height:38px;border:0;border-radius:10px;
-      background:linear-gradient(135deg,var(--blue),var(--green));
-      color:white;font-family:'Space Grotesk',sans-serif;
-      font-size:13px;font-weight:700;cursor:pointer;
-      transition:opacity .15s;
-    }
-    
-    .calc-btn:hover{opacity:.88;}
-    
-    .calc-result{
-      margin-top:12px;border:1px solid var(--line-accent);
-      border-radius:11px;background:rgba(35,167,255,.06);
-      padding:11px;display:none;
-    }
-    
-    .calc-result.visible{display:block;}
-    .calc-result-title{font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
-    .calc-result-value{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
-    .calc-result-sub{color:var(--muted);font-size:12px;margin-top:4px;}
-    
-    /* ===== EQUIPMENT LIST ===== */
-    .equip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;}
-    
-    .equip-card{
-      border:1px solid var(--line);border-radius:13px;
-      background:rgba(255,255,255,.03);
-      padding:13px;
-      display:flex;flex-direction:column;gap:7px;
-    }
-    
-    .equip-icon{font-size:26px;}
-    .equip-name{font-size:14px;font-weight:700;font-family:'Syne',sans-serif;}
-    .equip-desc{color:var(--muted);font-size:12px;line-height:1.45;}
-    .equip-badge{align-self:flex-start;}
-    
-    /* ===== VISIBILITY CALC ===== */
-    .vis-result{
-      margin-top:12px;padding:13px;
-      border-radius:12px;border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-      display:none;
-    }
-    
-    .vis-result.visible{display:block;}
-    .vis-bar-wrap{margin-top:10px;height:14px;border-radius:999px;background:#0f2130;overflow:hidden;}
-    .vis-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,#23a7ff,#19c37d);transition:width .5s ease;}
-    .vis-label{display:flex;justify-content:space-between;margin-top:5px;font-size:11px;color:var(--muted);}
-    
-    /* ===== NARCOSIS CALC ===== */
-    .narco-scale{
-      display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;
-    }
-    
-    .narco-step{
-      flex:1;min-width:70px;border:1px solid var(--line);
-      border-radius:10px;padding:9px 7px;text-align:center;
-      font-size:11px;font-weight:700;color:var(--muted);
-      transition:all .2s;
-    }
-    
-    .narco-step.active{
-      border-color:rgba(244,182,63,.5);
-      background:rgba(244,182,63,.12);
-      color:var(--yellow);
-    }
-    
-    /* ===== CHECKLIST ===== */
-    .checklist{display:grid;gap:7px;}
-    
-    .check-item{
-      display:flex;align-items:center;gap:10px;
-      border:1px solid var(--line);border-radius:11px;
-      padding:10px 13px;cursor:pointer;
-      transition:background .15s;
-      user-select:none;
-    }
-    
-    .check-item:hover{background:rgba(255,255,255,.05);}
-    .check-item.checked{background:rgba(25,195,125,.07);border-color:rgba(25,195,125,.25);}
-    .check-item.checked .check-box{background:var(--green);border-color:var(--green);}
-    .check-item.checked .check-box::after{content:'✓';}
-    
-    .check-box{
-      width:22px;height:22px;border-radius:7px;
-      border:2px solid rgba(255,255,255,.2);
-      flex:none;display:grid;place-items:center;
-      font-size:12px;font-weight:700;
-      transition:all .2s;
-    }
-    
-    .check-text{font-size:13.5px;font-weight:600;}
-    .check-cat{color:var(--muted);font-size:11px;margin-left:auto;}
-    
-    .check-progress{
-      display:flex;align-items:center;gap:10px;margin-bottom:12px;
-    }
-    
-    .check-prog-bar{flex:1;height:8px;border-radius:999px;background:#0f2130;overflow:hidden;}
-    .check-prog-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--blue),var(--green));transition:width .3s ease;}
-    .check-prog-label{color:var(--muted);font-size:12px;font-weight:700;white-space:nowrap;}
-    
-    /* ===== SIGNS / EMERGENCY ===== */
-    .signs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;}
-    
-    .sign-card{
-      border:1px solid var(--line);border-radius:13px;
-      background:rgba(255,255,255,.03);padding:13px;
-    }
-    
-    .sign-icon{font-size:26px;margin-bottom:7px;}
-    .sign-title{font-size:14px;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:4px;}
-    .sign-desc{color:var(--muted);font-size:12.5px;line-height:1.45;}
-    
-    .emergency-bar{
-      display:flex;align-items:center;gap:10px;
-      background:rgba(239,98,98,.1);border:1px solid rgba(239,98,98,.3);
-      border-radius:13px;padding:13px;margin-bottom:14px;
-    }
-    
-    .emergency-bar i{color:var(--red);font-size:22px;flex:none;}
-    .emergency-bar p{font-size:13px;line-height:1.45;color:#ffd5d5;}
-    .emergency-bar strong{color:white;}
-    
-    /* ===== LOG TABLE ===== */
-    .log-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px;}
-    
-    .log-empty{
-      text-align:center;padding:32px;color:var(--muted);
-      border:1px dashed rgba(255,255,255,.1);border-radius:12px;
-      font-size:14px;
-    }
-    
-    .log-empty i{display:block;font-size:32px;margin-bottom:8px;color:rgba(255,255,255,.2);}
-    
-    .log-table{width:100%;border-collapse:collapse;}
-    .log-table th,.log-table td{
-      padding:9px 12px;text-align:left;font-size:12.5px;
-      border-bottom:1px solid var(--line);
-    }
-    
-    .log-table th{color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
-    .log-table td{color:var(--soft);}
-    .log-table tr:last-child td{border-bottom:0;}
-    
-    .log-form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:12px;}
-    .log-form-grid .field{display:flex;flex-direction:column;}
-    
-    .log-del{
-      background:none;border:0;color:var(--muted);cursor:pointer;
-      font-size:16px;padding:3px;border-radius:6px;
-      transition:color .15s;
-    }
-    
-    .log-del:hover{color:var(--red);}
-    
-    /* ===== SAFETY STOPS ===== */
-    .safety-timeline{display:flex;flex-direction:column;gap:0;}
-    
-    .stop-row{
-      display:flex;align-items:center;gap:12px;
-      padding:10px 13px;
-      border-left:2px solid var(--line);
-      margin-left:14px;
-      position:relative;
-    }
-    
-    .stop-row::before{
-      content:'';position:absolute;left:-7px;top:50%;transform:translateY(-50%);
-      width:12px;height:12px;border-radius:999px;
-      border:2px solid var(--blue);background:#06111a;
-    }
-    
-    .stop-row.mandatory::before{background:var(--yellow);border-color:var(--yellow);}
-    .stop-row.safety::before{background:var(--green);border-color:var(--green);}
-    
-    .stop-depth{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;min-width:60px;}
-    .stop-detail{flex:1;}
-    .stop-name{font-size:13px;font-weight:700;}
-    .stop-time{color:var(--muted);font-size:12px;}
-    
-    /* ===== LOADING ===== */
-    .loading{min-height:280px;display:grid;place-items:center;text-align:center;}
-    .loading i{font-size:42px;color:var(--blue);animation:spin 1s linear infinite;}
-    .loading h2{margin:14px 0 0;font-family:'Syne',sans-serif;}
-    
-    .error-card{max-width:580px;margin:0 auto;text-align:center;}
-    .error-card h2{font-family:'Syne',sans-serif;}
-    .error-card p{color:var(--muted);margin:10px 0 16px;line-height:1.55;}
-    
-    .btn{
-      border:0;border-radius:11px;padding:11px 16px;
-      color:white;background:linear-gradient(135deg,var(--blue),var(--green));
-      cursor:pointer;font-weight:700;font-family:'Space Grotesk',sans-serif;
-    }
-    
-    .footer{color:var(--muted);text-align:center;font-size:12px;margin-top:20px;}
-    
-    .db-status{
-      margin-top:8px;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:5px 10px;
-      background:rgba(255,255,255,.05);
-      color:var(--muted);
-      font-size:11px;
-      font-weight:700;
-    }
-    
-    .db-status.online{color:#72efbc;border-color:rgba(25,195,125,.3);background:rgba(25,195,125,.08);}
-    .db-status.offline{color:#ffd060;border-color:rgba(244,182,63,.3);background:rgba(244,182,63,.08);}
-    .db-status.error{color:#ff9090;border-color:rgba(239,98,98,.35);background:rgba(239,98,98,.08);}
-    
-    /* ===== SHARE BUTTONS ===== */
-    .share-bar{
-      display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;
-    }
-    
-    .btn-wa{
-      display:inline-flex;align-items:center;gap:8px;
-      border:0;border-radius:11px;padding:11px 16px;
-      color:white;
-      background:linear-gradient(135deg,#25d366,#128c7e);
-      cursor:pointer;font-weight:700;
-      font-family:'Space Grotesk',sans-serif;
-      font-size:13px;flex:1;justify-content:center;
-      transition:opacity .15s;
-      text-decoration:none;
-    }
-    
-    .btn-wa:hover{opacity:.88;}
-    .btn-wa i{font-size:18px;}
-    
-    .btn-copy{
-      display:inline-flex;align-items:center;gap:8px;
-      border:1px solid var(--line);border-radius:11px;padding:11px 16px;
-      color:var(--soft);
-      background:rgba(255,255,255,.07);
-      cursor:pointer;font-weight:700;
-      font-family:'Space Grotesk',sans-serif;
-      font-size:13px;flex:1;justify-content:center;
-      transition:all .15s;
-    }
-    
-    .btn-copy:hover{background:rgba(255,255,255,.14);}
-    .btn-copy i{font-size:18px;}
-    
-    .share-toast{
-      position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-      background:#19c37d;color:white;
-      padding:10px 20px;border-radius:999px;
-      font-size:13px;font-weight:700;
-      opacity:0;pointer-events:none;
-      transition:opacity .25s;z-index:9999;
-      font-family:'Space Grotesk',sans-serif;
-    }
-    
-    .share-toast.show{opacity:1;}
-    
-    /* Log share row per entry */
-    .log-share-btn{
-      background:none;border:0;
-      color:#25d366;cursor:pointer;
-      font-size:18px;padding:3px 5px;
-      border-radius:7px;transition:opacity .15s;
-    }
-    .log-share-btn:hover{opacity:.7;}
-    
-    .log-edit-btn{
-      background:none;border:0;
-      color:var(--blue);cursor:pointer;
-      font-size:18px;padding:3px 5px;
-      border-radius:7px;transition:opacity .15s;
-    }
-    
-    .log-edit-btn:hover{opacity:.75;}
-    
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border-width: 0;
-    }
-    
-    @keyframes spin{to{transform:rotate(360deg)}}
-    
-    @media(max-width:900px){
-      .hero-main,.metrics,.tips,.calc-grid,.log-form-grid{grid-template-columns:1fr;}
-      .tab-btn{min-width:100px;}
-    }
-    
-    @media(max-width:560px){
-      .app{width:calc(100% - 20px);}
-      .hero-main,.section{padding:13px;}
-      .brand{align-items:center;}
-      .brand-mark{width:46px;height:46px;}
-      .notice{padding:11px 13px;}
-      .section-head{flex-direction:column;align-items:flex-start;}
-      .field-row{grid-template-columns:1fr;}
-    }
-  </style>
+<style>
+:root{
+  --bg:#06111a;
+  --panel:#0c1b26;
+  --panel-2:#102533;
+  --line:rgba(255,255,255,.09);
+  --line-accent:rgba(35,167,255,.28);
+  --text:#f0f9ff;
+  --muted:#8aacbd;
+  --soft:#cde4ef;
+  --blue:#23a7ff;
+  --blue-dim:rgba(35,167,255,.12);
+  --green:#19c37d;
+  --green-dim:rgba(25,195,125,.12);
+  --yellow:#f4b63f;
+  --yellow-dim:rgba(244,182,63,.12);
+  --red:#ef6262;
+  --red-dim:rgba(239,98,98,.12);
+  --cyan:#00d4e8;
+  --shadow:0 24px 64px rgba(0,0,0,.35);
+  --radius:16px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  min-height:100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Space Grotesk',sans-serif;
+  line-height:1.5;
+}
+
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 0%,rgba(35,167,255,.13),transparent),
+    radial-gradient(ellipse 50% 60% at 90% 100%,rgba(25,195,125,.1),transparent),
+    radial-gradient(ellipse 40% 30% at 50% 50%,rgba(35,167,255,.04),transparent);
+  z-index:0;
+}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
+
+.app{
+  position:relative;
+  z-index:1;
+  width:min(1220px,calc(100% - 32px));
+  margin:0 auto;
+  padding:24px 0 40px;
+}
+
+.hero{animation:fadeInUp .45s ease both;}
+.tab-bar{animation:fadeInUp .45s .1s ease both;}
+#content{animation:fadeIn .35s .2s ease both;}
+
+/* ===== HERO ===== */
+.hero{
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:rgba(12,27,38,.94);
+  backdrop-filter:blur(12px);
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.hero-main{
+  display:grid;
+  grid-template-columns:1fr minmax(300px,400px);
+  gap:20px;
+  padding:22px;
+  align-items:start;
+}
+
+.brand{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+}
+
+.brand-mark{
+  width:56px;height:56px;
+  border-radius:14px;
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,rgba(35,167,255,.25),rgba(25,195,125,.22));
+  border:1px solid rgba(35,167,255,.35);
+  font-size:28px;flex:none;
+  box-shadow:0 0 24px rgba(35,167,255,.18);
+}
+
+.hero-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(26px,3.5vw,44px);
+  line-height:1.02;
+  letter-spacing:-.02em;
+  font-weight:800;
+}
+
+.hero-copy{
+  margin:10px 0 0;
+  color:var(--soft);
+  font-size:15px;
+  line-height:1.55;
+  max-width:680px;
+}
+
+.chips{
+  display:flex;flex-wrap:wrap;gap:7px;margin-top:16px;
+}
+
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.06);
+  color:#e0f4ff;
+  border-radius:999px;
+  padding:6px 11px;font-size:12px;font-weight:700;
+}
+
+.chip i{font-size:14px;color:var(--blue);}
+
+.location-panel{
+  background:rgba(4,14,22,.6);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+}
+
+.eyebrow{
+  color:var(--muted);font-size:11px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;
+}
+
+.location-name{margin-top:6px;font-size:22px;font-weight:700;font-family:'Syne',sans-serif;}
+.coords{margin-top:2px;color:var(--muted);font-size:12px;}
+
+.search-row{
+  display:grid;grid-template-columns:1fr 42px 42px;gap:7px;margin-top:12px;
+}
+
+.city-input{
+  min-width:0;width:100%;height:42px;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(2,10,16,.7);
+  color:white;padding:0 12px;outline:none;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:14px;
+}
+
+.city-input:focus{
+  border-color:rgba(35,167,255,.65);
+  box-shadow:0 0 0 3px rgba(35,167,255,.12);
+}
+
+.icon-btn{
+  height:42px;width:42px;border:0;
+  border-radius:11px;
+  display:grid;place-items:center;
+  color:white;background:rgba(255,255,255,.1);
+  cursor:pointer;font-size:20px;
+  transition:background .15s;
+}
+
+.icon-btn:hover{background:rgba(255,255,255,.18);}
+.icon-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+.icon-btn.primary{background:linear-gradient(135deg,var(--blue),var(--green));}
+.hint{margin-top:9px;color:var(--muted);font-size:11px;line-height:1.45;}
+
+.notice{
+  border-top:1px solid var(--line);
+  padding:12px 22px;color:#cfe9f5;
+  display:flex;gap:10px;align-items:flex-start;
+  background:rgba(244,182,63,.04);font-size:12.5px;line-height:1.45;
+}
+
+.notice i{color:var(--yellow);font-size:17px;margin-top:1px;flex:none;}
+
+/* ===== NAV TABS ===== */
+.tab-bar{
+  display:flex;gap:6px;flex-wrap:wrap;
+  margin-top:18px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:rgba(12,27,38,.9);
+  padding:8px;
+}
+
+.tab-btn{
+  flex:1;min-width:120px;
+  height:40px;border:0;
+  border-radius:10px;
+  color:var(--muted);
+  background:transparent;
+  cursor:pointer;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:13px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  transition:all .18s;
+  white-space:nowrap;
+}
+
+.tab-btn i{font-size:16px;}
+.tab-btn:hover{background:rgba(255,255,255,.07);color:var(--text);}
+.tab-btn.active{
+  background:linear-gradient(135deg,rgba(35,167,255,.2),rgba(25,195,125,.14));
+  border:1px solid rgba(35,167,255,.38);
+  color:var(--text);
+  box-shadow:0 0 14px rgba(35,167,255,.1);
+}
+
+/* ===== CONTENT ===== */
+.content{margin-top:16px;display:grid;gap:16px;}
+
+.tab-panel{display:none;}
+.tab-panel.active{display:grid;gap:16px;}
+
+/* ===== SECTION ===== */
+.section{
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:rgba(12,27,38,.88);
+  padding:16px;
+  transition:border-color .2s;
+}
+
+.section:hover{
+  border-color:rgba(35,167,255,.18);
+}
+
+.section-head{
+  display:flex;align-items:center;
+  justify-content:space-between;gap:12px;margin-bottom:14px;
+}
+
+.section-title{
+  margin:0;font-size:15px;font-weight:700;font-family:'Syne',sans-serif;
+  display:flex;align-items:center;gap:8px;
+}
+
+.section-title i{color:var(--blue);font-size:19px;}
+.section-meta{color:var(--muted);font-size:12px;}
+
+/* ===== METRICS ===== */
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+
+.metric{
+  border:1px solid var(--line);
+  border-radius:13px;
+  background:linear-gradient(180deg,#102737,#0b1c27);
+  padding:13px;min-height:100px;
+  transition:border-color .2s, transform .18s, box-shadow .18s;
+}
+.metric:hover{
+  border-color:rgba(35,167,255,.3);
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
+}
+
+.metric-label{
+  color:var(--muted);font-size:11px;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+
+.metric-value{margin-top:9px;font-size:30px;font-weight:700;line-height:1;font-family:'Syne',sans-serif;}
+.metric-sub{color:var(--muted);margin-top:7px;font-size:12px;}
+
+/* ===== SCORE ===== */
+.score-wrap{
+  margin-top:12px;border:1px solid var(--line);
+  border-radius:13px;padding:13px;
+  background:rgba(255,255,255,.03);
+}
+
+.score-line{display:flex;justify-content:space-between;gap:12px;align-items:center;}
+.score-label{font-weight:700;}
+
+.badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:26px;padding:4px 10px;
+  border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.04em;
+}
+
+.good{background:rgba(25,195,125,.16);color:#5eeaae;}
+.medium{background:rgba(244,182,63,.16);color:#ffd060;}
+.bad{background:rgba(239,98,98,.17);color:#ff9090;}
+.info{background:rgba(35,167,255,.14);color:#7fd4ff;}
+
+.track{
+  margin-top:10px;height:10px;overflow:hidden;
+  border-radius:999px;background:#0f2130;
+}
+
+.fill{height:100%;border-radius:999px;transition:width .7s cubic-bezier(.4,0,.2,1);}
+
+/* ===== FORECAST ===== */
+.forecast-grid{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(110px,1fr));
+  gap:9px;overflow-x:auto;padding-bottom:2px;
+}
+
+.day-card{
+  min-width:110px;border:1px solid var(--line);
+  border-radius:13px;
+  background:linear-gradient(180deg,#102837,#0b1b25);
+  padding:11px;cursor:pointer;
+  transition:transform .18s,border-color .18s;
+  text-align:left;
+}
+
+.day-card:hover{transform:translateY(-2px);}
+.day-card.selected{border-color:rgba(35,167,255,.85);box-shadow:0 0 0 3px rgba(35,167,255,.12);}
+
+.day-name{color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;}
+.day-icon{margin-top:9px;font-size:28px;}
+.day-temp{margin-top:5px;font-size:22px;font-weight:700;font-family:'Syne',sans-serif;}
+.day-small{color:var(--muted);font-size:11px;margin-top:3px;}
+
+/* ===== FISH ===== */
+.fish-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:11px;
+}
+
+.fish-card{
+  border:1px solid var(--line);border-radius:13px;
+  background:linear-gradient(180deg,#102736,#0b1b25);
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:border-color .2s, transform .18s, box-shadow .18s;
+}
+
+.fish-card:hover{
+  border-color:rgba(35,167,255,.3);
+  transform:translateY(-3px);
+  box-shadow:0 12px 32px rgba(0,0,0,.3);
+}
+
+.fish-photo-wrap{
+  position:relative;width:100%;aspect-ratio:16/10;
+  background:#06111a;overflow:hidden;
+}
+
+.fish-photo{width:100%;height:100%;display:block;object-fit:cover;}
+
+.fish-photo-wrap::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 42%,rgba(6,17,26,.85));
+  pointer-events:none;
+}
+
+.fish-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+
+.fish-body{padding:13px;display:flex;flex:1;flex-direction:column;gap:8px;}
+
+.fish-emoji{
+  width:40px;height:40px;display:grid;place-items:center;
+  border-radius:11px;background:rgba(255,255,255,.08);font-size:22px;
+}
+
+.fish-name{font-size:17px;font-weight:700;font-family:'Syne',sans-serif;}
+.fish-desc{color:var(--soft);font-size:12.5px;line-height:1.48;}
+
+.fish-note{margin-top:auto;display:flex;flex-wrap:wrap;gap:5px;}
+
+.fish-source{color:var(--muted);font-size:11px;line-height:1.35;}
+.fish-source a{color:#b8e4ff;text-decoration:none;}
+
+.mini-tag{
+  border:1px solid var(--line);border-radius:999px;
+  color:#cde2eb;background:rgba(255,255,255,.05);
+  padding:4px 8px;font-size:10.5px;font-weight:700;
+}
+
+/* ===== TIPS ===== */
+.tips{
+  list-style:none;display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+}
+
+.tips li{
+  border:1px solid var(--line);border-radius:13px;
+  background:rgba(255,255,255,.03);
+  padding:12px;color:#d2e7ef;
+  line-height:1.45;display:flex;gap:9px;font-size:13.5px;
+  transition:background .15s, border-color .15s;
+}
+
+.tips li:hover{background:rgba(255,255,255,.06);border-color:rgba(35,167,255,.15);}
+
+.tips i{color:var(--green);font-size:19px;flex:none;margin-top:1px;}
+
+/* ===== DIVE CALC ===== */
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+.calc-card{
+  border:1px solid var(--line);border-radius:13px;
+  background:linear-gradient(180deg,#0f2434,#0b1b27);
+  padding:15px;
+}
+
+.calc-card h3{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:800;
+  margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--soft);
+}
+
+.calc-card h3 i{color:var(--blue);}
+
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px;}
+.field-row.single{grid-template-columns:1fr;}
+
+.field label{display:block;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-bottom:5px;}
+
+.field input,.field select{
+  width:100%;height:38px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.13);
+  background:rgba(2,10,16,.7);
+  color:white;padding:0 10px;outline:none;
+  font-family:'Space Grotesk',sans-serif;font-size:13px;
+}
+
+.field input:focus,.field select:focus{border-color:rgba(35,167,255,.6);}
+.field select option{background:#0c1b26;}
+
+.calc-btn{
+  width:100%;height:38px;border:0;border-radius:10px;
+  background:linear-gradient(135deg,var(--blue),var(--green));
+  color:white;font-family:'Space Grotesk',sans-serif;
+  font-size:13px;font-weight:700;cursor:pointer;
+  transition:opacity .15s;
+}
+
+.calc-btn:hover{opacity:.88;}
+
+.calc-result{
+  margin-top:12px;border:1px solid var(--line-accent);
+  border-radius:11px;background:rgba(35,167,255,.06);
+  padding:11px;display:none;
+}
+
+.calc-result.visible{display:block;}
+.calc-result-title{font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+.calc-result-value{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
+.calc-result-sub{color:var(--muted);font-size:12px;margin-top:4px;}
+
+/* ===== EQUIPMENT LIST ===== */
+.equip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;}
+
+.equip-card{
+  border:1px solid var(--line);border-radius:13px;
+  background:rgba(255,255,255,.03);
+  padding:13px;
+  display:flex;flex-direction:column;gap:7px;
+}
+
+.equip-icon{font-size:26px;}
+.equip-name{font-size:14px;font-weight:700;font-family:'Syne',sans-serif;}
+.equip-desc{color:var(--muted);font-size:12px;line-height:1.45;}
+.equip-badge{align-self:flex-start;}
+
+/* ===== VISIBILITY CALC ===== */
+.vis-result{
+  margin-top:12px;padding:13px;
+  border-radius:12px;border:1px solid var(--line);
+  background:rgba(255,255,255,.03);
+  display:none;
+}
+
+.vis-result.visible{display:block;}
+.vis-bar-wrap{margin-top:10px;height:14px;border-radius:999px;background:#0f2130;overflow:hidden;}
+.vis-bar{height:100%;border-radius:999px;background:linear-gradient(90deg,#23a7ff,#19c37d);transition:width .5s ease;}
+.vis-label{display:flex;justify-content:space-between;margin-top:5px;font-size:11px;color:var(--muted);}
+
+/* ===== NARCOSIS CALC ===== */
+.narco-scale{
+  display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;
+}
+
+.narco-step{
+  flex:1;min-width:70px;border:1px solid var(--line);
+  border-radius:10px;padding:9px 7px;text-align:center;
+  font-size:11px;font-weight:700;color:var(--muted);
+  transition:all .2s;
+}
+
+.narco-step.active{
+  border-color:rgba(244,182,63,.5);
+  background:rgba(244,182,63,.12);
+  color:var(--yellow);
+}
+
+/* ===== CHECKLIST ===== */
+.checklist{display:grid;gap:7px;}
+
+.check-item{
+  display:flex;align-items:center;gap:10px;
+  border:1px solid var(--line);border-radius:11px;
+  padding:10px 13px;cursor:pointer;
+  transition:background .15s;
+  user-select:none;
+}
+
+.check-item:hover{background:rgba(255,255,255,.05);}
+.check-item.checked{background:rgba(25,195,125,.08);border-color:rgba(25,195,125,.3);box-shadow:0 0 0 1px rgba(25,195,125,.1);}
+.check-item.checked .check-box{background:var(--green);border-color:var(--green);box-shadow:0 0 8px rgba(25,195,125,.4);}
+.check-item.checked .check-box::after{content:'✓';}
+
+.check-box{
+  width:22px;height:22px;border-radius:7px;
+  border:2px solid rgba(255,255,255,.2);
+  flex:none;display:grid;place-items:center;
+  font-size:12px;font-weight:700;
+  transition:all .2s;
+}
+
+.check-text{font-size:13.5px;font-weight:600;}
+.check-cat{color:var(--muted);font-size:11px;margin-left:auto;}
+
+.check-progress{
+  display:flex;align-items:center;gap:10px;margin-bottom:12px;
+}
+
+.check-prog-bar{flex:1;height:8px;border-radius:999px;background:#0f2130;overflow:hidden;}
+.check-prog-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--blue),var(--green));transition:width .3s ease;}
+.check-prog-label{color:var(--muted);font-size:12px;font-weight:700;white-space:nowrap;}
+
+/* ===== SIGNS / EMERGENCY ===== */
+.signs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;}
+
+.sign-card{
+  border:1px solid var(--line);border-radius:13px;
+  background:rgba(255,255,255,.03);padding:13px;
+}
+
+.sign-icon{font-size:26px;margin-bottom:7px;}
+.sign-title{font-size:14px;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:4px;}
+.sign-desc{color:var(--muted);font-size:12.5px;line-height:1.45;}
+
+.emergency-bar{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(239,98,98,.1);border:1px solid rgba(239,98,98,.3);
+  border-radius:13px;padding:13px;margin-bottom:14px;
+}
+
+.emergency-bar i{color:var(--red);font-size:22px;flex:none;}
+.emergency-bar p{font-size:13px;line-height:1.45;color:#ffd5d5;}
+.emergency-bar strong{color:white;}
+
+/* ===== LOG TABLE ===== */
+.log-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px;}
+
+.log-empty{
+  text-align:center;padding:32px;color:var(--muted);
+  border:1px dashed rgba(255,255,255,.1);border-radius:12px;
+  font-size:14px;
+}
+
+.log-empty i{display:block;font-size:32px;margin-bottom:8px;color:rgba(255,255,255,.2);}
+
+.log-table{width:100%;border-collapse:collapse;}
+.log-table th,.log-table td{
+  padding:9px 12px;text-align:left;font-size:12.5px;
+  border-bottom:1px solid var(--line);
+}
+
+.log-table th{color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+.log-table td{color:var(--soft);}
+.log-table tr:last-child td{border-bottom:0;}
+
+.log-form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:12px;}
+.log-form-grid .field{display:flex;flex-direction:column;}
+
+.log-del{
+  background:none;border:0;color:var(--muted);cursor:pointer;
+  font-size:16px;padding:3px;border-radius:6px;
+  transition:color .15s;
+}
+
+.log-del:hover{color:var(--red);}
+
+/* ===== SAFETY STOPS ===== */
+.safety-timeline{display:flex;flex-direction:column;gap:0;}
+
+.stop-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 13px;
+  border-left:2px solid var(--line);
+  margin-left:14px;
+  position:relative;
+}
+
+.stop-row::before{
+  content:'';position:absolute;left:-7px;top:50%;transform:translateY(-50%);
+  width:12px;height:12px;border-radius:999px;
+  border:2px solid var(--blue);background:#06111a;
+}
+
+.stop-row.mandatory::before{background:var(--yellow);border-color:var(--yellow);}
+.stop-row.safety::before{background:var(--green);border-color:var(--green);}
+
+.stop-depth{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;min-width:60px;}
+.stop-detail{flex:1;}
+.stop-name{font-size:13px;font-weight:700;}
+.stop-time{color:var(--muted);font-size:12px;}
+
+/* ===== LOADING ===== */
+.loading{min-height:280px;display:grid;place-items:center;text-align:center;}
+.loading i{font-size:42px;color:var(--blue);animation:spin 1s linear infinite;filter:drop-shadow(0 0 12px rgba(35,167,255,.5));}
+.loading h2{margin:14px 0 0;font-family:'Syne',sans-serif;color:var(--soft);}
+
+.error-card{max-width:580px;margin:0 auto;text-align:center;}
+.error-card h2{font-family:'Syne',sans-serif;}
+.error-card p{color:var(--muted);margin:10px 0 16px;line-height:1.55;}
+
+.btn{
+  border:0;border-radius:11px;padding:11px 16px;
+  color:white;background:linear-gradient(135deg,var(--blue),var(--green));
+  cursor:pointer;font-weight:700;font-family:'Space Grotesk',sans-serif;
+}
+
+.footer{color:var(--muted);text-align:center;font-size:12px;margin-top:20px;}
+
+.db-status{
+  margin-top:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:5px 10px;
+  background:rgba(255,255,255,.05);
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+}
+
+.db-status.online{color:#72efbc;border-color:rgba(25,195,125,.3);background:rgba(25,195,125,.08);}
+.db-status.online::before{
+  content:'';display:inline-block;width:7px;height:7px;
+  border-radius:50%;background:#19c37d;
+  animation:pulse-dot 2s ease-in-out infinite;
+  margin-right:2px;
+}
+.db-status.offline{color:#ffd060;border-color:rgba(244,182,63,.3);background:rgba(244,182,63,.08);}
+.db-status.error{color:#ff9090;border-color:rgba(239,98,98,.35);background:rgba(239,98,98,.08);}
+
+/* ===== SHARE BUTTONS ===== */
+.share-bar{
+  display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;
+}
+
+.btn-wa{
+  display:inline-flex;align-items:center;gap:8px;
+  border:0;border-radius:11px;padding:11px 16px;
+  color:white;
+  background:linear-gradient(135deg,#25d366,#128c7e);
+  cursor:pointer;font-weight:700;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:13px;flex:1;justify-content:center;
+  transition:opacity .15s;
+  text-decoration:none;
+}
+
+.btn-wa:hover{opacity:.88;}
+.btn-wa i{font-size:18px;}
+
+.btn-copy{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--line);border-radius:11px;padding:11px 16px;
+  color:var(--soft);
+  background:rgba(255,255,255,.07);
+  cursor:pointer;font-weight:700;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:13px;flex:1;justify-content:center;
+  transition:all .15s;
+}
+
+.btn-copy:hover{background:rgba(255,255,255,.14);}
+.btn-copy i{font-size:18px;}
+
+.share-toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:#19c37d;color:white;
+  padding:10px 20px;border-radius:999px;
+  font-size:13px;font-weight:700;
+  opacity:0;pointer-events:none;
+  transition:opacity .25s;z-index:9999;
+  font-family:'Space Grotesk',sans-serif;
+}
+
+.share-toast.show{opacity:1;}
+
+/* Log share row per entry */
+.log-share-btn{
+  background:none;border:0;
+  color:#25d366;cursor:pointer;
+  font-size:18px;padding:3px 5px;
+  border-radius:7px;transition:opacity .15s;
+}
+.log-share-btn:hover{opacity:.7;}
+
+.log-edit-btn{
+  background:none;border:0;
+  color:var(--blue);cursor:pointer;
+  font-size:18px;padding:3px 5px;
+  border-radius:7px;transition:opacity .15s;
+}
+
+.log-edit-btn:hover{opacity:.75;}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+::-webkit-scrollbar{width:7px;height:7px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:999px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.22);}
+
+@media(max-width:900px){
+  .hero-main,.metrics,.tips,.calc-grid,.log-form-grid{grid-template-columns:1fr;}
+  .tab-btn{min-width:100px;}
+  .metrics{grid-template-columns:repeat(2,1fr);}
+}
+
+@media(max-width:560px){
+  .app{width:calc(100% - 20px);}
+  .hero-main,.section{padding:13px;}
+  .brand{align-items:center;}
+  .brand-mark{width:46px;height:46px;}
+  .notice{padding:11px 13px;}
+  .section-head{flex-direction:column;align-items:flex-start;}
+  .field-row{grid-template-columns:1fr;}
+  .metrics{grid-template-columns:repeat(2,1fr);}
+  .tab-bar{padding:6px;gap:4px;}
+  .tab-btn{min-width:80px;font-size:12px;height:36px;gap:5px;}
+  .tab-btn i{font-size:14px;}
+  .forecast-grid{grid-template-columns:repeat(4,minmax(100px,1fr));}
+  .hero-title{font-size:clamp(22px,5vw,38px);}
+  .signs-grid{grid-template-columns:1fr;}
+}
+</style>
 </head>
 
 <body>
-  <div class="share-toast" id="share-toast" role="status" aria-live="polite">✓ Copiado para a área de transferência!</div>
-  <main class="app">
-    <header class="hero">
-      <div class="hero-main">
-        <div>
-          <div class="brand">
-            <div class="brand-mark" aria-label="Ícone de mergulho">🤿</div>
-            <div>
-              <h1 class="hero-title">Pesca Subaquática Inteligente</h1>
-              <p class="hero-copy">
-                Clima, lua, visibilidade e espécies — tudo que você precisa antes de entrar na água. Bacia do rio Paraná.
-              </p>
-            </div>
-          </div>
-
-          <div class="chips">
-            <span class="chip"><i class="ti ti-map-pin" aria-hidden="true"></i> GPS ou Cidade</span>
-            <span class="chip"><i class="ti ti-cloud" aria-hidden="true"></i> Clima 7 dias</span>
-            <span class="chip"><i class="ti ti-fish" aria-hidden="true"></i> Espécies invasoras</span>
-            <span class="chip"><i class="ti ti-calculator" aria-hidden="true"></i> Calculadoras</span>
-            <span class="chip"><i class="ti ti-checklist" aria-hidden="true"></i> Checklist</span>
-            <span class="chip"><i class="ti ti-notebook" aria-hidden="true"></i> Diário</span>
+<div class="share-toast" id="share-toast">✓ Copiado para a área de transferência!</div>
+<main class="app">
+  <header class="hero">
+    <div class="hero-main">
+      <div>
+        <div class="brand">
+          <div class="brand-mark">🤿</div>
+          <div>
+            <h1 class="hero-title">Pesca Subaquática Inteligente</h1>
+            <p class="hero-copy">
+              Clima, lua, visibilidade e espécies — tudo que você precisa antes de entrar na água. Bacia do rio Paraná.
+            </p>
           </div>
         </div>
 
-        <aside class="location-panel">
-          <div class="eyebrow">Localização</div>
-          <div class="location-name" id="location-name">Localizando...</div>
-          <div class="coords" id="coords">---</div>
-          <div class="search-row">
-            <label for="city-input" class="sr-only">Digite a cidade e UF</label>
-            <input 
-              class="city-input" 
-              id="city-input" 
-              placeholder="Ex: Itapagipe-MG" 
-              autocomplete="address-level2"
-              aria-label="Buscar por cidade e UF"
-            />
-            <button 
-              class="icon-btn primary" 
-              id="search-btn" 
-              title="Buscar cidade"
-              aria-label="Buscar cidade"
-            ><i class="ti ti-search" aria-hidden="true"></i></button>
-            <button 
-              class="icon-btn" 
-              id="gps-btn" 
-              title="Usar GPS para detectar localização"
-              aria-label="Detectar localização com GPS"
-            ><i class="ti ti-current-location" aria-hidden="true"></i></button>
-          </div>
-          <p class="hint">Digite cidade-UF ou permita o GPS para detectar automaticamente.</p>
-        </aside>
+        <div class="chips">
+          <span class="chip"><i class="ti ti-map-pin"></i> GPS ou Cidade</span>
+          <span class="chip"><i class="ti ti-cloud"></i> Clima 7 dias</span>
+          <span class="chip"><i class="ti ti-fish"></i> Espécies invasoras</span>
+          <span class="chip"><i class="ti ti-calculator"></i> Calculadoras</span>
+          <span class="chip"><i class="ti ti-checklist"></i> Checklist</span>
+          <span class="chip"><i class="ti ti-notebook"></i> Diário</span>
+        </div>
       </div>
 
-      <div class="notice" role="alertdialog" aria-labelledby="notice-title">
-        <i class="ti ti-alert-triangle" aria-hidden="true"></i>
-        <span id="notice-title">Consulte sempre a legislação atual, defeso, tamanho mínimo e normas do local. Painel informativo — não substitui fiscalização ambiental ou treinamento técnico de mergulho.</span>
-      </div>
-    </header>
-
-    <!-- TAB BAR -->
-    <nav class="tab-bar" id="tab-bar" role="tablist" aria-label="Navegação principal">
-      <button 
-        class="tab-btn active" 
-        data-tab="clima" 
-        role="tab"
-        aria-selected="true"
-        aria-controls="clima-panel"
-      >
-        <i class="ti ti-cloud-bolt" aria-hidden="true"></i> Clima & Lua
-      </button>
-      <button 
-        class="tab-btn" 
-        data-tab="especies" 
-        role="tab"
-        aria-selected="false"
-        aria-controls="especies-panel"
-      >
-        <i class="ti ti-fish" aria-hidden="true"></i> Espécies
-      </button>
-      <button 
-        class="tab-btn" 
-        data-tab="calculadoras" 
-        role="tab"
-        aria-selected="false"
-        aria-controls="calculadoras-panel"
-      >
-        <i class="ti ti-calculator" aria-hidden="true"></i> Calculadoras
-      </button>
-      <button 
-        class="tab-btn" 
-        data-tab="checklist" 
-        role="tab"
-        aria-selected="false"
-        aria-controls="checklist-panel"
-      >
-        <i class="ti ti-checklist" aria-hidden="true"></i> Checklist
-      </button>
-      <button 
-        class="tab-btn" 
-        data-tab="diario" 
-        role="tab"
-        aria-selected="false"
-        aria-controls="diario-panel"
-      >
-        <i class="ti ti-notebook" aria-hidden="true"></i> Diário
-      </button>
-      <button 
-        class="tab-btn" 
-        data-tab="seguranca" 
-        role="tab"
-        aria-selected="false"
-        aria-controls="seguranca-panel"
-      >
-        <i class="ti ti-shield-heart" aria-hidden="true"></i> Segurança
-      </button>
-    </nav>
-
-    <div class="content" id="content">
-      <div class="section loading">
-        <div><i class="ti ti-loader" aria-hidden="true"></i><h2>Obtendo GPS e clima...</h2></div>
-      </div>
+      <aside class="location-panel">
+        <div class="eyebrow">Localização</div>
+        <div class="location-name" id="location-name">Localizando...</div>
+        <div class="coords" id="coords">---</div>
+        <div class="search-row">
+          <input class="city-input" id="city-input" placeholder="Ex: Itapagipe-MG" autocomplete="address-level2" />
+          <button class="icon-btn primary" id="search-btn" title="Buscar cidade"><i class="ti ti-search"></i></button>
+          <button class="icon-btn" id="gps-btn" title="Usar GPS"><i class="ti ti-current-location"></i></button>
+        </div>
+        <p class="hint">Digite cidade-UF ou permita o GPS para detectar automaticamente.</p>
+      </aside>
     </div>
 
-    <footer class="footer">
-      <p>Desenvolvido por Adolfo Queiroz · Pesca Subaquática Inteligente · Dados climáticos Open-Meteo</p>
-      <div class="db-status offline" id="db-status" role="status" aria-live="polite">
-        <i class="ti ti-database" aria-hidden="true"></i>
-        <span>Banco aguardando conexão</span>
-      </div>
-    </footer>
-  </main>
+    <div class="notice">
+      <i class="ti ti-alert-triangle"></i>
+      <span>Consulte sempre a legislação atual, defeso, tamanho mínimo e normas do local. Painel informativo — não substitui fiscalização ambiental ou treinamento técnico de mergulho.</span>
+    </div>
+  </header>
 
-  <script defer src="app.js"></script>
+  <!-- TAB BAR -->
+  <nav class="tab-bar" id="tab-bar">
+    <button class="tab-btn active" data-tab="clima" onclick="switchTab('clima')">
+      <i class="ti ti-cloud-bolt"></i> Clima & Lua
+    </button>
+    <button class="tab-btn" data-tab="especies" onclick="switchTab('especies')">
+      <i class="ti ti-fish"></i> Espécies
+    </button>
+    <button class="tab-btn" data-tab="calculadoras" onclick="switchTab('calculadoras')">
+      <i class="ti ti-calculator"></i> Calculadoras
+    </button>
+    <button class="tab-btn" data-tab="checklist" onclick="switchTab('checklist')">
+      <i class="ti ti-checklist"></i> Checklist
+    </button>
+    <button class="tab-btn" data-tab="diario" onclick="switchTab('diario')">
+      <i class="ti ti-notebook"></i> Diário
+    </button>
+    <button class="tab-btn" data-tab="seguranca" onclick="switchTab('seguranca')">
+      <i class="ti ti-shield-heart"></i> Segurança
+    </button>
+  </nav>
+
+  <div class="content" id="content">
+    <div class="section loading">
+      <div><i class="ti ti-loader"></i><h2>Obtendo GPS e clima...</h2></div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    Desenvolvido por Adolfo Queiroz · Pesca Subaquática Inteligente · Dados climáticos Open-Meteo
+    <div class="db-status offline" id="db-status">
+      <i class="ti ti-database"></i>
+      Banco aguardando conexão
+    </div>
+  </footer>
+</main>
+
+<script>
+// ========== STATE ==========
+let LAT = null, LON = null, CITY = 'Região Atual';
+let selectedDay = 0, weatherData = null;
+let currentTab = 'clima';
+let diveLogs = JSON.parse(localStorage.getItem('diveLogs') || '[]');
+let checkState = JSON.parse(localStorage.getItem('checkState') || '{}');
+let editingLogIndex = null;
+const FIREBASE_DB_URL = 'https://pescasub-5967d-default-rtdb.firebaseio.com';
+const FIREBASE_PATH = 'pescaSubApp';
+let firebaseOnline = false;
+
+// ========== FISH DATA ==========
+const PEIXES_INVASORES = [
+  {
+    emoji:'🐟',nome:'Tilápia',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Tilapia_oreochromis_niloticus_fish.jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Tilapia_oreochromis_niloticus_fish.jpg',
+    credit:'Raver Duane / USFWS',
+    desc:'Espécie exótica comum em represas. A retirada ajuda no controle populacional.',
+    sol:true,tags:['Exótica','Controle','Água parada']
+  },
+  {
+    emoji:'🐠',nome:'Tucunaré',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Tucunar%C3%A9%20(Peacock%20Bass)%20(20750719960).jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Tucunar%C3%A9_(Peacock_Bass)_(20750719960).jpg',
+    credit:'Under the same moon...',
+    desc:'Predador introduzido. Caça melhor com sol, água clara e estrutura.',
+    sol:true,tags:['Introduzido','Predador','Sol']
+  },
+  {
+    emoji:'🐡',nome:'Pirarucu',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Arapaima-full.jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Arapaima-full.jpg',
+    credit:'Wikimedia Commons',
+    desc:'Espécie amazônica. Onde aparece introduzida, confirme autorização e regra.',
+    sol:false,tags:['Não nativo','Atenção legal','Grande porte']
+  },
+  {
+    emoji:'🐟',nome:'Carpa',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Common_Carp_(Cyprinus_carpio)_(1)_(51222524826).jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Common_Carp_(Cyprinus_carpio)_(1)_(51222524826).jpg',
+    credit:'Sam Stukel / USFWS',
+    desc:'Exótico em lagos e reservatórios. Tolera água turva e pouca correnteza.',
+    sol:false,tags:['Exótica','Reservatório','Água lenta']
+  },
+  {
+    emoji:'🐠',nome:'Bagre-africano',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Clarias_gariepinus%2C_African_sharptooth_catfish.jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Clarias_gariepinus,_African_sharptooth_catfish.jpg',
+    credit:'Zahara5555',
+    desc:'Invasor resistente, ocupa ambientes degradados. Verifique normas locais.',
+    sol:false,tags:['Invasor','Resistente','Controle']
+  }
+];
+
+const PEIXES_NATIVOS = [
+  {
+    emoji:'🐟',nome:'Dourado',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Dourado(Salminus_brasiliensis)emBonito.jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Dourado(Salminus_brasiliensis)emBonito.jpg',
+    credit:'David Morimoto',
+    desc:'Emblemático da bacia. Regras específicas de proteção, tamanho e período.',
+    sol:true,tags:['Nativo','Predador','Consultar regra']
+  },
+  {
+    emoji:'🐠',nome:'Pacu',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Pacu_Piaractus_2008_G1.jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Pacu_Piaractus_2008_G1.jpg',
+    credit:'George Chernilevsky',
+    desc:'Grande importância ecológica, associado a frutos e áreas alagadas.',
+    sol:false,tags:['Nativo','Frugívoro','Atenção legal']
+  },
+  {
+    emoji:'🐡',nome:'Pintado',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Pescaria_de_pintado_no_pantanal.jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Pescaria_de_pintado_no_pantanal.jpg',
+    credit:'Wikimedia Commons',
+    desc:'Bagre nativo de grande porte. Restrições por estado, época e tamanho.',
+    sol:false,tags:['Nativo','Grande porte','Defeso']
+  },
+  {
+    emoji:'🐟',nome:'Curimbatá',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Curimbat%C3%A1%20%E2%80%93%20Prochilodus_lineatus%20(5257755240).jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Curimbat%C3%A1_%E2%80%93_Prochilodus_lineatus_(5257755240).jpg',
+    credit:'Wikimedia Commons',
+    desc:'Migrador nativo, relevante para a cadeia alimentar. Protegido em piracema.',
+    sol:true,tags:['Nativo','Migrador','Piracema']
+  },
+  {
+    emoji:'🐠',nome:'Piraputanga',
+    img:'https://commons.wikimedia.org/wiki/Special:FilePath/Brycon_hilarii_-_Piraputanga_no_Monumento_Natural_do_Rio_Formoso.jpg?width=900',
+    source:'https://commons.wikimedia.org/wiki/File:Brycon_hilarii_-_Piraputanga_no_Monumento_Natural_do_Rio_Formoso.jpg',
+    credit:'BRASIL AQUA',
+    desc:'Águas claras e ambientes preservados. Tratar com cuidado e regra local.',
+    sol:true,tags:['Nativo','Água clara','Preservação']
+  }
+];
+
+// ========== CHECKLIST DATA ==========
+const CHECKLIST_ITEMS = [
+  {id:'c1',cat:'Equipamento',text:'Espingarda / roupa verificada e funcional'},
+  {id:'c2',cat:'Equipamento',text:'Máscara limpa, sem risco e vedação OK'},
+  {id:'c3',cat:'Equipamento',text:'Nadadeiras sem trincas'},
+  {id:'c4',cat:'Equipamento',text:'Boia de mergulho (bandeira) visível'},
+  {id:'c5',cat:'Equipamento',text:'Arpão e pontas conferidos'},
+  {id:'c6',cat:'Equipamento',text:'Faca de mergulho acessível'},
+  {id:'c7',cat:'Segurança',text:'Parceiro de diving (buddy) definido'},
+  {id:'c8',cat:'Segurança',text:'Informou onde e quando volta para alguém'},
+  {id:'c9',cat:'Segurança',text:'Verificou condições climáticas e marés'},
+  {id:'c10',cat:'Segurança',text:'Hidratado e descansado'},
+  {id:'c11',cat:'Segurança',text:'Conhece a área e correntes locais'},
+  {id:'c12',cat:'Legal',text:'Licença de pesca em mãos'},
+  {id:'c13',cat:'Legal',text:'Verificou espécies permitidas e defeso'},
+  {id:'c14',cat:'Legal',text:'Conferiu tamanho mínimo e cota diária'},
+  {id:'c15',cat:'Emergência',text:'Celular carregado em embalagem estanque'},
+  {id:'c16',cat:'Emergência',text:'Sabe o número do resgate local / SAMU 192'},
+];
+
+// ========== EQUIPMENT DATA ==========
+const EQUIPAMENTOS = [
+  {icon:'🤿',nome:'Máscara',desc:'Volume interno baixo facilita equalização. Lente individual ou dupla; vedação de silicone.',badge:'Essencial',cls:'good'},
+  {icon:'🦈',nome:'Roupa de neoprene',desc:'Proteção térmica e contra cortes. Espessura 3mm a 5mm dependendo da água.',badge:'Essencial',cls:'good'},
+  {icon:'🏊',nome:'Nadadeiras',desc:'Longas e rígidas aumentam propulsão. Ajuste preciso para evitar câimbras.',badge:'Essencial',cls:'good'},
+  {icon:'🎯',nome:'Espingarda / roupa',desc:'Pneumática, elástico ou de cano. Pesca de emboscada a longa distância.',badge:'Essencial',cls:'good'},
+  {icon:'🦺',nome:'Roupa lastro',desc:'Cinturão e lastros: peso certo evita hiperventilação e síncope.',badge:'Segurança',cls:'medium'},
+  {icon:'🚩',nome:'Boia e bandeira',desc:'Obrigatória. Sinaliza mergulhador para barcos. Cabo mínimo 5m.',badge:'Obrigatório',cls:'bad'},
+  {icon:'🔪',nome:'Faca de mergulho',desc:'Corta linha, rede. Sempre acessível. Nunca use como arpão.',badge:'Segurança',cls:'medium'},
+  {icon:'🐟',nome:'Bag de captura',desc:'Filete bag ou bag para peixes. Evita deixar presas soltas no cinturão.',badge:'Recomendado',cls:'info'},
+  {icon:'📡',nome:'Computador / relógio',desc:'Cronometra apneias, marca profundidade máxima e intervalo de descanso.',badge:'Recomendado',cls:'info'},
+];
+
+// ========== HAND SIGNALS ==========
+const SINAIS = [
+  {icon:'👍',nome:'OK (superfície)',desc:'Polegar para cima: estou bem — use apenas em superfície.'},
+  {icon:'🤙',nome:'OK (submerso)',desc:'OK circular com polegar e indicador: estou bem submerso.'},
+  {icon:'✋',nome:'Para / Atenção',desc:'Mão aberta, palma para o parceiro: pare e observe.'},
+  {icon:'👇',nome:'Descemos',desc:'Polegar apontando para baixo: vamos descer.'},
+  {icon:'☝️',nome:'Subimos',desc:'Polegar apontando para cima (submerso): vamos subir.'},
+  {icon:'🤏',nome:'Pouco ar / Frio',desc:'Mão comprimida: ar acabando / estou com frio.'},
+  {icon:'✌️',nome:'Peixes / número 2',desc:'Dois dedos: indica peixe ou número dois.'},
+  {icon:'🤜',nome:'Alerta / Urgente',desc:'Punho fechado agitado: situação urgente, venha imediatamente.'},
+];
+
+// ========== UTILS ==========
+const cityInput = document.getElementById('city-input');
+const searchBtn = document.getElementById('search-btn');
+const gpsBtn = document.getElementById('gps-btn');
+
+searchBtn.addEventListener('click', searchCity);
+gpsBtn.addEventListener('click', loadAll);
+cityInput.addEventListener('keydown', e => { if(e.key==='Enter') searchCity(); });
+
+function norm(v){
+  return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+}
+
+function stateToUF(v){
+  const t=String(v||'').trim();
+  if(/^[A-Z]{2}$/.test(t)) return t;
+  const iso=t.match(/BR-([A-Z]{2})/i);
+  if(iso) return iso[1].toUpperCase();
+  const m={'acre':'AC','alagoas':'AL','amapa':'AP','amazonas':'AM','bahia':'BA','ceara':'CE','distrito federal':'DF','espirito santo':'ES','goias':'GO','maranhao':'MA','mato grosso':'MT','mato grosso do sul':'MS','minas gerais':'MG','para':'PA','paraiba':'PB','parana':'PR','pernambuco':'PE','piaui':'PI','rio de janeiro':'RJ','rio grande do norte':'RN','rio grande do sul':'RS','rondonia':'RO','roraima':'RR','santa catarina':'SC','sao paulo':'SP','sergipe':'SE','tocantins':'TO'};
+  return m[norm(t)]||t;
+}
+
+function formatCity(addr){
+  addr=addr||{};
+  const c=addr.city||addr.town||addr.village||addr.municipality||addr.county||'Região Atual';
+  const uf=stateToUF(addr['ISO3166-2-lvl4']||addr.state_code||addr.state);
+  return uf&&uf!==c?`${c}-${uf}`:c;
+}
+
+function setLocationUI(name,coords){
+  document.getElementById('location-name').textContent=name;
+  document.getElementById('coords').textContent=coords||'---';
+}
+
+function setDbStatus(text,state='offline'){
+  const el=document.getElementById('db-status');
+  if(!el) return;
+  el.className=`db-status ${state}`;
+  el.innerHTML=`<i class="ti ti-database"></i> ${text}`;
+}
+
+function firebaseUrl(path){
+  return `${FIREBASE_DB_URL}/${FIREBASE_PATH}/${path}.json`;
+}
+
+async function firebaseRead(path){
+  const r=await fetch(firebaseUrl(path));
+  if(!r.ok) throw new Error('Erro ao ler Firebase');
+  return r.json();
+}
+
+async function firebaseWrite(path,data){
+  const r=await fetch(firebaseUrl(path),{
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(data)
+  });
+  if(!r.ok) throw new Error('Erro ao gravar Firebase');
+  return r.json();
+}
+
+async function firebasePatch(path,data){
+  const r=await fetch(firebaseUrl(path),{
+    method:'PATCH',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(data)
+  });
+  if(!r.ok) throw new Error('Erro ao atualizar Firebase');
+  return r.json();
+}
+
+async function syncFromFirebase(){
+  setDbStatus('Conectando ao banco...','offline');
+  try{
+    const data=await firebaseRead('state');
+    firebaseOnline=true;
+    if(data&&Array.isArray(data.diveLogs)){
+      diveLogs=data.diveLogs;
+      localStorage.setItem('diveLogs',JSON.stringify(diveLogs));
+    }
+    if(data&&data.checkState&&typeof data.checkState==='object'){
+      checkState=data.checkState;
+      localStorage.setItem('checkState',JSON.stringify(checkState));
+    }
+    setDbStatus('Banco online','online');
+    if(currentTab==='checklist'||currentTab==='diario') renderStaticTab(currentTab);
+  }catch(e){
+    firebaseOnline=false;
+    setDbStatus('Banco offline: usando este aparelho','error');
+  }
+}
+
+async function saveAppStateToFirebase(){
+  localStorage.setItem('diveLogs',JSON.stringify(diveLogs));
+  localStorage.setItem('checkState',JSON.stringify(checkState));
+  try{
+    await firebasePatch('state',{
+      diveLogs,
+      checkState,
+      updatedAt:new Date().toISOString()
+    });
+    firebaseOnline=true;
+    setDbStatus('Banco online','online');
+  }catch(e){
+    firebaseOnline=false;
+    setDbStatus('Banco offline: salvo localmente','error');
+  }
+}
+
+async function saveWeatherSnapshot(data){
+  if(!LAT||!LON||!data) return;
+  try{
+    await firebaseWrite('latestWeather',{
+      city:CITY,
+      lat:LAT,
+      lon:LON,
+      current:data.current_weather||null,
+      updatedAt:new Date().toISOString()
+    });
+    if(firebaseOnline) setDbStatus('Banco online','online');
+  }catch(e){
+    firebaseOnline=false;
+    setDbStatus('Banco offline: clima não sincronizado','error');
+  }
+}
+
+async function updatePlaceFromCoords(){
+  const c=`${LAT.toFixed(5)} , ${LON.toFixed(5)}`;
+  setLocationUI('Identificando...', c);
+  try{
+    const r=await fetch(`https://geocode.maps.co/reverse?lat=${LAT}&lon=${LON}`);
+    const d=await r.json();
+    CITY=formatCity(d.address);
+  }catch{CITY='Região Atual';}
+  setLocationUI(CITY,c);
+  cityInput.value=CITY!=='Região Atual'?CITY:'';
+}
+
+async function getLocation(){
+  if(!navigator.geolocation) throw new Error('GPS indisponível');
+  return new Promise((res,rej)=>{
+    navigator.geolocation.getCurrentPosition(
+      async pos=>{LAT=pos.coords.latitude;LON=pos.coords.longitude;await updatePlaceFromCoords();res();},
+      rej,{enableHighAccuracy:true,timeout:12000,maximumAge:0}
+    );
+  });
+}
+
+async function searchCity(){
+  const q=cityInput.value.trim();
+  if(!q){cityInput.focus();return;}
+  setLocationUI('Buscando...','---');
+  showLoading('Buscando região e clima...');
+  try{
+    const r=await fetch(`https://geocode.maps.co/search?q=${encodeURIComponent(q)}&country=BR&limit=1`);
+    const places=await r.json();
+    if(!places.length) throw new Error('Não encontrada');
+    const p=places[0];
+    LAT=Number(p.lat);LON=Number(p.lon);
+    CITY=formatCity(p.address)||q.toUpperCase();
+    setLocationUI(CITY,`${LAT.toFixed(5)} , ${LON.toFixed(5)}`);
+    const data=await fetchWeather();
+    render(data);
+    saveWeatherSnapshot(data);
+  }catch{showError('Erro ao buscar cidade','Confira o nome. Ex: Itapagipe-MG.');}
+}
+
+async function fetchWeather(){
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,weathercode&timezone=auto&forecast_days=7`;
+  const r=await fetch(url);
+  if(!r.ok) throw new Error('Erro clima');
+  return r.json();
+}
+
+function weatherCode(c){
+  if(c===0) return['☀️','Sol'];
+  if(c<=3) return['⛅','Parcialmente nublado'];
+  if(c<=55) return['🌫️','Neblina'];
+  if(c<=65) return['🌧️','Chuva'];
+  if(c<=82) return['⛈️','Temporal'];
+  return['🌥️','Variável'];
+}
+
+function windDir(d){
+  if(d===undefined||d===null) return'---';
+  const dirs=['N','NE','L','SE','S','SO','O','NO'];
+  return `${dirs[Math.round(Number(d)/45)%8]} (${Math.round(d)}°)`;
+}
+
+function fmtTime(v){
+  if(!v) return'agora';
+  const d=new Date(v);
+  if(isNaN(d.getTime())) return v;
+  return d.toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+}
+
+function moonPhase(date){
+  const known=new Date(2000,0,6,18,14);
+  const days=(date-known)/(864e5);
+  const cycle=29.53058867;
+  const phase=((days%cycle)+cycle)%cycle;
+  if(phase<1.85) return['🌑','Lua Nova','Excelente — baixa luminosidade.'];
+  if(phase<7.38) return['🌒','Crescente','Boa atividade amanhecer e fim de tarde.'];
+  if(phase<9.22) return['🌓','Quarto Crescente','Condição equilibrada.'];
+  if(phase<14.77) return['🌔','Gibosa Crescente','Regular, observe vento e claridade.'];
+  if(phase<16.61) return['🌕','Lua Cheia','Peixes mais ariscos — maior luminosidade.'];
+  if(phase<22.15) return['🌖','Gibosa Minguante','Regular, prefira transição.'];
+  if(phase<24) return['🌗','Quarto Minguante','Boa movimentação moderada.'];
+  return['🌘','Minguante','Excelente em baixa luz.'];
+}
+
+function calcScore(code,rain,wind,moon){
+  let s=82;
+  if(['Lua Nova','Minguante'].includes(moon[1])) s+=18;
+  if(moon[1]==='Lua Cheia') s-=22;
+  if(code===0) s+=12;
+  if(code>=60) s-=18;
+  if(rain>8) s-=16;
+  if(wind>24) s-=18;
+  s=Math.max(20,Math.min(130,s));
+  if(s>=105) return['EXCELENTE','good',s];
+  if(s>=78) return['BOM','medium',s];
+  if(s>=55) return['REGULAR','medium',s];
+  return['DIFÍCIL','bad',s];
+}
+
+function getDays(data){
+  const daily=data.daily, days=[];
+  for(let i=0;i<7;i++){
+    const date=new Date();
+    date.setDate(date.getDate()+i);
+    const moon=moonPhase(date);
+    const score=calcScore(daily.weathercode[i],daily.precipitation_sum[i],daily.windspeed_10m_max[i],moon);
+    const weather=weatherCode(daily.weathercode[i]);
+    days.push({date,moon,score,icon:weather[0],desc:weather[1],
+      temp:Math.round(daily.temperature_2m_max[i]),
+      min:Math.round(daily.temperature_2m_min[i]),
+      rain:Math.round(daily.precipitation_sum[i]),
+      wind:Math.round(daily.windspeed_10m_max[i])
+    });
+  }
+  return days;
+}
+
+// ========== TAB SWITCH ==========
+function switchTab(tab){
+  currentTab=tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.tab===tab);
+  });
+  if(weatherData) render(weatherData);
+  else renderStaticTab(tab);
+}
+
+function renderStaticTab(tab){
+  const content=document.getElementById('content');
+  if(tab==='calculadoras'){content.innerHTML=renderCalculadoras();attachCalcEvents();}
+  else if(tab==='checklist'){content.innerHTML=renderChecklist();attachChecklistEvents();}
+  else if(tab==='diario'){content.innerHTML=renderDiario();attachDiarioEvents();}
+  else if(tab==='seguranca'){content.innerHTML=renderSeguranca();}
+  animateSections();
+}
+
+function animateSections(){
+  const secs=document.querySelectorAll('#content .section, #content .tab-panel > section');
+  secs.forEach((s,i)=>{
+    s.style.opacity='0';s.style.transform='translateY(12px)';s.style.transition='none';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      s.style.transition=`opacity .3s ${i*0.07}s ease, transform .3s ${i*0.07}s ease`;
+      s.style.opacity='1';s.style.transform='translateY(0)';
+    }));
+  });
+}
+
+// ========== RENDER MAIN ==========
+function render(data){
+  weatherData=data;
+  const days=getDays(data);
+  window.days=days;
+  const sel=days[selectedDay]||days[0];
+  const cur=data.current_weather||{};
+  const curW=weatherCode(cur.weathercode??data.daily.weathercode[0]);
+  const curT=cur.temperature!==undefined?Math.round(cur.temperature):sel.temp;
+  const curWind=cur.windspeed!==undefined?Math.round(cur.windspeed):sel.wind;
+  const week=['Dom','Seg','Ter','Qua','Qui','Sex','Sab'];
+  const width=Math.min(100,(sel.score[2]/130)*100);
+  const fillColor=sel.score[1]==='good'?'#19c37d':sel.score[1]==='medium'?'#f4b63f':'#ef6262';
+
+  const content=document.getElementById('content');
+
+  if(currentTab==='clima'){
+    content.innerHTML=`
+      <div class="tab-panel active">
+        <section class="section">
+          <div class="section-head">
+            <h2 class="section-title"><i class="ti ti-cloud-bolt"></i> Condições em tempo real</h2>
+            <div class="section-meta">Atualizado ${fmtTime(cur.time)}</div>
+          </div>
+          <div class="metrics">
+            <div class="metric"><div class="metric-label">Agora</div><div class="metric-value">${curT}°</div><div class="metric-sub">temperatura atual</div></div>
+            <div class="metric"><div class="metric-label">Condição</div><div class="metric-value">${curW[0]}</div><div class="metric-sub">${curW[1]}</div></div>
+            <div class="metric"><div class="metric-label">Vento</div><div class="metric-value">${curWind}</div><div class="metric-sub">km/h</div></div>
+            <div class="metric"><div class="metric-label">Direção</div><div class="metric-value" style="font-size:22px">${windDir(cur.winddirection)}</div><div class="metric-sub">direção</div></div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h2 class="section-title"><i class="ti ti-calendar-week"></i> Próximos 7 dias</h2>
+            <div class="section-meta">${CITY}</div>
+          </div>
+          <div class="forecast-grid">
+            ${days.map((d,i)=>`
+              <button class="day-card ${i===selectedDay?'selected':''}" onclick="selectDay(${i})">
+                <div class="day-name">${i===0?'Hoje':week[d.date.getDay()]}</div>
+                <div class="day-icon">${d.icon}</div>
+                <div class="day-temp">${d.temp}°</div>
+                <div class="day-small">${d.min}° mín · ${d.moon[0]}</div>
+              </button>
+            `).join('')}
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h2 class="section-title"><i class="ti ti-chart-bar"></i> Dia selecionado</h2>
+            <div class="section-meta">${sel.desc}</div>
+          </div>
+          <div class="metrics">
+            <div class="metric"><div class="metric-label">Temperatura</div><div class="metric-value">${sel.temp}°</div><div class="metric-sub">mín ${sel.min}°</div></div>
+            <div class="metric"><div class="metric-label">Chuva</div><div class="metric-value">${sel.rain}mm</div><div class="metric-sub">${sel.desc}</div></div>
+            <div class="metric"><div class="metric-label">Vento</div><div class="metric-value">${sel.wind}</div><div class="metric-sub">km/h máx</div></div>
+            <div class="metric"><div class="metric-label">Lua</div><div class="metric-value">${sel.moon[0]}</div><div class="metric-sub">${sel.moon[1]}</div></div>
+          </div>
+          <div class="score-wrap">
+            <div class="score-line">
+              <div>
+                <div class="score-label">Índice de pesca sub</div>
+                <div class="metric-sub">${sel.moon[2]}</div>
+              </div>
+              <span class="badge ${sel.score[1]}">${sel.score[0]}</span>
+            </div>
+            <div class="track"><div class="fill" style="width:${width}%;background:${fillColor}"></div></div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <h2 class="section-title"><i class="ti ti-bulb"></i> Recomendações</h2>
+          </div>
+          <ul class="tips">
+            <li><i class="ti ti-clock"></i><span>Melhores janelas: 6h às 9h e 16h às 18h, principalmente com vento controlado.</span></li>
+            <li><i class="ti ti-ruler-measure"></i><span>Confirme defeso, tamanho mínimo e autorização para pesca subaquática no local.</span></li>
+            <li><i class="ti ti-wave-square"></i><span>Procure estruturas, margens e água com boa visibilidade horizontal.</span></li>
+            <li><i class="ti ti-map-pin"></i><span>Região atual: ${CITY}. Verifique normas estaduais antes de mergulhar.</span></li>
+          </ul>
+        </section>
+      </div>
+    `;
+  }
+  else if(currentTab==='especies'){
+    const fishHtml=(arr,labelAtivo,labelMod,labelBad,clsAtivo,clsMod)=>arr.map(fish=>{
+      const active=(sel.icon==='☀️'&&fish.sol)||(sel.icon!=='☀️'&&!fish.sol);
+      let label=active?labelAtivo:labelMod;let cls=active?clsAtivo:clsMod;
+      if(sel.score[0]==='DIFÍCIL'){label=labelBad;cls='bad';}
+      return `
+        <article class="fish-card">
+          <div class="fish-photo-wrap">
+            <img class="fish-photo" src="${fish.img}" alt="${fish.nome}" loading="lazy">
+          </div>
+          <div class="fish-body">
+            <div class="fish-top">
+              <div class="fish-emoji">${fish.emoji}</div>
+              <span class="badge ${cls}">${label}</span>
+            </div>
+            <div class="fish-name">${fish.nome}</div>
+            <div class="fish-desc">${fish.desc}</div>
+            <div class="fish-note">${fish.tags.map(t=>`<span class="mini-tag">${t}</span>`).join('')}</div>
+            <div class="fish-source">Foto: <a href="${fish.source}" target="_blank">${fish.credit}</a></div>
+          </div>
+        </article>`;
+    }).join('');
+
+    content.innerHTML=`
+      <div class="tab-panel active">
+        <section class="section">
+          <div class="section-head">
+            <h2 class="section-title"><i class="ti ti-fish"></i> Espécies invasoras / permitidas</h2>
+            <div class="section-meta">Bacia do Paraná</div>
+          </div>
+          <div class="fish-grid">${fishHtml(PEIXES_INVASORES,'MAIS ATIVO','MODERADO','BAIXA ATIVIDADE','good','medium')}</div>
+        </section>
+        <section class="section">
+          <div class="section-head">
+            <h2 class="section-title"><i class="ti ti-leaf"></i> Espécies nativas</h2>
+            <div class="section-meta">Consultar legislação antes da captura</div>
+          </div>
+          <div class="fish-grid">${fishHtml(PEIXES_NATIVOS,'NATIVO ATIVO','NATIVO','PRESERVAR','medium','good')}</div>
+        </section>
+      </div>
+    `;
+  }
+  else if(currentTab==='calculadoras'){
+    content.innerHTML=renderCalculadoras();
+    attachCalcEvents();
+  }
+  else if(currentTab==='checklist'){
+    content.innerHTML=renderChecklist();
+    attachChecklistEvents();
+  }
+  else if(currentTab==='diario'){
+    content.innerHTML=renderDiario();
+    attachDiarioEvents();
+  }
+  else if(currentTab==='seguranca'){
+    content.innerHTML=renderSeguranca();
+  }
+  animateSections();
+}
+
+// ========== CALCULADORAS ==========
+function renderCalculadoras(){
+  return `
+  <div class="tab-panel active">
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-calculator"></i> Calculadoras de Mergulho</h2>
+        <div class="section-meta">Apneia · Visibilidade · Segurança</div>
+      </div>
+      <div class="calc-grid">
+
+        <!-- VISIBILIDADE -->
+        <div class="calc-card">
+          <h3><i class="ti ti-eye"></i> Visibilidade da Água</h3>
+          <div class="field-row">
+            <div class="field">
+              <label>Transparência</label>
+              <select id="transp">
+                <option value="95">Água cristalina (>10m)</option>
+                <option value="75">Boa (5–10m)</option>
+                <option value="55">Moderada (2–5m)</option>
+                <option value="30">Turva (1–2m)</option>
+                <option value="10">Muito turva (<1m)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Condição do dia</label>
+              <select id="dia-cond">
+                <option value="20">Ensolarado</option>
+                <option value="10">Nublado</option>
+                <option value="0">Chuvoso / Temporal</option>
+                <option value="-10">Noite / crepúsculo</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Fundo (tipo)</label>
+              <select id="fundo">
+                <option value="5">Pedra / rochoso</option>
+                <option value="0">Areia</option>
+                <option value="-10">Lama / silte</option>
+                <option value="-15">Macrófitas densas</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Correnteza</label>
+              <select id="corrente">
+                <option value="5">Calma</option>
+                <option value="0">Moderada</option>
+                <option value="-15">Forte</option>
+              </select>
+            </div>
+          </div>
+          <button class="calc-btn" id="btn-vis">Calcular Visibilidade</button>
+          <div class="calc-result" id="res-vis">
+            <div class="calc-result-title">Índice de Visibilidade</div>
+            <div class="calc-result-value" id="vis-val">—</div>
+            <div class="vis-bar-wrap"><div class="vis-bar" id="vis-bar" style="width:0%"></div></div>
+            <div class="vis-label"><span>Ruim</span><span>Excelente</span></div>
+            <div class="calc-result-sub" id="vis-sub">—</div>
+          </div>
+        </div>
+
+        <!-- APNEIA / INTERVALO -->
+        <div class="calc-card">
+          <h3><i class="ti ti-activity"></i> Intervalo de Recuperação</h3>
+          <div class="field-row">
+            <div class="field">
+              <label>Duração da apneia (s)</label>
+              <input type="number" id="apneia-dur" placeholder="Ex: 45" min="5" max="600">
+            </div>
+            <div class="field">
+              <label>Profundidade (m)</label>
+              <input type="number" id="apneia-prof" placeholder="Ex: 6" min="0" max="40">
+            </div>
+          </div>
+          <div class="field-row single">
+            <div class="field">
+              <label>Nível do mergulhador</label>
+              <select id="nivel">
+                <option value="3">Iniciante (1-3m)</option>
+                <option value="2">Intermediário (3-10m)</option>
+                <option value="1.5">Avançado (10m+)</option>
+              </select>
+            </div>
+          </div>
+          <button class="calc-btn" id="btn-apneia">Calcular Intervalo</button>
+          <div class="calc-result" id="res-apneia">
+            <div class="calc-result-title">Descanso Mínimo Recomendado</div>
+            <div class="calc-result-value" id="apneia-val">—</div>
+            <div class="calc-result-sub" id="apneia-sub">—</div>
+          </div>
+        </div>
+
+        <!-- NARCOSE -->
+        <div class="calc-card">
+          <h3><i class="ti ti-brain"></i> Estimador de Risco de Narcose</h3>
+          <div class="field-row">
+            <div class="field">
+              <label>Profundidade máx (m)</label>
+              <input type="number" id="narco-prof" placeholder="Ex: 30" min="0" max="60">
+            </div>
+            <div class="field">
+              <label>Duração no fundo (min)</label>
+              <input type="number" id="narco-dur" placeholder="Ex: 20" min="1" max="60">
+            </div>
+          </div>
+          <div class="field-row single">
+            <div class="field">
+              <label>Experiência no local</label>
+              <select id="narco-exp">
+                <option value="0">Primeira vez no local</option>
+                <option value="-5">Pouco familiarizado</option>
+                <option value="-10">Bem familiarizado</option>
+              </select>
+            </div>
+          </div>
+          <button class="calc-btn" id="btn-narco">Estimar Risco</button>
+          <div class="calc-result" id="res-narco">
+            <div class="calc-result-title">Nível de Risco</div>
+            <div class="narco-scale" id="narco-scale">
+              <div class="narco-step" data-level="0">Baixo</div>
+              <div class="narco-step" data-level="1">Moderado</div>
+              <div class="narco-step" data-level="2">Alto</div>
+              <div class="narco-step" data-level="3">Muito Alto</div>
+            </div>
+            <div class="calc-result-sub" id="narco-sub" style="margin-top:8px">—</div>
+          </div>
+        </div>
+
+        <!-- PARADAS DE SEGURANÇA -->
+        <div class="calc-card">
+          <h3><i class="ti ti-trending-down"></i> Paradas de Segurança</h3>
+          <div class="field-row single">
+            <div class="field">
+              <label>Profundidade máxima (m)</label>
+              <input type="number" id="stop-prof" placeholder="Ex: 20" min="5" max="60">
+            </div>
+          </div>
+          <div class="field-row single">
+            <div class="field">
+              <label>Tipo de mergulho</label>
+              <select id="stop-tipo">
+                <option value="apneia">Apneia / Pesca sub</option>
+                <option value="scuba">Scuba / Recreativo</option>
+              </select>
+            </div>
+          </div>
+          <button class="calc-btn" id="btn-stops">Calcular Paradas</button>
+          <div class="calc-result" id="res-stops">
+            <div class="calc-result-title">Plano de Subida</div>
+            <div class="safety-timeline" id="stops-timeline"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>`;
+}
+
+function attachCalcEvents(){
+  document.getElementById('btn-vis')?.addEventListener('click',calcVis);
+  document.getElementById('btn-apneia')?.addEventListener('click',calcApneia);
+  document.getElementById('btn-narco')?.addEventListener('click',calcNarco);
+  document.getElementById('btn-stops')?.addEventListener('click',calcStops);
+}
+
+function calcVis(){
+  const t=+document.getElementById('transp').value;
+  const d=+document.getElementById('dia-cond').value;
+  const f=+document.getElementById('fundo').value;
+  const c=+document.getElementById('corrente').value;
+  const score=Math.max(0,Math.min(100,t+d+f+c));
+  const res=document.getElementById('res-vis');
+  res.classList.add('visible');
+  document.getElementById('vis-val').textContent=`${score}/100`;
+  document.getElementById('vis-bar').style.width=`${score}%`;
+  let sub='';
+  if(score>=80) sub='🟢 Excelente — visibilidade favorável para emboscada precisa.';
+  else if(score>=55) sub='🟡 Boa — detecte peixes, mas ajuste estratégia de aproximação.';
+  else if(score>=30) sub='🟠 Moderada — pesque em estruturas e use distâncias curtas.';
+  else sub='🔴 Ruim — considere adiar. Risco de desorientação e perda de referência.';
+  document.getElementById('vis-sub').textContent=sub;
+}
+
+function calcApneia(){
+  const dur=+document.getElementById('apneia-dur').value||45;
+  const prof=+document.getElementById('apneia-prof').value||5;
+  const nivel=+document.getElementById('nivel').value;
+  // Regra: mínimo 2x a duração, acrescida da profundidade proporcionalmente
+  const base=dur*nivel;
+  const extra=Math.round(prof*4);
+  const total=Math.round(base+extra);
+  const res=document.getElementById('res-apneia');
+  res.classList.add('visible');
+  const mins=Math.floor(total/60);
+  const secs=total%60;
+  document.getElementById('apneia-val').textContent=mins>0?`${mins}min ${secs}s`:`${secs}s`;
+  document.getElementById('apneia-sub').textContent=`Apneia de ${dur}s a ${prof}m. Descanse completamente antes do próximo mergulho. Nunca hiperventile.`;
+}
+
+function calcNarco(){
+  const prof=+document.getElementById('narco-prof').value||30;
+  const dur=+document.getElementById('narco-dur').value||20;
+  const exp=+document.getElementById('narco-exp').value;
+  let score=0;
+  if(prof>10) score+=Math.floor((prof-10)/10);
+  if(prof>30) score+=2;
+  if(dur>20) score+=1;
+  if(dur>40) score+=1;
+  score=Math.max(0,Math.min(3,score+exp+3));
+  const res=document.getElementById('res-narco');
+  res.classList.add('visible');
+  document.querySelectorAll('.narco-step').forEach((el,i)=>{
+    el.classList.toggle('active',i===score);
+  });
+  const msgs=[
+    'Risco baixo — profundidade dentro do conforto para apneia.',
+    'Atenção — monitore sensações e reduza tempo no fundo.',
+    'Alto — risco real de narcose. Reduza profundidade ou duração.',
+    'Muito Alto — não mergulhe sem buddy experiente e treinamento específico.'
+  ];
+  document.getElementById('narco-sub').textContent=msgs[score]||msgs[0];
+}
+
+function calcStops(){
+  const prof=+document.getElementById('stop-prof').value||20;
+  const tipo=document.getElementById('stop-tipo').value;
+  const res=document.getElementById('res-stops');
+  res.classList.add('visible');
+  const timeline=document.getElementById('stops-timeline');
+
+  let stops=[];
+  if(tipo==='apneia'){
+    // Pesca sub: subida lenta, parada opcional a 5m
+    stops=[
+      {depth:prof,name:'Ponto máximo',time:'Saída do fundo',cls:''},
+      {depth:Math.round(prof*0.5),name:'Subida lenta',time:'0,3 m/s máximo',cls:''},
+      {depth:5,name:'Parada de segurança',time:'1–2 min (recomendado)',cls:'safety'},
+      {depth:0,name:'Superfície',time:'Respire fundo antes do próximo mergulho',cls:'safety'},
+    ];
+  } else {
+    // Scuba
+    const stops3=prof>30?[{depth:3,name:'Parada obrigatória DECO',time:'3+ min',cls:'mandatory'}]:[];
+    stops=[
+      {depth:prof,name:'Ponto máximo / saída do fundo',time:'Inicie subida controlada',cls:''},
+      {depth:Math.round(prof*0.6),name:'Subida (9m/min)',time:'Reduza ritmo conforme conforto',cls:''},
+      {depth:6,name:'Parada de segurança',time:'3 min — obrigatória',cls:'mandatory'},
+      ...stops3,
+      {depth:0,name:'Superfície',time:'Aguarde 10 min em superfície',cls:'safety'},
+    ];
+  }
+
+  timeline.innerHTML=stops.map(s=>`
+    <div class="stop-row ${s.cls}">
+      <div class="stop-depth">${s.depth}m</div>
+      <div class="stop-detail">
+        <div class="stop-name">${s.name}</div>
+        <div class="stop-time">${s.time}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ========== CHECKLIST ==========
+function renderChecklist(){
+  const done=CHECKLIST_ITEMS.filter(i=>checkState[i.id]).length;
+  const pct=Math.round((done/CHECKLIST_ITEMS.length)*100);
+  const cats=[...new Set(CHECKLIST_ITEMS.map(i=>i.cat))];
+
+  return `
+  <div class="tab-panel active">
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-checklist"></i> Checklist Pré-Mergulho</h2>
+        <div class="section-meta">${done}/${CHECKLIST_ITEMS.length} itens</div>
+      </div>
+      <div class="check-progress">
+        <div class="check-prog-bar">
+          <div class="check-prog-fill" style="width:${pct}%"></div>
+        </div>
+        <div class="check-prog-label">${pct}%</div>
+      </div>
+      <div class="checklist" id="checklist-list">
+        ${cats.map(cat=>`
+          <div class="mini-tag" style="margin-bottom:4px">${cat}</div>
+          ${CHECKLIST_ITEMS.filter(i=>i.cat===cat).map(item=>`
+            <div class="check-item ${checkState[item.id]?'checked':''}" onclick="toggleCheck('${item.id}')">
+              <div class="check-box"></div>
+              <div class="check-text">${item.text}</div>
+              <div class="check-cat">${item.cat}</div>
+            </div>
+          `).join('')}
+        `).join('')}
+      </div>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn-wa" onclick="shareChecklist('wa')"><i class="ti ti-brand-whatsapp"></i> Enviar Checklist no WhatsApp</button>
+        <button class="btn-copy" onclick="shareChecklist('copy')"><i class="ti ti-copy"></i> Copiar</button>
+        <button class="calc-btn" style="flex:1;min-width:140px" onclick="resetChecklist()"><i class="ti ti-refresh"></i> Reiniciar</button>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-scuba-mask"></i> Equipamentos Recomendados</h2>
+      </div>
+      <div class="equip-grid">
+        ${EQUIPAMENTOS.map(e=>`
+          <div class="equip-card">
+            <div class="equip-icon">${e.icon}</div>
+            <div class="equip-name">${e.nome}</div>
+            <div class="equip-desc">${e.desc}</div>
+            <span class="badge ${e.cls} equip-badge">${e.badge}</span>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+  </div>`;
+}
+
+function attachChecklistEvents(){}
+
+function toggleCheck(id){
+  checkState[id]=!checkState[id];
+  saveAppStateToFirebase();
+  if(currentTab==='checklist') renderStaticTab('checklist');
+}
+
+function resetChecklist(){
+  checkState={};
+  saveAppStateToFirebase();
+  renderStaticTab('checklist');
+}
+
+// ========== DIÁRIO ==========
+function renderDiario(){
+  const hasLogs=diveLogs.length>0;
+  const editingLog=editingLogIndex!==null?diveLogs[editingLogIndex]:null;
+  return `
+  <div class="tab-panel active">
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-notebook"></i> Diário de Mergulhos</h2>
+        <div class="section-meta">${diveLogs.length} registro(s)</div>
+      </div>
+
+      <div class="log-form-grid">
+        <div class="field">
+          <label>Data</label>
+          <input type="date" id="log-data" value="${editingLog?.data||new Date().toISOString().slice(0,10)}">
+        </div>
+        <div class="field">
+          <label>Local</label>
+          <div style="display:flex;gap:7px;align-items:center;">
+            <input type="text" id="log-local" placeholder="Ex: Represa Jurumirim" value="${editingLog?.local||''}" style="flex:1;min-width:0;">
+            <button type="button" class="icon-btn" id="btn-gps-local" title="Capturar localização GPS" onclick="captureGpsForLog()" style="flex:none;height:38px;width:38px;font-size:18px;border-radius:10px;">
+              <i class="ti ti-current-location"></i>
+            </button>
+          </div>
+          <div id="gps-local-status" style="font-size:11px;color:var(--muted);margin-top:4px;min-height:16px;"></div>
+        </div>
+        <div class="field">
+          <label>Profundidade máx (m)</label>
+          <input type="number" id="log-prof" placeholder="Ex: 8" min="0" max="60" value="${editingLog?.prof||''}">
+        </div>
+        <div class="field">
+          <label>Melhor apneia (s)</label>
+          <input type="number" id="log-apneia" placeholder="Ex: 55" min="0" value="${editingLog?.apneia||''}">
+        </div>
+        <div class="field">
+          <label>Captura</label>
+          <input type="text" id="log-captura" placeholder="Ex: 2 tilápias" value="${editingLog?.captura||''}">
+        </div>
+        <div class="field">
+          <label>Visibilidade</label>
+          <select id="log-vis">
+            <option value="Excelente" ${editingLog?.vis==='Excelente'?'selected':''}>Excelente</option>
+            <option value="Boa" ${editingLog?.vis==='Boa'?'selected':''}>Boa</option>
+            <option value="Moderada" ${editingLog?.vis==='Moderada'?'selected':''}>Moderada</option>
+            <option value="Ruim" ${editingLog?.vis==='Ruim'?'selected':''}>Ruim</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:10px">
+        <label>Observações</label>
+        <input type="text" id="log-obs" placeholder="Condições, espécies vistas, etc." value="${editingLog?.obs||''}">
+      </div>
+      ${editingLog?`<div class="mini-tag" style="margin-bottom:10px">Editando registro de ${editingLog.data||'data não informada'}</div>`:''}
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="calc-btn" id="btn-log-add">${editingLog?'Salvar Alteração':'Adicionar Registro'}</button>
+        ${editingLog?`<button class="btn-copy" type="button" onclick="cancelEditLog()" style="flex:0 1 160px"><i class="ti ti-x"></i> Cancelar</button>`:''}
+      </div>
+
+      <div class="share-bar" style="margin-top:14px;">
+        <button class="btn-wa" onclick="shareAllLogs('wa')"><i class="ti ti-brand-whatsapp"></i> Enviar Diário no WhatsApp</button>
+        <button class="btn-copy" onclick="shareAllLogs('copy')"><i class="ti ti-copy"></i> Copiar Diário</button>
+      </div>
+
+      <div style="margin-top:14px">
+        ${hasLogs?`
+          <div style="overflow-x:auto">
+            <table class="log-table">
+              <thead>
+                <tr>
+                  <th>Data</th><th>Local</th><th>Prof.</th><th>Apneia</th><th>Captura</th><th>Vis.</th><th>Obs.</th><th></th>
+                </tr>
+              </thead>
+              <tbody>
+                ${diveLogs.slice().reverse().map((l,ri)=>{
+                  const i=diveLogs.length-1-ri;
+                  return `<tr>
+                    <td>${l.data}</td>
+                    <td>${l.local||'—'}</td>
+                    <td>${l.prof?l.prof+'m':'—'}</td>
+                    <td>${l.apneia?l.apneia+'s':'—'}</td>
+                    <td>${l.captura||'—'}</td>
+                    <td>${l.vis||'—'}</td>
+                    <td>${l.obs||'—'}</td>
+                    <td style="display:flex;gap:4px;align-items:center;">
+                      <button class="log-share-btn" title="Enviar este mergulho no WhatsApp" onclick="shareLog(${i},'wa')"><i class="ti ti-brand-whatsapp"></i></button>
+                      <button class="log-share-btn" title="Copiar este mergulho" onclick="shareLog(${i},'copy')" style="color:var(--muted)"><i class="ti ti-copy"></i></button>
+                      <button class="log-edit-btn" title="Editar" onclick="editLog(${i})"><i class="ti ti-pencil"></i></button>
+                      <button class="log-del" title="Apagar" onclick="deletLog(${i})"><i class="ti ti-trash"></i></button>
+                    </td>
+                  </tr>`;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        `:`<div class="log-empty"><i class="ti ti-notebook-off"></i>Nenhum mergulho registrado ainda.<br>Preencha o formulário acima para começar.</div>`}
+      </div>
+    </section>
+  </div>`;
+}
+
+async function captureGpsForLog(){
+  const btn=document.getElementById('btn-gps-local');
+  const status=document.getElementById('gps-local-status');
+  const input=document.getElementById('log-local');
+  if(!btn||!status||!input) return;
+
+  btn.disabled=true;
+  btn.innerHTML='<i class="ti ti-loader" style="animation:spin 1s linear infinite;display:inline-block"></i>';
+  status.textContent='Obtendo GPS...';
+
+  if(!navigator.geolocation){
+    status.textContent='GPS não disponível neste dispositivo.';
+    btn.disabled=false;
+    btn.innerHTML='<i class="ti ti-current-location"></i>';
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    async pos=>{
+      const lat=pos.coords.latitude.toFixed(6);
+      const lon=pos.coords.longitude.toFixed(6);
+      status.textContent=`📍 ${lat}, ${lon} — buscando nome...`;
+
+      try{
+        const r=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=pt-BR`,{
+          headers:{'User-Agent':'PescaSubApp/1.0'}
+        });
+        const d=await r.json();
+        const a=d.address||{};
+        const nome=a.lake||a.reservoir||a.river||a.waterway||a.leisure||a.tourism||
+                   a.village||a.town||a.city||a.suburb||a.hamlet||a.county||a.state||'';
+        const estado=a.state_code||a.state||'';
+        const local=nome&&estado?`${nome} – ${estado}`:nome||`${lat}, ${lon}`;
+        input.value=local;
+        status.textContent=`✅ GPS capturado: ${lat}, ${lon}`;
+      }catch{
+        // fallback: use coordenadas
+        input.value=`${lat}, ${lon}`;
+        status.textContent=`✅ GPS: ${lat}, ${lon}`;
+      }
+
+      btn.disabled=false;
+      btn.innerHTML='<i class="ti ti-current-location"></i>';
+    },
+    err=>{
+      const msgs={1:'Permissão negada.',2:'Posição indisponível.',3:'Tempo esgotado.'};
+      status.textContent=`❌ ${msgs[err.code]||'Erro no GPS.'}`;
+      btn.disabled=false;
+      btn.innerHTML='<i class="ti ti-current-location"></i>';
+    },
+    {enableHighAccuracy:true,timeout:12000,maximumAge:0}
+  );
+}
+
+function attachDiarioEvents(){
+  document.getElementById('btn-log-add')?.addEventListener('click',()=>{
+    const entry={
+      data:document.getElementById('log-data').value,
+      local:document.getElementById('log-local').value,
+      prof:document.getElementById('log-prof').value,
+      apneia:document.getElementById('log-apneia').value,
+      captura:document.getElementById('log-captura').value,
+      vis:document.getElementById('log-vis').value,
+      obs:document.getElementById('log-obs').value,
+    };
+    if(!entry.local&&!entry.prof){alert('Informe ao menos o local ou profundidade.');return;}
+    if(editingLogIndex!==null){
+      diveLogs[editingLogIndex]=entry;
+      editingLogIndex=null;
+    }else{
+      diveLogs.push(entry);
+    }
+    saveAppStateToFirebase();
+    renderStaticTab('diario');
+  });
+}
+
+function editLog(i){
+  editingLogIndex=i;
+  renderStaticTab('diario');
+  setTimeout(()=>document.getElementById('log-data')?.focus(),0);
+}
+
+function cancelEditLog(){
+  editingLogIndex=null;
+  renderStaticTab('diario');
+}
+
+function deletLog(i){
+  if(!confirm('Remover este registro?')) return;
+  if(editingLogIndex===i) editingLogIndex=null;
+  else if(editingLogIndex!==null&&editingLogIndex>i) editingLogIndex--;
+  diveLogs.splice(i,1);
+  saveAppStateToFirebase();
+  renderStaticTab('diario');
+}
+
+// ========== SHARE / WHATSAPP ==========
+function showToast(msg){
+  const t=document.getElementById('share-toast');
+  t.textContent='✓ '+msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+function copyText(text){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>showToast('Copiado para a área de transferência!'));
+  } else {
+    const ta=document.createElement('textarea');
+    ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('Copiado!');
+  }
+}
+
+function openWhatsApp(text){
+  const encoded=encodeURIComponent(text);
+  // Opens WhatsApp with pre-filled message; user picks the group
+  window.open('https://wa.me/?text='+encoded,'_blank');
+}
+
+function buildChecklistMsg(){
+  const done=CHECKLIST_ITEMS.filter(i=>checkState[i.id]).length;
+  const total=CHECKLIST_ITEMS.length;
+  const pct=Math.round((done/total)*100);
+  const data=new Date().toLocaleDateString('pt-BR');
+  let msg=`🤿 *CHECKLIST PRÉ-MERGULHO*\n`;
+  msg+=`📅 ${data} · ${CITY||'Região atual'}\n`;
+  msg+=`✅ ${done}/${total} itens (${pct}%)\n\n`;
+
+  const cats=[...new Set(CHECKLIST_ITEMS.map(i=>i.cat))];
+  cats.forEach(cat=>{
+    msg+=`*${cat.toUpperCase()}*\n`;
+    CHECKLIST_ITEMS.filter(i=>i.cat===cat).forEach(item=>{
+      msg+=(checkState[item.id]?'✅':'⬜')+' '+item.text+'\n';
+    });
+    msg+='\n';
+  });
+
+  msg+=pct===100
+    ? '🟢 Checklist completo! Boa pesca e mergulho seguro! 🎯'
+    : `⚠️ ${total-done} item(s) pendente(s). Confira antes de entrar na água!`;
+  return msg;
+}
+
+function buildLogMsg(log){
+  if(!log) return '';
+  let msg=`🤿 *REGISTRO DE MERGULHO*\n`;
+  msg+=`📅 Data: ${log.data||'—'}\n`;
+  msg+=`📍 Local: ${log.local||'—'}\n`;
+  msg+=`📏 Profundidade: ${log.prof?log.prof+'m':'—'}\n`;
+  msg+=`⏱️ Melhor apneia: ${log.apneia?log.apneia+'s':'—'}\n`;
+  msg+=`🐟 Captura: ${log.captura||'—'}\n`;
+  msg+=`👁️ Visibilidade: ${log.vis||'—'}\n`;
+  if(log.obs) msg+=`📝 Obs: ${log.obs}\n`;
+  msg+=`\n_Enviado via Pesca Subaquática Inteligente 🤿_`;
+  return msg;
+}
+
+function buildAllLogsMsg(){
+  if(!diveLogs.length) return 'Nenhum registro no diário ainda.';
+  let msg=`🤿 *DIÁRIO DE MERGULHOS*\n`;
+  msg+=`📅 Gerado em ${new Date().toLocaleDateString('pt-BR')}\n`;
+  msg+=`📊 Total: ${diveLogs.length} mergulho(s)\n\n`;
+  msg+='─'.repeat(30)+'\n\n';
+  diveLogs.slice().reverse().forEach((l,i)=>{
+    msg+=`*#${diveLogs.length-i} — ${l.data||'?'}*\n`;
+    msg+=`📍 ${l.local||'—'} · 📏 ${l.prof?l.prof+'m':'—'} · ⏱️ ${l.apneia?l.apneia+'s':'—'}\n`;
+    msg+=`🐟 ${l.captura||'—'} · 👁️ ${l.vis||'—'}\n`;
+    if(l.obs) msg+=`📝 ${l.obs}\n`;
+    msg+='\n';
+  });
+  msg+=`_Enviado via Pesca Subaquática Inteligente 🤿_`;
+  return msg;
+}
+
+function shareChecklist(via){
+  const msg=buildChecklistMsg();
+  if(via==='wa') openWhatsApp(msg);
+  else copyText(msg);
+}
+
+function shareLog(i,via){
+  const log=diveLogs[i];
+  const msg=buildLogMsg(log);
+  if(via==='wa') openWhatsApp(msg);
+  else copyText(msg);
+}
+
+function shareAllLogs(via){
+  const msg=buildAllLogsMsg();
+  if(via==='wa') openWhatsApp(msg);
+  else copyText(msg);
+}
+
+// ========== SEGURANÇA ==========
+function renderSeguranca(){
+  return `
+  <div class="tab-panel active">
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-alert-triangle"></i> Emergências</h2>
+      </div>
+      <div class="emergency-bar">
+        <i class="ti ti-phone-call"></i>
+        <p><strong>SAMU: 192</strong> · <strong>Bombeiros: 193</strong> · <strong>Defesa Civil: 199</strong><br>
+        Em afogamento ou síncope: ligue imediatamente e inicie RCP se necessário.</p>
+      </div>
+      <div class="signs-grid">
+        <div class="sign-card">
+          <div class="sign-icon">💧</div>
+          <div class="sign-title">Síncope de Apneia (Blackout)</div>
+          <div class="sign-desc">Ocorre na subida por queda de O₂. Buddy deve estar pronto. Nunca mergulhe sozinho. Resgate imediato e RCP se inconsciente.</div>
+        </div>
+        <div class="sign-card">
+          <div class="sign-icon">⚠️</div>
+          <div class="sign-title">Samba / Pré-Síncope</div>
+          <div class="sign-desc">Espasmos musculares indicam início de hipóxia. Parceiro assume controle imediatamente, leva à superfície, mantém vias aéreas livres.</div>
+        </div>
+        <div class="sign-card">
+          <div class="sign-icon">🌀</div>
+          <div class="sign-title">Desorientação na Água</div>
+          <div class="sign-desc">Pare, equalize a pressão, observe bolhas subindo. Nunca prenda a respiração durante subida em SCUBA. Em apneia: suba devagar sempre.</div>
+        </div>
+        <div class="sign-card">
+          <div class="sign-icon">🌡️</div>
+          <div class="sign-title">Hipotermia</div>
+          <div class="sign-desc">Tremedeira, confusão, lentidão de raciocínio. Saia da água imediatamente. Aqueça gradualmente. Evite álcool e massagens.</div>
+        </div>
+        <div class="sign-card">
+          <div class="sign-icon">🦷</div>
+          <div class="sign-title">Barotrauma de Orelha</div>
+          <div class="sign-desc">Dor forte ao igualar pressão — suba imediatamente. Nunca force a descida com dor. Consulte médico antes de mergulhar novamente.</div>
+        </div>
+        <div class="sign-card">
+          <div class="sign-icon">🐟</div>
+          <div class="sign-title">Acidente com Animal</div>
+          <div class="sign-desc">Arraias, bagres e peixes com espinhos: lave a lesão, imobilize e procure atendimento. Nunca puxe arpão cravado sem auxílio médico.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-hand-gesture"></i> Sinais de Mão</h2>
+        <div class="section-meta">Comunicação submersa</div>
+      </div>
+      <div class="signs-grid">
+        ${SINAIS.map(s=>`
+          <div class="sign-card">
+            <div class="sign-icon">${s.icon}</div>
+            <div class="sign-title">${s.nome}</div>
+            <div class="sign-desc">${s.desc}</div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title"><i class="ti ti-bulb"></i> Regras de Ouro</h2>
+      </div>
+      <ul class="tips">
+        <li><i class="ti ti-user-check"></i><span>Nunca mergulhe sozinho. Buddy é regra, não sugestão — principalmente em apneia.</span></li>
+        <li><i class="ti ti-lungs"></i><span>Nunca hiperventile antes de apneia. Aumenta risco de síncope sem aviso.</span></li>
+        <li><i class="ti ti-clock-pause"></i><span>Respeite o intervalo de recuperação: no mínimo 2× o tempo submerso.</span></li>
+        <li><i class="ti ti-flag-3"></i><span>Boia e bandeira sempre na superfície. Obrigatório e salva vidas.</span></li>
+        <li><i class="ti ti-barrier-block"></i><span>Conheça os limites do seu equipamento e do seu preparo físico no dia.</span></li>
+        <li><i class="ti ti-leaf"></i><span>Preserve espécies nativas. Pesque apenas o que é permitido, com responsabilidade.</span></li>
+      </ul>
+    </section>
+  </div>`;
+}
+
+// ========== INFRA ==========
+function showLoading(msg){
+  document.getElementById('content').innerHTML=`
+    <div class="section loading">
+      <div><i class="ti ti-loader"></i><h2>${msg}</h2></div>
+    </div>`;
+}
+
+function showError(title,msg){
+  document.getElementById('content').innerHTML=`
+    <section class="section">
+      <div class="error-card">
+        <h2>${title}</h2>
+        <p>${msg}</p>
+        <button class="btn" onclick="loadAll()">Tentar GPS novamente</button>
+      </div>
+    </section>`;
+}
+
+function selectDay(i){selectedDay=i;render(weatherData);}
+
+async function loadAll(){
+  try{
+    showLoading('Obtendo GPS e clima...');
+    await getLocation();
+    const data=await fetchWeather();
+    render(data);
+    saveWeatherSnapshot(data);
+  }catch{
+    setLocationUI(CITY,LAT&&LON?`${LAT.toFixed(5)} , ${LON.toFixed(5)}`:'---');
+    showError('GPS ou clima indisponível','Permita localização ou digite a cidade. Ex: Itapagipe-MG.');
+  }
+}
+
+syncFromFirebase();
+loadAll();
+setInterval(()=>{
+  if(LAT&&LON&&currentTab==='clima'){
+    fetchWeather().then(data=>{render(data);saveWeatherSnapshot(data);}).catch(()=>{});
+  }
+},600000);
+</script>
 </body>
 </html>
